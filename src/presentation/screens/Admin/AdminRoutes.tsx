@@ -4,7 +4,10 @@ import { lazy } from "react";
 
 const BackupsScreenLazy = lazy(() => import("../Backups/BackupScreen"));
 const UserScreenLazy = lazy(() => import("../Users/UserScreen"));
+const FilesRoutesLazy = lazy(() => import("../Files/FilesRoutes"));
+
 const NotFoundScreenLazy = lazy(() => import("../NotFoundScreen"));
+
 
 export default function AdminRoutes() {
   return (
@@ -14,6 +17,7 @@ export default function AdminRoutes() {
         <Route path="dashboard" element={<p>Dashboard</p>} />
         <Route path="users" element={<UserScreenLazy />} />
         <Route path="backups" element={<BackupsScreenLazy />} />
+        <Route path="files" element={<FilesRoutesLazy />} />
         <Route path="*" element={<NotFoundScreenLazy />} />
       </Route>
     </Routes>
