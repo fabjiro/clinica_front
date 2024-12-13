@@ -23,7 +23,6 @@ const columns: GridColDef[] = [
   },
   { field: "col2", headerName: "Correo", flex: 1 },
   { field: "col3", headerName: "Rol", flex: 1 },
-  { field: "col4", headerName: "Status", flex: 1 },
   {
     field: "col5",
     headerName: "Acciones",
@@ -58,7 +57,6 @@ export default function UserScreen() {
       },
       col2: user.email,
       col3: user.rol?.name,
-      col4: user.status?.name,
     }));
   }, [usersData]);
 
