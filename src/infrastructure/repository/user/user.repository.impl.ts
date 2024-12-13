@@ -3,7 +3,6 @@ import { IAddUserReqDto } from "../../../domain/dto/request/user/addUser.req.dto
 import { IUpdateUserReqDto } from "../../../domain/dto/request/user/updateUser.req.dto";
 import { ImageEntity } from "../../../domain/entity/image/image.entity";
 import { RolEntity } from "../../../domain/entity/rol/rol.entity";
-import { StatusEntity } from "../../../domain/entity/status/status.entity";
 import { UserEntity } from "../../../domain/entity/user/user.entity";
 import { IUserModel } from "../../../domain/model/user/user.model";
 import { UserRepository } from "../../../domain/repository/user/user.repository";
@@ -36,7 +35,6 @@ export class UserRepositoryImpl implements UserRepository {
         item.avatar!.originalUrl,
         item.avatar!.compactUrl
       );
-      const status = new StatusEntity(item.status!.id, item.status!.name);
 
       return new UserEntity(
         item.id,
@@ -44,7 +42,6 @@ export class UserRepositoryImpl implements UserRepository {
         item.email,
         rolEntity,
         avatar,
-        status
       );
     });
   }
