@@ -15,6 +15,5 @@ export const userSchemaValidation = () => {
         .required("El correo es requerido"),
     }),
     Rol: Yup.string().required("El Rol es requerido"),
-    Status: Yup.string().required("El Status es requerido"),
   });
 };

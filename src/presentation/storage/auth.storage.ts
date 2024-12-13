@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { IUserDataEntity } from "../../domain/entity/user/IUserDataEntity";
 import { queryClient } from "../../config/query.config";
-import { useBillingStore } from "../screens/Billing/store/billing.store";
 
 export interface IAuthStore {
   setUserData: (data: IUserDataEntity) => void;
@@ -11,8 +10,6 @@ export interface IAuthStore {
   isAuth: () => boolean;
   userData?: IUserDataEntity;
 }
-
-const billisStore = useBillingStore.getState();
 
 
 export const useAuthStore = create(
@@ -25,7 +22,6 @@ export const useAuthStore = create(
       logOut: () => {
         set({ userData: undefined });
         queryClient.clear();
-        billisStore.clearCart();
       },
       isAuth: () => {
         return !!get().userData?.token;

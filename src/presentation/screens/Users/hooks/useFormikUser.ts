@@ -1,5 +1,4 @@
 import { RolEnum } from "../../../../enum/rol/rol.enum";
-import { StatusEnum } from "../../../../enum/status/status.enum";
 import { useAddUser, useUpdateUser } from "../query/user.query";
 import { userSchemaValidation } from "../schemas/user.schema";
 import { useFormik } from "formik";
@@ -20,12 +19,10 @@ export function useFormikUser() {
         Name: "",
         Email: "",
         Rol: RolEnum.CUSTOMER,
-        Status: StatusEnum.ACTIVE,
       }
     : {
         Name: user?.name,
         Rol: user?.rol?.id,
-        Status: user?.status?.id,
       };
 
   const {
@@ -41,14 +38,13 @@ export function useFormikUser() {
     validateOnChange: false,
     validateOnMount: false,
     validateOnBlur: false,
-    validationSchema: userSchemaValidation,
+    validationSchema: () => userSchemaValidation(),
     onSubmit: (values) => {
       if (isCreateMode) {
         mutate({
           Name: values.Name!,
           Email: values.Email!,
           Rol: values.Rol,
-          Status: values.Status,
           Avatar: values.Avatar,
         });
       } else {
@@ -56,7 +52,6 @@ export function useFormikUser() {
           Id: user?.id!,
           Name: values.Name!,
           Rol: values.Rol,
-          Status: values.Status,
           Avatar: values.Avatar,
         });
       }

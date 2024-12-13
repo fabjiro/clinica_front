@@ -13,25 +13,6 @@ import { UserDataSourceImpl } from "./infrastructure/datasource/user/user.dataso
 import { RolRepository } from "./domain/repository/rol/rol.repository";
 import { RolRepositoryImpl } from "./infrastructure/repository/rol/rol.repository.impl";
 import { RolDataSourceImpl } from "./infrastructure/datasource/rol/rol.datasource.impl";
-import { StatusRepository } from "./domain/repository/status/status.repository";
-import { StatusRepositoryImpl } from "./infrastructure/repository/status/status.repository.impl";
-import { StatusDataSourceImpl } from "./infrastructure/datasource/status/status.datasource.impl";
-import { CategoryRepository } from "./domain/repository/category/category.repository";
-import { CategoryDataSourceImpl } from "./infrastructure/datasource/category/category.datasource.impl";
-import { CategoryRepositoryImpl } from "./infrastructure/repository/category/category.repository.impl";
-import { ProductRepository } from "./domain/repository/product/product.repository";
-import { ProductRepositoryImpl } from "./infrastructure/repository/product/product.repository.impl";
-import { ProductDataSourceImpl } from "./infrastructure/datasource/product/product.datasource.impl";
-import { ShopRepository } from "./domain/repository/shop/shop.repository";
-import { ShopRepositoryImpl } from "./infrastructure/repository/shop/shop.repository.impl";
-import { ShopDataSourceImpl } from "./infrastructure/datasource/shop/shop.datasource.impl";
-import { InventoryDataSource } from "./domain/datasource/inventory/inventory.datasource";
-import { InventoryDataSourceImpl } from "./infrastructure/datasource/inventory/inventory.datasource.impl";
-import { InventoryRepositoryImpl } from "./infrastructure/repository/inventory/inventory.repository.impl";
-import { BillingDataSource } from "./domain/datasource/billing/billing.datasource";
-import { BillingDataSourceImpl } from "./infrastructure/datasource/billing/billing.datasource.impl";
-import { BillingRepositoryImpl } from "./infrastructure/repository/billing/billing.repository.impl";
-
 const container = new Container();
 
 container
@@ -50,36 +31,4 @@ container
   .bind<RolRepository>(TYPES.RolRepository)
   .toDynamicValue(() => new RolRepositoryImpl(new RolDataSourceImpl()))
   .inSingletonScope();
-container
-  .bind<StatusRepository>(TYPES.StatusRepository)
-  .toDynamicValue(() => new StatusRepositoryImpl(new StatusDataSourceImpl()))
-  .inSingletonScope();
-
-container
-  .bind<CategoryRepository>(TYPES.CategoryRepository)
-  .toDynamicValue(
-    () => new CategoryRepositoryImpl(new CategoryDataSourceImpl())
-  )
-  .inSingletonScope();
-
-container
-  .bind<ProductRepository>(TYPES.ProductRepository)
-  .toDynamicValue(() => new ProductRepositoryImpl(new ProductDataSourceImpl()))
-  .inSingletonScope();
-
-container
-  .bind<ShopRepository>(TYPES.ShopRepository)
-  .toDynamicValue(() => new ShopRepositoryImpl(new ShopDataSourceImpl()))
-  .inSingletonScope();
-
-container
-  .bind<InventoryDataSource>(TYPES.InventoryRepository)
-  .toDynamicValue(() => new InventoryRepositoryImpl(new InventoryDataSourceImpl()))
-  .inSingletonScope();
-
-container
-  .bind<BillingDataSource>(TYPES.BillingRepository)
-  .toDynamicValue(() => new BillingRepositoryImpl(new BillingDataSourceImpl()))
-  .inSingletonScope();
-
   export { container };
