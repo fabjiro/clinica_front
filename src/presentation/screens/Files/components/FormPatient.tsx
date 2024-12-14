@@ -9,22 +9,46 @@ import {
 import { SexType } from "../../../../const/sexType.const";
 import { useGetAllCivilStatus } from "../query/civilstatus.query";
 import { usePatientStore } from "../store/patient.store";
+import { useFormikPatient } from "../hooks/useFormikPatient";
+import { useEffect } from "react";
 
 export function FormPatient() {
   const { data: DataCivilStatus, status: statusGetRoles } =
     useGetAllCivilStatus();
   const toggleForm = usePatientStore((state) => state.toggleForm);
+  const { errors, values, handleSubmit, setFieldValue, statusAddPatient } = useFormikPatient();
+
+  const {
+    name: nameError,
+    identification: identificationError,
+    address: addressError,
+    phone: phoneError,
+    civilStatus: civilStatusError,
+    contactPerson: contactPersonError,
+    contactPhone: contactPhoneError,
+    birthday: birthdayError,
+    typeSex: typeSexError,
+    age: ageError,
+  } = errors;
 
   const isLoadingCivilStatus = statusGetRoles === "pending";
+  const isLoadingAddPatient = statusAddPatient === "pending";
+
+  useEffect(() => {
+    if(statusAddPatient == "success"){ 
+      toggleForm();
+    }
+  },[statusAddPatient])
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row gap-2">
         <Input
           isRequired
-          // isInvalid={!!nameError}
-          // errorMessage={nameError}
-          // value={values.Name}
-          // onChange={(e) => setFieldValue("Name", e.target.value)}
+          isInvalid={!!nameError}
+          errorMessage={nameError}
+          value={values.name}
+          onChange={(e) => setFieldValue("name", e.target.value)}
           size="sm"
           label="Nombre"
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
@@ -35,13 +59,32 @@ export function FormPatient() {
           size="sm"
           label="Edad"
           type="number"
+          isInvalid={!!ageError}
+          errorMessage={ageError}
+          value={values.age?.toString()}
+          onChange={(e) => {
+            const value = e.target.value;
+
+            if (value.trim() === "") {
+              setFieldValue("age", undefined); // O puedes usar null si prefieres
+              return;
+            }
+
+            // Si el valor no está vacío, convertimos el texto a número
+            const parsedValue = Number(value);
+
+            // Solo actualizamos si el valor es un número válido
+            if (!isNaN(parsedValue)) {
+              setFieldValue("age", parsedValue);
+            }
+          }}
         />
         <Input
           isRequired
-          // isInvalid={!!nameError}
-          // errorMessage={nameError}
-          // value={values.Name}
-          // onChange={(e) => setFieldValue("Name", e.target.value)}
+          isInvalid={!!identificationError}
+          errorMessage={identificationError}
+          value={values.identification}
+          onChange={(e) => setFieldValue("identification", e.target.value)}
           size="sm"
           label="Identificacion"
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
@@ -50,19 +93,42 @@ export function FormPatient() {
       <div className="flex flex-row gap-2">
         <Input
           isRequired
-          // isInvalid={!!nameError}
-          // errorMessage={nameError}
-          // value={values.Name}
-          // onChange={(e) => setFieldValue("Name", e.target.value)}
+          isInvalid={!!phoneError}
+          errorMessage={phoneError}
+          value={values.phone}
+          onChange={(e) => setFieldValue("phone", e.target.value)}
           size="sm"
           label="Numero"
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
-        <Textarea size="sm" label="Direccion" isRequired />
+        <Textarea
+          isInvalid={!!addressError}
+          errorMessage={addressError}
+          value={values.address}
+          onChange={(e) => setFieldValue("address", e.target.value)}
+          size="sm"
+          label="Direccion"
+          isRequired
+        />
       </div>
       <div className="flex flex-row gap-2">
-        <DatePicker isRequired size="sm" label="Fecha de nacimiento" />
-        <Autocomplete isRequired defaultItems={SexType} label="Sexo">
+        <DatePicker
+          isInvalid={!!birthdayError}
+          errorMessage={birthdayError}
+          //   value={values.address}
+          onChange={(e) => setFieldValue("birthday", e?.toString())}
+          isRequired
+          size="sm"
+          label="Fecha de nacimiento"
+        />
+        <Autocomplete
+          isInvalid={!!typeSexError}
+          errorMessage={typeSexError}
+        onSelectionChange={(e) => setFieldValue("typeSex", e)}
+          isRequired
+          defaultItems={SexType}
+          label="Sexo"
+        >
           {(item) => (
             <AutocompleteItem key={item.Value}>{item.Label}</AutocompleteItem>
           )}
@@ -72,7 +138,11 @@ export function FormPatient() {
           isRequired
           defaultItems={DataCivilStatus ?? []}
           label="Estado civil"
-        >
+          isInvalid={!!civilStatusError}
+          errorMessage={civilStatusError}
+          //   value={values.address}
+          onSelectionChange={(e) => setFieldValue("civilStatus", e)}
+          >
           {(item) => (
             <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
           )}
@@ -81,20 +151,20 @@ export function FormPatient() {
       <div className="flex flex-row gap-2">
         <Input
           isRequired
-          // isInvalid={!!nameError}
-          // errorMessage={nameError}
-          // value={values.Name}
-          // onChange={(e) => setFieldValue("Name", e.target.value)}
+          isInvalid={!!contactPersonError}
+          errorMessage={contactPersonError}
+          value={values.contactPerson}
+          onChange={(e) => setFieldValue("contactPerson", e.target.value)}
           size="sm"
           label="Nombre de contacto"
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Input
           isRequired
-          // isInvalid={!!nameError}
-          // errorMessage={nameError}
-          // value={values.Name}
-          // onChange={(e) => setFieldValue("Name", e.target.value)}
+          isInvalid={!!contactPhoneError}
+          errorMessage={contactPhoneError}
+          value={values.contactPhone}
+          onChange={(e) => setFieldValue("contactPhone", e.target.value)}
           size="sm"
           label="Numero de contacto"
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
@@ -103,14 +173,14 @@ export function FormPatient() {
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button onClick={() => toggleForm()}>Cancelar</Button>
         <Button
-          //   onClick={() => handleSubmit()}
-          //   isLoading={isLoadingAddUser || isLoadingUpdateUser}
+            onClick={() => handleSubmit()}
+            isLoading={isLoadingAddPatient}
           //   disabled={isLoadingRoles}
           color="primary"
         >
           Guardar
         </Button>
-      </div>{" "}
+      </div>
     </div>
   );
 }
