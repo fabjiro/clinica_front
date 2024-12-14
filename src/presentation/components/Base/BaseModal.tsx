@@ -13,6 +13,7 @@ interface IProps {
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
   showActions?: boolean;
+  size?: "4xl" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "5xl" | "full" | undefined;
 }
 
 export function BaseModal({
@@ -21,9 +22,10 @@ export function BaseModal({
   onOpenChange,
   title,
   showActions,
+  size,
 }: IProps) {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal size={size} isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
