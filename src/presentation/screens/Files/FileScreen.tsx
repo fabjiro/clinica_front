@@ -10,6 +10,7 @@ import { ModalPatient } from "./components/ModalPatient";
 import moment from "moment";
 
 const columns: GridColDef[] = [
+  { field: 'colId', headerName: 'ID', width: 90 },
   {
     field: "col1",
     headerName: "Nombre",
@@ -63,7 +64,8 @@ export function FileScreen() {
   const row = useMemo(() => {
     if (!dataPatient) return [];
 
-    return dataPatient.map((patient) => ({
+    return dataPatient.map((patient, index) => ({
+      colId: (index + 1),
       id: patient.id,
       col1: patient.name,
       col2: patient.phone,
