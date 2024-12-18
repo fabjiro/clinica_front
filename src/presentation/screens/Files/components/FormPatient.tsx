@@ -11,7 +11,8 @@ import { useGetAllCivilStatus } from "../query/civilstatus.query";
 import { usePatientStore } from "../store/patient.store";
 import { useFormikPatient } from "../hooks/useFormikPatient";
 import { useEffect } from "react";
-
+import { getLocalTimeZone, fromDate} from "@internationalized/date";
+import moment from "moment";
 export function FormPatient() {
   const { data: DataCivilStatus, status: statusGetRoles } =
     useGetAllCivilStatus();
@@ -39,6 +40,8 @@ export function FormPatient() {
       toggleForm();
     }
   },[statusAddPatient])
+
+  console.log(moment(values.birthday).format("L"));
 
   return (
     <div className="flex flex-col gap-4">
@@ -115,11 +118,12 @@ export function FormPatient() {
         <DatePicker
           isInvalid={!!birthdayError}
           errorMessage={birthdayError}
-          //   value={values.address}
           onChange={(e) => setFieldValue("birthday", e?.toString())}
           isRequired
           size="sm"
           label="Fecha de nacimiento"
+          value={values.birthday && fromDate(new Date(moment(values.birthday).format("L")) ,getLocalTimeZone()) || undefined}
+          hideTimeZone={true}
         />
         <Autocomplete
           isInvalid={!!typeSexError}
@@ -128,6 +132,7 @@ export function FormPatient() {
           isRequired
           defaultItems={SexType}
           label="Sexo"
+          selectedKey={values.typeSex}
         >
           {(item) => (
             <AutocompleteItem key={item.Value}>{item.Label}</AutocompleteItem>
@@ -140,7 +145,7 @@ export function FormPatient() {
           label="Estado civil"
           isInvalid={!!civilStatusError}
           errorMessage={civilStatusError}
-          //   value={values.address}
+          selectedKey={values.civilStatus}
           onSelectionChange={(e) => setFieldValue("civilStatus", e)}
           >
           {(item) => (

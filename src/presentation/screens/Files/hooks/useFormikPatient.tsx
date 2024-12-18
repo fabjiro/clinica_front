@@ -2,11 +2,31 @@ import { useFormik } from "formik";
 import { IPatientReqDto } from "../../../../Dto/Request/patient.req.dto";
 import { patientSchemaValidation } from "../schemas/patient.schema";
 import { useAddPatient } from "../query/patient.query";
+import { usePatientStore } from "../store/patient.store";
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 
 export function useFormikPatient() {
-  const initialValues: Partial<IPatientReqDto> = {};
+  
+  const { mutate, status: statusAddPatient,  } = useAddPatient();
+  const { patient, modeForm } = usePatientStore();
+  
+  const isCreateMode = modeForm === MODEFORMENUM.CREATE;
+  
+  
+  const initialValues: Partial<IPatientReqDto> = isCreateMode ? {} : {
+    name: patient?.name,
+    identification: patient?.identification,
+    phone: patient?.phone,
+    address: patient?.address,
+    age: patient?.age,
+    contactPerson: patient?.contactPerson,
+    contactPhone: patient?.contactPhone,
+    birthday: patient?.birthday,
+    typeSex: patient?.typeSex,
+    civilStatus: patient?.civilStatus.id,
+    avatar: undefined,
+  };
 
-  const { mutate, status: statusAddPatient } = useAddPatient();
 
   const {
     handleChange,

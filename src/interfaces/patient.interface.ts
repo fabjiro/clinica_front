@@ -11,6 +11,7 @@ export interface IPatient {
   phone: string;
   address: string;
   age: number;
+  contactPerson: string;
   contactPhone: string;
   birthday: string;
   typeSex: string;
