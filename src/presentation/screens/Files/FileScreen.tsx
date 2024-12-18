@@ -9,6 +9,7 @@ import { usePatientStore } from "./store/patient.store";
 import { ModalPatient } from "./components/ModalPatient";
 import moment from "moment";
 import { CiSearch } from "react-icons/ci";
+import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 const columns: GridColDef[] = [
   { field: "colId", headerName: "ID", width: 90 },
   {
@@ -60,7 +61,7 @@ const columns: GridColDef[] = [
 export function FileScreen() {
   const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
-  const toggleForm = usePatientStore((state) => state.toggleForm);
+  const { toggleForm, setModeForm } = usePatientStore();
 
   const row = useMemo(() => {
     if (!dataPatient) return [];
@@ -111,7 +112,10 @@ export function FileScreen() {
         actions={
           <>
             <Button
-              onClick={toggleForm}
+              onClick={() => {
+                setModeForm(MODEFORMENUM.CREATE);
+                toggleForm();
+              }}
               startContent={<MdAdd />}
               color="primary"
             >

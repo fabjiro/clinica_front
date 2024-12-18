@@ -3,12 +3,12 @@ import { usePatientStore } from "../store/patient.store";
 import { FormPatient } from "./FormPatient";
 
 export function ModalPatient() {
-  const { toggleForm, showForm } = usePatientStore();
+  const { toggleForm, showForm, titleForm } = usePatientStore();
   return (
     <BaseModal
       isOpen={showForm}
       onOpenChange={toggleForm}
-      title="Agregar Paciente"
+      title={titleForm}
       size="4xl"
     >
       <FormPatient />
