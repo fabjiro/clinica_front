@@ -18,6 +18,10 @@ export async function UpdatePatient(params: Partial<IPatientReqDto>) {
   await axiosInstance.put<IPatient>(BASE_URL, params);
 }
 
+export async function DeletePatient(id: string) {
+  await axiosInstance.delete<IPatient>(`${BASE_URL}/${id}`);
+}
+
 export function useGetAllPatient() {
   return useQuery({
     queryKey: ["getAllPatient"],
@@ -59,6 +63,26 @@ export function useUpdatePatient() {
     },
     onError: () => {
       toast.error("Error al actualizar paciente", {
+        position: "top-right",
+      });
+    },
+  });
+}
+
+export function useDeletePatient() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["deletePatient"],
+    mutationFn: DeletePatient,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllPatient"] });
+      toast.success("Paciente eliminado", {
+        position: "top-right",
+      });
+    },
+    onError: () => {
+      toast.error("Error al eliminar paciente", {
         position: "top-right",
       });
     },
