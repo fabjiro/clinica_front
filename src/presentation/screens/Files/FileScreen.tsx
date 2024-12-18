@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { ActionPatient } from "./components/ActionPatient";
 import { usePatientStore } from "./store/patient.store";
 import { ModalPatient } from "./components/ModalPatient";
+import moment from "moment";
 
 const columns: GridColDef[] = [
   {
@@ -40,6 +41,11 @@ const columns: GridColDef[] = [
     flex: 1,
   },
   {
+    field: "col8",
+    headerName: "Fecha de creación",
+    flex: 1,
+  },
+  {
     field: "col7",
     headerName: "Acciones",
     width: 100,
@@ -63,6 +69,7 @@ export function FileScreen() {
       col2: patient.phone,
       col3: patient.address,
       col4: patient.phone,
+      col8: moment(patient.createdAt).format('L'),
       col5:
         patient.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
           ? "Masculino"

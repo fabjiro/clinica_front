@@ -14,5 +14,6 @@ export interface IPatient {
   contactPhone: string;
   birthday: string;
   typeSex: string;
+  createdAt: Date;
   civilStatus: ICivilStatus;
 }
