@@ -80,8 +80,8 @@ export function FileScreen() {
           col8: moment(patient.createdAt).format("L"),
           col5:
             patient.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
-              ? "Masculino"
-              : "Femenino",
+              ? "Femenino"
+              : "Masculino",
           col6: patient.civilStatus.name,
         }));
     }
@@ -96,8 +96,8 @@ export function FileScreen() {
       col8: moment(patient.createdAt).format("L"),
       col5:
         patient.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
-          ? "Masculino"
-          : "Femenino",
+          ? "Femenino"
+          : "Masculino",
       col6: patient.civilStatus.name,
     }));
   }, [dataPatient, searchByWord]);

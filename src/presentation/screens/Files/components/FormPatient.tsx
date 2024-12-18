@@ -124,7 +124,7 @@ export function FormPatient() {
         <Autocomplete
           isInvalid={!!typeSexError}
           errorMessage={typeSexError}
-        onSelectionChange={(e) => setFieldValue("typeSex", e)}
+          onSelectionChange={(e) => setFieldValue("typeSex", e)}
           isRequired
           defaultItems={SexType}
           label="Sexo"
