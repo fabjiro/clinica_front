@@ -24,7 +24,7 @@ export class BackupDataSourceImpl implements BackupDataSource {
     return data;
   }
   async restore(id: string): Promise<IBackupModel> {
-    const { data } = await axiosInstance.put<IBackupModel>(
+    const { data } = await axiosInstance.post<IBackupModel>(
       `${this.BASE_URL}/restore/${id}`
     );
     return data;
