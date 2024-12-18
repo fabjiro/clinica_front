@@ -17,7 +17,7 @@ export function FormPatient() {
   const { data: DataCivilStatus, status: statusGetRoles } =
     useGetAllCivilStatus();
   const toggleForm = usePatientStore((state) => state.toggleForm);
-  const { errors, values, handleSubmit, setFieldValue, statusAddPatient } = useFormikPatient();
+  const { errors, values, handleSubmit, setFieldValue, statusAddPatient, statusUpdatePatient } = useFormikPatient();
 
   const {
     name: nameError,
@@ -33,15 +33,14 @@ export function FormPatient() {
   } = errors;
 
   const isLoadingCivilStatus = statusGetRoles === "pending";
+  const isLoadingUpdatePatient = statusUpdatePatient === "pending";
   const isLoadingAddPatient = statusAddPatient === "pending";
 
   useEffect(() => {
-    if(statusAddPatient == "success"){ 
+    if(statusAddPatient == "success" || statusUpdatePatient == "success"){ 
       toggleForm();
     }
-  },[statusAddPatient])
-
-  console.log(moment(values.birthday).format("L"));
+  },[statusAddPatient, statusUpdatePatient])
 
   return (
     <div className="flex flex-col gap-4">
@@ -179,7 +178,7 @@ export function FormPatient() {
         <Button onClick={() => toggleForm()}>Cancelar</Button>
         <Button
             onClick={() => handleSubmit()}
-            isLoading={isLoadingAddPatient}
+            isLoading={isLoadingAddPatient || isLoadingUpdatePatient}
           //   disabled={isLoadingRoles}
           color="primary"
         >

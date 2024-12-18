@@ -1,4 +1,5 @@
 export interface IPatientReqDto {
+  id?: string;
   name: string;
   identification: string;
   phone: string;

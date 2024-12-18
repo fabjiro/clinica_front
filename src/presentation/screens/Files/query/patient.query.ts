@@ -14,6 +14,10 @@ export async function AddPatient(params: IPatientReqDto) {
   await axiosInstance.post<IPatient>(BASE_URL, params);
 }
 
+export async function UpdatePatient(params: Partial<IPatientReqDto>) {
+  await axiosInstance.put<IPatient>(BASE_URL, params);
+}
+
 export function useGetAllPatient() {
   return useQuery({
     queryKey: ["getAllPatient"],
@@ -22,7 +26,6 @@ export function useGetAllPatient() {
 }
 
 export function useAddPatient() {
-
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,6 +42,25 @@ export function useAddPatient() {
         position: "top-right",
       });
     },
-  })
+  });
+}
 
+export function useUpdatePatient() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["updatePatient"],
+    mutationFn: UpdatePatient,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllPatient"] });
+      toast.success("Paciente actualizado", {
+        position: "top-right",
+      });
+    },
+    onError: () => {
+      toast.error("Error al actualizar paciente", {
+        position: "top-right",
+      });
+    },
+  });
 }
