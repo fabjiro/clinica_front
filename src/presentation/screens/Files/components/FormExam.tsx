@@ -17,6 +17,7 @@ export function FormExam() {
             isRequired
             defaultItems={DataGroup ?? []}
             label="Grupos"
+            size="sm"
             //   isInvalid={!!civilStatusError}
             //   errorMessage={civilStatusError}
             //   selectedKey={values.civilStatus}
@@ -33,12 +34,13 @@ export function FormExam() {
             //   value={values.contactPhone}
             //   onChange={(e) => setFieldValue("contactPhone", e.target.value)}
             size="sm"
-            label="Nombre Examen"
+            label="Nuevo examen"
             // disabled={isLoadingAddUser || isLoadingUpdateUser}
             />
+            
         </div>
             
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-4 justify-end items-center">
 
         <Button onClick={() => toggleFormGroup()}>Cancelar</Button>
         <Button
