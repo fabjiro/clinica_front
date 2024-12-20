@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
+import { ActionExam } from "./components/ActionExam";
 
 
 export function ExamScreen() {
@@ -37,7 +38,7 @@ export function ExamScreen() {
         sortable: false,
         filterable: false,
         pinnable: false,
-        // renderCell: (params) => <ActionExam id={params.id.toString()} />,
+        renderCell: (params) => <ActionExam id={params.id.toString()} />,
       },
     ];
 
