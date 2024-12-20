@@ -10,7 +10,8 @@ import { ModalPatient } from "./components/ModalPatient";
 import moment from "moment";
 import { CiSearch } from "react-icons/ci";
 import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
-
+import { ImFilesEmpty } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -63,15 +64,11 @@ const columns: GridColDef[] = [
 ];
 
 export function FileScreen() {
+  const navigate = useNavigate();
   const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
   const { toggleForm, setModeForm } = usePatientStore();
   
-
-  
-
-
-
   const row = useMemo(() => {
     if (!dataPatient) return [];
 
@@ -129,6 +126,16 @@ export function FileScreen() {
               color="primary"
             >
               Nuevo paciente
+            </Button>
+
+            <Button
+              onClick={() => {
+                navigate("/files/exams");
+              }}
+              startContent={<ImFilesEmpty />}
+              color="success"
+            >
+              Examenes
             </Button>
             
             

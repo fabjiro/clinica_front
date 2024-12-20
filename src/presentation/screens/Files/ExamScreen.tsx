@@ -7,10 +7,13 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useGetExam } from "./query/exam.query";
 import { useMemo, useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 
 export function ExamScreen() {
     
+    const navigate = useNavigate();
     const {toggleForm: toggleFormGroup} = useGroupsStore();
     const [searchByWord, setSearchByWord] = useState<string | undefined>();
     const { data: dataExam} = useGetExam();
@@ -81,29 +84,36 @@ export function ExamScreen() {
         }
     >
       <div className="flex flex-col gap-2 flex-1">
-                <Input
-                  label=""
-                  placeholder="Buscar Examen..."
-                  variant="bordered"
-                  startContent={<CiSearch />}
-                  onChange={(e) => setSearchByWord(e.target.value)}
-                  className="max-w-sm"
-                />
-                
-                <div className="flex-1 overflow-auto">
-                  <DataGrid
-                 //   loading={isLoadingExam}
-                   columns={columns}
-                  rows={row}
-                  disableColumnMenu
-                  hideFooter
-                 />
+        <div className="flex flex-col items-start gap-2">
+          <Button
+          onClick={() => {
+           navigate("/files");
+          }}
+          className="text-sm px-4 py-2"
+          >
+          <IoArrowBack />
+          {"Volver"}
+          </Button>
         </div>
+        <Input
+          label=""
+          placeholder="Buscar Examen..."
+          variant="bordered"
+          startContent={<CiSearch />}
+          onChange={(e) => setSearchByWord(e.target.value)}
+          className="max-w-sm"
+          />
                 
-
-          </div>
-      
-        
+          <div className="flex-1 overflow-auto">
+            <DataGrid
+            //   loading={isLoadingExam}
+              columns={columns}
+              rows={row}
+              disableColumnMenu
+              hideFooter
+          />
+        </div>
+      </div>   
     </BaseScreen>
 
     <ModalExam />
