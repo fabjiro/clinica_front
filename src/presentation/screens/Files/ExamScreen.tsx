@@ -1,16 +1,18 @@
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { BaseScreen } from "../BaseScreen";
-import { ImFilesEmpty } from "react-icons/im";
+import { IoIosAdd } from "react-icons/io";
 import { useGroupsStore } from "./store/groups.store";
 import { ModalExam } from "./components/ModalExam";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useGetExam } from "./query/exam.query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 
 
 export function ExamScreen() {
     
     const {toggleForm: toggleFormGroup} = useGroupsStore();
+    const [searchByWord, setSearchByWord] = useState<string | undefined>();
     const { data: dataExam} = useGetExam();
 
     const columns: GridColDef[] = [
@@ -32,13 +34,26 @@ export function ExamScreen() {
         sortable: false,
         filterable: false,
         pinnable: false,
-        // renderCell: (params) => <ActionPatient id={params.id.toString()} />,
+        // renderCell: (params) => <ActionExam id={params.id.toString()} />,
       },
     ];
 
     const row = useMemo(() => {
         if (!dataExam) return [];
-    
+
+        if (searchByWord) {
+              return dataExam
+                .filter((Exam) =>
+                  Exam.name.toLowerCase().includes(searchByWord.toLowerCase())
+                )
+                .map((Exam, index) => ({
+                  colId: index + 1,
+                  id: Exam.id,
+                  col1: Exam.group.name,
+                  col2: Exam.name,
+                  
+                }));
+            }
         
         return dataExam.map((exam, index) => ({
           colId: index + 1,
@@ -46,34 +61,49 @@ export function ExamScreen() {
           col1: exam.group.name,
           col2: exam.name,
         }));
-      }, [dataExam]);
+      }, [dataExam, searchByWord]);
     
 
     return (
     <>
     <BaseScreen
-        titlePage="Exámenes"
+        titlePage="Examenes"
         actions={
             <Button
               onClick={() => {
                 toggleFormGroup();
               }}
-              startContent={<ImFilesEmpty />}
+              startContent={<IoIosAdd />}
               color="success"
             >
-              Examenes
+              Nuevo Examen
             </Button>
         }
     >
-        <div className="flex-1 overflow-auto">
-                    <DataGrid
-                    //   loading={isLoadingPatient}
-                      columns={columns}
-                      rows={row}
-                      disableColumnMenu
-                      hideFooter
-                    />
-                  </div>
+      <div className="flex flex-col gap-2 flex-1">
+                <Input
+                  label=""
+                  placeholder="Buscar Examen..."
+                  variant="bordered"
+                  startContent={<CiSearch />}
+                  onChange={(e) => setSearchByWord(e.target.value)}
+                  className="max-w-sm"
+                />
+                
+                <div className="flex-1 overflow-auto">
+                  <DataGrid
+                 //   loading={isLoadingExam}
+                   columns={columns}
+                  rows={row}
+                  disableColumnMenu
+                  hideFooter
+                 />
+        </div>
+                
+
+          </div>
+      
+        
     </BaseScreen>
 
     <ModalExam />
