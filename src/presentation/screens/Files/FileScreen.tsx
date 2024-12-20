@@ -157,7 +157,14 @@ export function FileScreen() {
               columns={columns}
               rows={row}
               disableColumnMenu
-              hideFooter
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 6,
+                  },
+                },
+              }}
+              pageSizeOptions={[6]}
             />
           </div>
         </div>

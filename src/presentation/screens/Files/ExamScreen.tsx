@@ -105,13 +105,22 @@ export function ExamScreen() {
           className="max-w-sm"
           />
                 
-          <div className="flex-1 overflow-auto">
-            <DataGrid
-            //   loading={isLoadingExam}
-              columns={columns}
-              rows={row}
-              disableColumnMenu
-              hideFooter
+        <div className="flex-1 overflow-auto">
+          <DataGrid
+          //   loading={isLoadingExam}
+          columns={columns}
+          rows={row}
+          disableColumnMenu
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 6,
+              },
+            },
+          }}
+          pageSizeOptions={[6]}
+          
+          
           />
         </div>
       </div>   
