@@ -8,10 +8,6 @@ import { useGetExam } from "./query/exam.query";
 import { useMemo } from "react";
 
 
-
-
-
-
 export function ExamScreen() {
     
     const {toggleForm: toggleFormGroup} = useGroupsStore();

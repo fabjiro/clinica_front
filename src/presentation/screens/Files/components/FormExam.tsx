@@ -1,6 +1,8 @@
 import { Autocomplete, AutocompleteItem, Button, Input } from "@nextui-org/react";
 import { useGroupsStore } from "../store/groups.store";
 import { useGetGroup } from "../query/group.query"
+import { useFormikExam } from "../hooks/useFormikExam";
+
 
 
 
@@ -8,6 +10,22 @@ export function FormExam() {
 
     const {toggleForm: toggleFormGroup} = useGroupsStore();
     const { data: DataGroup, isLoading: isLoadingGroup } = useGetGroup();
+    const { errors, values, handleSubmit, setFieldValue } = useFormikExam();
+
+    const {
+        group: groupError,
+        name: nameError,
+      } = errors;
+      
+    // const isLoadingUpdateExam = statusUpdatePatient === "pending";
+    // const isLoadingAddExam = statusAddPatient === "pending";
+
+    // useEffect(() => {
+    //     if(statusAddExam == "success" || statusUpdateExam == "success"){ 
+    //         toggleFormGroup();
+    //     }
+    //   },[statusAddExam, statusUpdateExam])
+
 
     return (
         <div className="flex flex-col gap-4 ">
@@ -18,10 +36,10 @@ export function FormExam() {
             defaultItems={DataGroup ?? []}
             label="Grupos"
             size="sm"
-            //   isInvalid={!!civilStatusError}
-            //   errorMessage={civilStatusError}
-            //   selectedKey={values.civilStatus}
-            //   onSelectionChange={(e) => setFieldValue("civilStatus", e)}
+            isInvalid={!!groupError}
+            errorMessage={groupError}
+            selectedKey={values.group}
+            onSelectionChange={(e) => setFieldValue("group", e)}
             >
             {(item) => (
                 <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
@@ -29,10 +47,10 @@ export function FormExam() {
             </Autocomplete>
             <Input
             isRequired
-            //   isInvalid={!!contactPhoneError}
-            //   errorMessage={contactPhoneError}
-            //   value={values.contactPhone}
-            //   onChange={(e) => setFieldValue("contactPhone", e.target.value)}
+            isInvalid={!!nameError}
+            errorMessage={nameError}
+            value={values.name}
+              onChange={(e) => setFieldValue("name", e.target.value)}
             size="sm"
             label="Nuevo examen"
             // disabled={isLoadingAddUser || isLoadingUpdateUser}
@@ -44,7 +62,7 @@ export function FormExam() {
 
         <Button onClick={() => toggleFormGroup()}>Cancelar</Button>
         <Button
-            // onClick={() => handleSubmit()}
+            onClick={() => handleSubmit()}
             // isLoading={isLoadingAddPatient || isLoadingUpdatePatient}
           //   disabled={isLoadingRoles}
           color="primary"
