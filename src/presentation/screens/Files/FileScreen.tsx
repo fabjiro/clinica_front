@@ -10,10 +10,7 @@ import { ModalPatient } from "./components/ModalPatient";
 import moment from "moment";
 import { CiSearch } from "react-icons/ci";
 import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
-import { ImFilesEmpty } from "react-icons/im";
-import { ModalExam } from "./components/ModalExam";
-import { useGroupsStore } from "./store/groups.store";
-import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -69,7 +66,7 @@ export function FileScreen() {
   const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
   const { toggleForm, setModeForm } = usePatientStore();
-  const {toggleForm: toggleFormGroup} = useGroupsStore();
+  
 
   
 

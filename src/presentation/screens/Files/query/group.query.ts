@@ -12,7 +12,7 @@ export async function GetAllGroups() {
 
 export function useGetGroup() {
     return useQuery({
-      queryKey: ["getAllGropup"],
+      queryKey: ["getAllGroup"],
       queryFn: GetAllGroups,
     });
-  }
+}
