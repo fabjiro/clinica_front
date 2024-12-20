@@ -10,6 +10,12 @@ import { ModalPatient } from "./components/ModalPatient";
 import moment from "moment";
 import { CiSearch } from "react-icons/ci";
 import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
+import { ImFilesEmpty } from "react-icons/im";
+import { ModalExam } from "./components/ModalExam";
+import { useGroupsStore } from "./store/groups.store";
+
+
+
 const columns: GridColDef[] = [
   { field: "colId", headerName: "ID", width: 90 },
   {
@@ -62,6 +68,7 @@ export function FileScreen() {
   const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
   const { toggleForm, setModeForm } = usePatientStore();
+  const {toggleForm: toggleFormGroup} = useGroupsStore();
 
   const row = useMemo(() => {
     if (!dataPatient) return [];
@@ -121,6 +128,17 @@ export function FileScreen() {
             >
               Nuevo paciente
             </Button>
+            
+            <Button
+              onClick={() => {
+                // setModeForm(MODEFORMENUM.CREATE);
+                toggleFormGroup();
+              }}
+              startContent={<ImFilesEmpty />}
+              color="success"
+            >
+              Examenes
+            </Button>
           </>
         }
       >
@@ -145,6 +163,7 @@ export function FileScreen() {
         </div>
       </BaseScreen>
       <ModalPatient />
+      <ModalExam />
     </>
   );
 }
