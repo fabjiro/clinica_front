@@ -1,15 +1,16 @@
 import { useFormik } from "formik";
 import { IExamReqDto } from "../../../../Dto/Request/exam.req.dto";
 import { examSchemaValidation } from "../schemas/exam.schema";
+import { useAddExam } from "../query/exam.query";
 
 export function useFormikExam() {
-//   const { mutate, status: statusAddPatient } = useAddPatient();
+  const { mutate, status: statusAddExam } = useAddExam();
 //   const { mutate: mutateUpdate, status: statusUpdatePatient } = useUpdatePatient();
 //   const { patient, modeForm } = usePatientStore();
 
 //   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
 
-  const initialValues: Partial<IExamReqDto> = {};
+  const initialValues: Partial<IExamReqDto> = { group: "", name: "" };
 
   const {
     handleChange,
@@ -27,6 +28,7 @@ export function useFormikExam() {
     validationSchema: () => examSchemaValidation(),
     onSubmit: (values) => {
       console.log(values);
+      mutate({group: values.group!, name: values.name!});
     },
   });
 
@@ -38,5 +40,6 @@ export function useFormikExam() {
     submitForm,
     errors,
     values,
+    statusAddExam
   };
 }

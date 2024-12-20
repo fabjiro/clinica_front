@@ -2,6 +2,7 @@ import { Autocomplete, AutocompleteItem, Button, Input } from "@nextui-org/react
 import { useGroupsStore } from "../store/groups.store";
 import { useGetGroup } from "../query/group.query"
 import { useFormikExam } from "../hooks/useFormikExam";
+import { useEffect } from "react";
 
 
 
@@ -10,21 +11,21 @@ export function FormExam() {
 
     const {toggleForm: toggleFormGroup} = useGroupsStore();
     const { data: DataGroup, isLoading: isLoadingGroup } = useGetGroup();
-    const { errors, values, handleSubmit, setFieldValue } = useFormikExam();
+    const { errors, values, handleSubmit, setFieldValue,  statusAddExam } = useFormikExam();
 
     const {
         group: groupError,
         name: nameError,
       } = errors;
       
-    // const isLoadingUpdateExam = statusUpdatePatient === "pending";
-    // const isLoadingAddExam = statusAddPatient === "pending";
+    // const isLoadingUpdateExam = statusUpdateExam === "pending";
+    const isLoadingAddExam = statusAddExam === "pending";
 
-    // useEffect(() => {
-    //     if(statusAddExam == "success" || statusUpdateExam == "success"){ 
-    //         toggleFormGroup();
-    //     }
-    //   },[statusAddExam, statusUpdateExam])
+    useEffect(() => {
+        if(statusAddExam == "success"){ 
+            toggleFormGroup();
+        }
+    },[statusAddExam])
 
 
     return (
@@ -63,7 +64,7 @@ export function FormExam() {
         <Button onClick={() => toggleFormGroup()}>Cancelar</Button>
         <Button
             onClick={() => handleSubmit()}
-            // isLoading={isLoadingAddPatient || isLoadingUpdatePatient}
+            isLoading={isLoadingAddExam}
           //   disabled={isLoadingRoles}
           color="primary"
         >
