@@ -22,6 +22,13 @@ export async function AddExam(params: IExamReqDto) {
     await axiosInstance.post<IExam>(BASE_URL, params);
 }
 
+export async function DeleteExam(id: string) {
+  await axiosInstance.delete<IExam>(`${BASE_URL}/${id}`);
+}
+
+
+
+
 
 export function useAddExam() {
     const queryClient = useQueryClient();
@@ -37,6 +44,26 @@ export function useAddExam() {
       },
       onError: () => {
         toast.error("Error al crear Examen", {
+          position: "top-right",
+        });
+      },
+    });
+  }
+
+  export function useDeleteExam() {
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationKey: ["deleteExam"],
+      mutationFn: DeleteExam,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["getAllExam"] });
+        toast.success("Examen eliminado", {
+          position: "top-right",
+        });
+      },
+      onError: () => {
+        toast.error("Error al eliminar Examen", {
           position: "top-right",
         });
       },

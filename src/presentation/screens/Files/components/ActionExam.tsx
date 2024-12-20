@@ -7,49 +7,50 @@ import {
   } from "@nextui-org/react";
   import { FaEllipsisVertical } from "react-icons/fa6";
   import { MdEdit, MdDelete } from "react-icons/md";
-//   import { usePatientStore } from "../store/patient.store";
+import { useConfirmStore } from "../../../storage/confim.storage";
+import { useDeleteExam } from "../query/exam.query";
+//   import { useExamStore } from "../store/Exam.store";
 //   import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 //   import { useQueryClient } from "@tanstack/react-query";
-//   import { IPatient } from "../../../../interfaces/patient.interface";
+//   import { IExam } from "../../../../interfaces/Exam.interface";
 //   import { useConfirmStore } from "../../../storage/confim.storage";
-//   import { useDeletePatient } from "../query/patient.query";
+//   import { useDeleteExam } from "../query/Exam.query";
   
   interface IProps {
     id: string;
   }
   
   export function ActionExam({ id }: IProps) {
-    // const { toggleForm, setModeForm, setPatient } = usePatientStore();
-    // const { status: statusDeletePatient, mutate: handleDeletePatient } =
-    //   useDeletePatient();
+    // const { toggleForm, setModeForm, setExam } = useExamStore();
+    const { status: statusDeleteExam, mutate: handleDeleteExam } = useDeleteExam();
     // const clientQuery = useQueryClient();
-    // const showConfirm = useConfirmStore((state) => state.showConfirm);
+    const showConfirm = useConfirmStore((state) => state.showConfirm);
   
     const handleUpdate = () => {
-    //   const patient = (
-    //     clientQuery.getQueryData<IPatient[]>(["getAllPatient"]) ?? []
-    //   ).find((patient) => patient.id === id);
+    //   const Exam = (
+    //     clientQuery.getQueryData<IExam[]>(["getAllExam"]) ?? []
+    //   ).find((Exam) => Exam.id === id);
   
-    //   if (!patient) return;
+    //   if (!Exam) return;
   
-    //   setPatient(patient);
+    //   setExam(Exam);
     //   setModeForm(MODEFORMENUM.UPDATE);
     //   toggleForm();
     console.log(id)
     };
   
-    // const handleDelete = () => {
-    // //   showConfirm("Eliminar", "¿Desea eliminar el paciente?", () => {
-    // //     handleDeletePatient(id);
-    // //   });
-    // };
+    const handleDelete = () => {
+      showConfirm("Eliminar", "¿Desea eliminar el Examen?", () => {
+        handleDeleteExam(id);
+      });
+    };
   
     return (
       <div className="flex flex-row gap-2 items-center justify-center h-full w-full">
         <Dropdown backdrop="blur" className="rounded-md">
           <DropdownTrigger>
             <Button
-            //   isLoading={statusDeletePatient === "pending"}
+              isLoading={statusDeleteExam === "pending"}
               size="sm"
               isIconOnly
               variant="light"
@@ -71,7 +72,7 @@ import {
               color="danger"
               key="edit"
               startContent={<MdDelete />}
-            //   onClick={handleDelete}
+              onClick={handleDelete}
             >
               Eliminar
             </DropdownItem>
