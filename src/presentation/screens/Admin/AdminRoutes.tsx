@@ -17,7 +17,7 @@ export default function AdminRoutes() {
         <Route path="dashboard" element={<p>Dashboard</p>} />
         <Route path="users" element={<UserScreenLazy />} />
         <Route path="backups" element={<BackupsScreenLazy />} />
-        <Route path="files" element={<FilesRoutesLazy />} />
+        <Route path="files/*" element={<FilesRoutesLazy />} />
         <Route path="*" element={<NotFoundScreenLazy />} />
       </Route>
     </Routes>
