@@ -12,6 +12,7 @@ import { CiSearch } from "react-icons/ci";
 import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 import { ImFilesEmpty } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
+import { FiUserPlus } from "react-icons/fi";
 
 
 
@@ -122,10 +123,20 @@ export function FileScreen() {
                 setModeForm(MODEFORMENUM.CREATE);
                 toggleForm();
               }}
-              startContent={<MdAdd />}
+              startContent={<FiUserPlus />}
               color="primary"
             >
               Nuevo paciente
+            </Button>
+
+            <Button
+              onClick={() => {
+                navigate("/files/exams");
+              }}
+              startContent={<MdAdd />}
+              color="warning"
+            >
+              Nueva Consulta
             </Button>
 
             <Button
