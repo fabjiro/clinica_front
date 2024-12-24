@@ -9,6 +9,10 @@ import {
   import { MdEdit, MdDelete } from "react-icons/md";
 import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeleteExam } from "../query/exam.query";
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
+import { useGroupsStore } from "../store/groups.store";
+import { IExam } from "../../../../interfaces/exam.interface";
+import { useQueryClient } from "@tanstack/react-query";
 //   import { useExamStore } from "../store/Exam.store";
 //   import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 //   import { useQueryClient } from "@tanstack/react-query";
@@ -21,22 +25,21 @@ import { useDeleteExam } from "../query/exam.query";
   }
   
   export function ActionExam({ id }: IProps) {
-    // const { toggleForm, setModeForm, setExam } = useExamStore();
+    const { toggleForm, setModeForm, setExam } = useGroupsStore();
     const { status: statusDeleteExam, mutate: handleDeleteExam } = useDeleteExam();
-    // const clientQuery = useQueryClient();
+    const clientQuery = useQueryClient();
     const showConfirm = useConfirmStore((state) => state.showConfirm);
   
     const handleUpdate = () => {
-    //   const Exam = (
-    //     clientQuery.getQueryData<IExam[]>(["getAllExam"]) ?? []
-    //   ).find((Exam) => Exam.id === id);
+      const Exam = (
+        clientQuery.getQueryData<IExam[]>(["getAllExam"]) ?? []
+      ).find((Exam) => Exam.id === id);
   
-    //   if (!Exam) return;
+      if (!Exam) return;
   
-    //   setExam(Exam);
-    //   setModeForm(MODEFORMENUM.UPDATE);
-    //   toggleForm();
-    console.log(id)
+      setExam(Exam);
+      setModeForm(MODEFORMENUM.UPDATE);
+      toggleForm();
     };
   
     const handleDelete = () => {

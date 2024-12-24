@@ -10,12 +10,13 @@ import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { ActionExam } from "./components/ActionExam";
+import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 
 
 export function ExamScreen() {
     
     const navigate = useNavigate();
-    const {toggleForm: toggleFormGroup} = useGroupsStore();
+    const {toggleForm: toggleFormGroup, setModeForm} = useGroupsStore();
     const [searchByWord, setSearchByWord] = useState<string | undefined>();
     const { data: dataExam} = useGetExam();
 
@@ -75,6 +76,7 @@ export function ExamScreen() {
         actions={
             <Button
               onClick={() => {
+                setModeForm(MODEFORMENUM.CREATE)
                 toggleFormGroup();
               }}
               startContent={<IoIosAdd />}

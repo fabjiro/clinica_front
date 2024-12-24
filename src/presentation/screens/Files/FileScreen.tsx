@@ -130,9 +130,9 @@ export function FileScreen() {
             </Button>
 
             <Button
-              onClick={() => {
-                navigate("/files/exams");
-              }}
+              // onClick={() => {
+                
+              // }}
               startContent={<MdAdd />}
               color="warning"
             >

@@ -3,12 +3,12 @@ import { useGroupsStore } from "../store/groups.store";
 import { FormExam } from "./FormExam";
 
 export function ModalExam() {
-  const { toggleForm, showForm } = useGroupsStore();
+  const { toggleForm, showForm, titleForm } = useGroupsStore();
   return (
     <BaseModal
       isOpen={showForm}
       onOpenChange={toggleForm}
-      title={"Nuevo examen"}
+      title={titleForm}
       size="4xl"
     >
       <FormExam />

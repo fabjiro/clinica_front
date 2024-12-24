@@ -1,16 +1,22 @@
 import { useFormik } from "formik";
 import { IExamReqDto } from "../../../../Dto/Request/exam.req.dto";
 import { examSchemaValidation } from "../schemas/exam.schema";
-import { useAddExam } from "../query/exam.query";
+import { useAddExam, useUpdateExam } from "../query/exam.query";
+import { useGroupsStore } from "../store/groups.store";
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 
 export function useFormikExam() {
   const { mutate, status: statusAddExam } = useAddExam();
+  const { mutate: mutateUpdateExam, status: statusUpdateExam} = useUpdateExam();
 //   const { mutate: mutateUpdate, status: statusUpdatePatient } = useUpdatePatient();
-//   const { patient, modeForm } = usePatientStore();
+  const { exam, modeForm } = useGroupsStore();
 
-//   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
+  const isCreateMode = modeForm === MODEFORMENUM.CREATE;
 
-  const initialValues: Partial<IExamReqDto> = { group: "", name: "" };
+  const initialValues: Partial<IExamReqDto> = isCreateMode ?  { group: "", name: "" } : {
+    group: exam?.group.id,
+    name: exam?.name
+  };
 
   const {
     handleChange,
@@ -27,8 +33,15 @@ export function useFormikExam() {
     validateOnBlur: false,
     validationSchema: () => examSchemaValidation(),
     onSubmit: (values) => {
-      console.log(values);
-      mutate({group: values.group!, name: values.name!});
+      if(isCreateMode) {
+        mutate({group: values.group!, name: values.name!});
+      } else {
+        mutateUpdateExam({
+          id: exam?.id,
+          group: values.group,
+          name: values.name
+        });
+      }
     },
   });
 
@@ -40,6 +53,7 @@ export function useFormikExam() {
     submitForm,
     errors,
     values,
-    statusAddExam
+    statusAddExam,
+    statusUpdateExam
   };
 }

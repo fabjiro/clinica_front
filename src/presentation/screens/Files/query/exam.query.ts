@@ -26,6 +26,10 @@ export async function DeleteExam(id: string) {
   await axiosInstance.delete<IExam>(`${BASE_URL}/${id}`);
 }
 
+export async function UpdateExman(params: Partial<IExamReqDto>){
+  await axiosInstance.put<IExam>(`${BASE_URL}`, params);
+}
+
 
 
 
@@ -64,6 +68,26 @@ export function useAddExam() {
       },
       onError: () => {
         toast.error("Error al eliminar Examen", {
+          position: "top-right",
+        });
+      },
+    });
+  }
+
+  export function useUpdateExam() {
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationKey: ["updateExam"],
+      mutationFn: UpdateExman,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["getAllExam"] });
+        toast.success("Examen actualizado", {
+          position: "top-right",
+        });
+      },
+      onError: () => {
+        toast.error("Error al actualizar Examen", {
           position: "top-right",
         });
       },

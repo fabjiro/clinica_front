@@ -11,7 +11,7 @@ export function FormExam() {
 
     const {toggleForm: toggleFormGroup} = useGroupsStore();
     const { data: DataGroup, isLoading: isLoadingGroup } = useGetGroup();
-    const { errors, values, handleSubmit, setFieldValue,  statusAddExam } = useFormikExam();
+    const { errors, values, handleSubmit, setFieldValue,  statusAddExam, statusUpdateExam } = useFormikExam();
 
     const {
         group: groupError,
@@ -22,10 +22,10 @@ export function FormExam() {
     const isLoadingAddExam = statusAddExam === "pending";
 
     useEffect(() => {
-        if(statusAddExam == "success"){ 
+        if(statusAddExam == "success" || statusUpdateExam === "success"){ 
             toggleFormGroup();
         }
-    },[statusAddExam])
+    },[statusAddExam,statusUpdateExam])
 
 
     return (
