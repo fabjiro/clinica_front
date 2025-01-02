@@ -13,8 +13,9 @@ import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 import { ImFilesEmpty } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
-
-
+import { BaseModal } from "../../components/Base/BaseModal";
+import { useConsutlFormStore } from "../../storage/form.storage";
+import { FormConsult } from "./components/FormConsult";
 
 const columns: GridColDef[] = [
   { field: "colId", headerName: "ID", width: 90 },
@@ -69,7 +70,8 @@ export function FileScreen() {
   const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
   const { toggleForm, setModeForm } = usePatientStore();
-  
+  const { modeForm, setModeForm: setModeFormConsult, toggleForm: toggleFormConsult, showForm } = useConsutlFormStore();
+
   const row = useMemo(() => {
     if (!dataPatient) return [];
 
@@ -130,9 +132,10 @@ export function FileScreen() {
             </Button>
 
             <Button
-              // onClick={() => {
-                
-              // }}
+              onClick={() => {
+                setModeFormConsult(MODEFORMENUM.CREATE);
+                toggleFormConsult();
+              }}
               startContent={<MdAdd />}
               color="warning"
             >
@@ -148,8 +151,6 @@ export function FileScreen() {
             >
               Examenes
             </Button>
-            
-            
           </>
         }
       >
@@ -181,7 +182,19 @@ export function FileScreen() {
         </div>
       </BaseScreen>
       <ModalPatient />
-      
+      <BaseModal
+      size="full"
+      scrollBehavior="inside"
+        isOpen={showForm}
+        onOpenChange={toggleFormConsult}
+        title={
+          modeForm === MODEFORMENUM.CREATE
+            ? "Nueva Consulta"
+            : "Editar Consulta"
+        }
+      >
+        <FormConsult />
+      </BaseModal>
     </>
   );
 }

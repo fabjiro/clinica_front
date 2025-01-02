@@ -14,6 +14,7 @@ interface IProps {
   onOpenChange?: (isOpen: boolean) => void;
   showActions?: boolean;
   size?: "4xl" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "5xl" | "full" | undefined;
+  scrollBehavior?: "inside" | "normal" | "outside" | undefined
 }
 
 export function BaseModal({
@@ -23,9 +24,10 @@ export function BaseModal({
   title,
   showActions,
   size,
+  scrollBehavior
 }: IProps) {
   return (
-    <Modal size={size} isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal scrollBehavior={scrollBehavior} size={size} isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
           <>
