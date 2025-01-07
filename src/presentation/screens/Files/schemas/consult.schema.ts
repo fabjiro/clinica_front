@@ -8,6 +8,7 @@ export function consultSchemaValidation(): Yup.Schema<Partial<IConsultReqDto>> {
     weight: Yup.number().required("El peso es requerido"),
     size: Yup.number().required("El tamaño es requerido"),
     diagnostic: Yup.string().required("El diagnostico es requerido"),
+    examComplementary: Yup.string().required("El examen complementario es requerido"),
     motive: Yup.string().optional(),
     antecedentPerson: Yup.string().optional(),
     antecedentFamily: Yup.string().optional(),
@@ -21,6 +22,5 @@ export function consultSchemaValidation(): Yup.Schema<Partial<IConsultReqDto>> {
     systolicPressure: Yup.number().optional(),
     diastolicPressure: Yup.number().optional(),
     imageExam: Yup.string().optional(),
-    examComplementary: Yup.string().optional(),
 });
 }

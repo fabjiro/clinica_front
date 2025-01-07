@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { MODEFORMENUM } from "../../enum/mode/mode.enum";
+import { IConsultReqDto } from "../../Dto/Request/consult.req.dto";
 
 interface IFormStore<T> {
   modeForm: MODEFORMENUM;
@@ -23,4 +24,4 @@ export const createFormStore = <T>() => {
 // export const useCategoryFormStore = createFormStore<CategoryEntity>();
 // export const useAttributeFormStore = createFormStore<AttributesEntity>();
 
-export const useConsutlFormStore = createFormStore<any>();
+export const useConsutlFormStore = createFormStore<IConsultReqDto>();

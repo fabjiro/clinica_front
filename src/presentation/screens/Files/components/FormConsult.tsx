@@ -11,10 +11,13 @@ import { useGetAllPatient } from "../query/patient.query";
 import { useGetExam } from "../query/exam.query";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
+import { useFormikConsult } from "../hooks/useFormilConsult";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
   const { data: allExamns, status: statusGetAllExam } = useGetExam();
+
+  const { values, errors, setFieldValue, handleSubmit } = useFormikConsult();
 
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
     accept: ".png, .jpg, .jpeg",
@@ -35,10 +38,10 @@ export function FormConsult() {
           defaultItems={allPatient ?? []}
           label="Paciente"
           size="sm"
-          // isInvalid={!!groupError}
-          // errorMessage={groupError}
+          isInvalid={!!errors.patient}
+          errorMessage={errors.patient}
           // selectedKey={values.group}
-          // onSelectionChange={(e) => setFieldValue("group", e)}
+          onSelectionChange={(e) => setFieldValue("patient", e)}
         >
           {(item) => (
             <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
@@ -57,8 +60,26 @@ export function FormConsult() {
           <Textarea label="Funcional" />
         </div>
         <div className="flex flex-row gap-4">
-          <Input isRequired size="sm" label="Peso" endContent="Kg" />
-          <Input isRequired size="sm" label="Talla" endContent="Cm" />
+          <Input
+            isInvalid={!!errors.weight}
+            errorMessage={errors.weight}
+            isRequired
+            size="sm"
+            label="Peso"
+            endContent="Kg"
+            value={values.weight?.toString()}
+            onChange={(e) => setFieldValue("weight", e.target.value)}
+          />
+          <Input
+            isInvalid={!!errors.size}
+            errorMessage={errors.size}
+            isRequired
+            size="sm"
+            label="Talla"
+            endContent="Cm"
+            value={values.size?.toString()}
+            onChange={(e) => setFieldValue("size", e.target.value)}
+          />
           <Input size="sm" label="Pulso" endContent="Lpm" />
           <Input size="sm" label="Sturacion de oxigeno" endContent="%" />
         </div>
@@ -90,7 +111,14 @@ export function FormConsult() {
               <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
             )}
           </Autocomplete>
-          <Textarea isRequired label="Diagnostico" />
+          <Textarea
+            isRequired
+            label="Diagnostico"
+            isInvalid={!!errors.diagnostic}
+            errorMessage={errors.diagnostic}
+            value={values.diagnostic}
+            onChange={(e) => setFieldValue("diagnostic", e.target.value)}
+          />
         </div>
         <div className="flex flex-row gap-4">
           <Button
@@ -104,14 +132,28 @@ export function FormConsult() {
           >
             Imagen del examen
           </Button>
-          <DatePicker isRequired label="Proxima cita" />;
+          <DatePicker
+            isRequired
+            label="Proxima cita"
+            isInvalid={!!errors.nextappointment}
+            errorMessage={errors.nextappointment}
+            onChange={(e) => setFieldValue("nextappointment", e)}
+            hideTimeZone={true}
+          />
         </div>
-        <Textarea label="Receta" />
+        <Textarea
+          isRequired
+          label="Receta"
+          isInvalid={!!errors.examComplementary}
+          errorMessage={errors.examComplementary}
+          value={values.examComplementary}
+          onChange={(e) => setFieldValue("examComplementary", e.target.value)}
+        />
 
         <div className="flex flex-row gap-4 justify-end items-center">
           {/* <Button onClick={() => toggleForm()}>Cancelar</Button> */}
           <Button
-            //   onClick={() => handleSubmit()}
+            onClick={() => handleSubmit()}
             isLoading={isLoading}
             //   disabled={isLoadingRoles}
             color="primary"

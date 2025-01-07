@@ -3,6 +3,7 @@ export interface IConsultReqDto {
   nextappointment: string;
   weight: number;
   size: number;
+  examComplementary: string;
   motive?: string;
   antecedentPerson?: string;
   diagnostic: string;
@@ -18,5 +19,4 @@ export interface IConsultReqDto {
   systolicPressure?: number;
   diastolicPressure?: number;
   imageExam?: string;
-  examComplementary?: string;
 }
