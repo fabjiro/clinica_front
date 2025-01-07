@@ -59,20 +59,15 @@ export function FormConsult() {
         <div className="flex flex-row gap-4">
           <Input isRequired size="sm" label="Peso" endContent="Kg" />
           <Input isRequired size="sm" label="Talla" endContent="Cm" />
-          <Input isRequired size="sm" label="Pulso" endContent="Lpm" />
-          <Input
-            isRequired
-            size="sm"
-            label="Sturacion de oxigeno"
-            endContent="%"
-          />
+          <Input size="sm" label="Pulso" endContent="Lpm" />
+          <Input size="sm" label="Sturacion de oxigeno" endContent="%" />
         </div>
         <div className="flex flex-col">
           <h1>Presion arterial</h1>
           <div className="flex flex-row w-1/4 gap-4">
-            <Input isRequired size="sm" label="Sistolica" />
+            <Input size="sm" label="Sistolica" />
             {/* <Button variant="light">/</Button> */}
-            <Input isRequired size="sm" label="Diastolica" />
+            <Input size="sm" label="Diastolica" />
           </div>
         </div>
 
@@ -83,7 +78,6 @@ export function FormConsult() {
         <div className="flex flex-row gap-4">
           <Autocomplete
             isLoading={isLoading}
-            isRequired
             defaultItems={allExamns ?? []}
             label="Examen complemantarios"
             size="sm"
@@ -96,7 +90,7 @@ export function FormConsult() {
               <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
             )}
           </Autocomplete>
-          <Textarea label="Diagnostico" />
+          <Textarea isRequired label="Diagnostico" />
         </div>
         <div className="flex flex-row gap-4">
           <Button
@@ -110,7 +104,7 @@ export function FormConsult() {
           >
             Imagen del examen
           </Button>
-          <DatePicker label="Proxima cita" />;
+          <DatePicker isRequired label="Proxima cita" />;
         </div>
         <Textarea label="Receta" />
 
