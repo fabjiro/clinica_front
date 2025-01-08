@@ -9,7 +9,7 @@ export async function createConsult(params: IConsultReqDto) {
   await axiosInstance.post<IConsultReqDto>(BASE_URL, params);
 }
 
-export async function useCreateConsult() {
+export function useCreateConsult() {
   return useMutation({
     mutationKey: ["createConsult"],
     mutationFn: createConsult,

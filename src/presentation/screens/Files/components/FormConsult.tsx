@@ -19,6 +19,8 @@ export function FormConsult() {
 
   const { values, errors, setFieldValue, handleSubmit } = useFormikConsult();
 
+  console.log(errors);
+
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
     accept: ".png, .jpg, .jpeg",
     multiple: false,
@@ -48,7 +50,14 @@ export function FormConsult() {
           )}
         </Autocomplete>
         <div className="flex flex-row gap-4">
-          <Textarea label="Motivo" />
+          <Textarea
+            value={values.motive}
+            errorMessage={errors.motive}
+            isInvalid={!!errors.motive}
+            onChange={(e) => setFieldValue("motive", e.target.value)}
+            isRequired
+            label="Motivo"
+          />
           <Textarea label="Historial clinico" />
         </div>
         <Divider />
@@ -93,7 +102,13 @@ export function FormConsult() {
         </div>
 
         <div className="flex flex-row gap-4">
-          <Textarea label="Antecendentes Personlaes" />
+          <Textarea
+            isInvalid={!!errors.antecedentPerson}
+            errorMessage={errors.antecedentPerson}
+            value={values.antecedentPerson}
+            onChange={(e) => setFieldValue("antecedentPerson", e.target.value)}
+            label="Antecendentes Personlaes"
+          />
           <Textarea label="Antecendentes Familiares" />
         </div>
         <div className="flex flex-row gap-4">
@@ -102,10 +117,7 @@ export function FormConsult() {
             defaultItems={allExamns ?? []}
             label="Examen complemantarios"
             size="sm"
-            // isInvalid={!!groupError}
-            // errorMessage={groupError}
-            // selectedKey={values.group}
-            // onSelectionChange={(e) => setFieldValue("group", e)}
+            onSelectionChange={(e) => setFieldValue("examComplementary", e)}
           >
             {(item) => (
               <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
@@ -137,17 +149,17 @@ export function FormConsult() {
             label="Proxima cita"
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
-            onChange={(e) => setFieldValue("nextappointment", e)}
+            onChange={(e) => setFieldValue("nextappointment", e?.toString())}
             hideTimeZone={true}
           />
         </div>
         <Textarea
           isRequired
           label="Receta"
-          isInvalid={!!errors.examComplementary}
-          errorMessage={errors.examComplementary}
-          value={values.examComplementary}
-          onChange={(e) => setFieldValue("examComplementary", e.target.value)}
+          isInvalid={!!errors.recipe}
+          errorMessage={errors.recipe}
+          value={values.recipe}
+          onChange={(e) => setFieldValue("recipe", e.target.value)}
         />
 
         <div className="flex flex-row gap-4 justify-end items-center">

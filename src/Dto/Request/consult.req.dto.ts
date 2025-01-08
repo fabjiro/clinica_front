@@ -3,11 +3,11 @@ export interface IConsultReqDto {
   nextappointment: string;
   weight: number;
   size: number;
-  examComplementary: string;
-  motive?: string;
-  antecedentPerson?: string;
+  examComplementary?: string;
   diagnostic: string;
-  recipe?: string;
+  motive: string;
+  antecedentPerson: string;
+  recipe: string;
   antecedentFamily?: string;
   clinicalhistory?: string;
   bilogicalEvaluation?: string;
