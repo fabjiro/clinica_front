@@ -14,6 +14,7 @@ import { IPatient } from "../../../../interfaces/patient.interface";
 import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeletePatient } from "../query/patient.query";
 import { IoIosDocument } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   id: string;
@@ -25,6 +26,7 @@ export function ActionPatient({ id }: IProps) {
     useDeletePatient();
   const clientQuery = useQueryClient();
   const showConfirm = useConfirmStore((state) => state.showConfirm);
+  const navigate = useNavigate();
 
   const handleUpdate = () => {
     const patient = (
@@ -60,8 +62,8 @@ export function ActionPatient({ id }: IProps) {
         <DropdownMenu>
           <DropdownItem
             startContent={<IoIosDocument />}
-            key="edit"
-            onClick={handleUpdate}
+            key="consult"
+            onClick={() => navigate("/files/patient/" + id)}
           >
             Consultas
           </DropdownItem>
