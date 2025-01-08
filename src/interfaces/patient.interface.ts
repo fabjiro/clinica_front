@@ -17,4 +17,5 @@ export interface IPatient {
   typeSex: string;
   createdAt: Date;
   civilStatus: ICivilStatus;
+  consultCount: number;
 }

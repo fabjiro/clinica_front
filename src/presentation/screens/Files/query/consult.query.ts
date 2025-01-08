@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../../../config/axios.config";
 import { IConsultReqDto } from "../../../../Dto/Request/consult.req.dto";
 import toast from "react-hot-toast";
@@ -10,10 +10,13 @@ export async function createConsult(params: IConsultReqDto) {
 }
 
 export function useCreateConsult() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["createConsult"],
     mutationFn: createConsult,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllPatient"] });
+      
       toast.success("Consulta creada", {
         position: "top-right",
       });

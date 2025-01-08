@@ -50,6 +50,11 @@ const columns: GridColDef[] = [
     flex: 1,
   },
   {
+    field: "col9",
+    headerName: "N. Consultas",
+    flex: 1,
+  },
+  {
     field: "col8",
     headerName: "Fecha de creación",
     flex: 1,
@@ -93,6 +98,7 @@ export function FileScreen() {
               ? "Femenino"
               : "Masculino",
           col6: patient.civilStatus.name,
+          col9: patient.consultCount,
         }));
     }
 
@@ -109,6 +115,7 @@ export function FileScreen() {
           ? "Femenino"
           : "Masculino",
       col6: patient.civilStatus.name,
+      col9: patient.consultCount,
     }));
   }, [dataPatient, searchByWord]);
 
