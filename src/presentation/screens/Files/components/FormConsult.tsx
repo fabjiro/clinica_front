@@ -19,8 +19,6 @@ export function FormConsult() {
 
   const { values, errors, setFieldValue, handleSubmit } = useFormikConsult();
 
-  console.log(errors);
-
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
     accept: ".png, .jpg, .jpeg",
     multiple: false,

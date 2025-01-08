@@ -13,6 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IPatient } from "../../../../interfaces/patient.interface";
 import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeletePatient } from "../query/patient.query";
+import { IoIosDocument } from "react-icons/io";
 
 interface IProps {
   id: string;
@@ -57,6 +58,13 @@ export function ActionPatient({ id }: IProps) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu>
+          <DropdownItem
+            startContent={<IoIosDocument />}
+            key="edit"
+            onClick={handleUpdate}
+          >
+            Consultas
+          </DropdownItem>
           <DropdownItem
             showDivider
             startContent={<MdEdit />}
