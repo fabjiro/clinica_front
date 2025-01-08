@@ -58,15 +58,36 @@ export function FormConsult() {
             isRequired
             label="Motivo"
           />
-          <Textarea label="Historial clinico" />
+          <Textarea
+            onChange={(e) => setFieldValue("clinicalhistory", e.target.value)}
+            label="Historial clinico"
+          />
         </div>
         <Divider />
         <h1 className="text-2xl font-semibold">Evaluacion Geriatrica</h1>
         <div className="flex flex-row gap-4">
-          <Textarea label="Biologico" />
-          <Textarea label="Psicologico" />
-          <Textarea label="Socual" />
-          <Textarea label="Funcional" />
+          <Textarea
+            onChange={(e) =>
+              setFieldValue("bilogicalEvaluation", e.target.value)
+            }
+            label="Biologico"
+          />
+          <Textarea
+            onChange={(e) =>
+              setFieldValue("psychologicalEvaluation", e.target.value)
+            }
+            label="Psicologico"
+          />
+          <Textarea
+            onChange={(e) => setFieldValue("socialEvaluation", e.target.value)}
+            label="Social"
+          />
+          <Textarea
+            onChange={(e) =>
+              setFieldValue("functionalEvaluation", e.target.value)
+            }
+            label="Funcional"
+          />
         </div>
         <div className="flex flex-row gap-4">
           <Input
@@ -89,15 +110,37 @@ export function FormConsult() {
             value={values.size?.toString()}
             onChange={(e) => setFieldValue("size", e.target.value)}
           />
-          <Input size="sm" label="Pulso" endContent="Lpm" />
-          <Input size="sm" label="Sturacion de oxigeno" endContent="%" />
+          <Input
+            onChange={(e) => setFieldValue("pulse", e.target.value)}
+            size="sm"
+            label="Pulso"
+            endContent="Lpm"
+          />
+          <Input
+            onChange={(e) => setFieldValue("oxygenSaturation", e.target.value)}
+            size="sm"
+            label="Sturacion de oxigeno"
+            endContent="%"
+          />
         </div>
         <div className="flex flex-col">
           <h1>Presion arterial</h1>
           <div className="flex flex-row w-1/4 gap-4">
-            <Input size="sm" label="Sistolica" />
+            <Input
+              onChange={(e) =>
+                setFieldValue("systolicPressure", e.target.value)
+              }
+              size="sm"
+              label="Sistolica"
+            />
             {/* <Button variant="light">/</Button> */}
-            <Input size="sm" label="Diastolica" />
+            <Input
+              onChange={(e) =>
+                setFieldValue("diastolicPressure", e.target.value)
+              }
+              size="sm"
+              label="Diastolica"
+            />
           </div>
         </div>
 
@@ -109,7 +152,10 @@ export function FormConsult() {
             onChange={(e) => setFieldValue("antecedentPerson", e.target.value)}
             label="Antecendentes Personlaes"
           />
-          <Textarea label="Antecendentes Familiares" />
+          <Textarea
+            onChange={(e) => setFieldValue("antecedentFamily", e.target.value)}
+            label="Antecendentes Familiares"
+          />
         </div>
         <div className="flex flex-row gap-4">
           <Autocomplete
