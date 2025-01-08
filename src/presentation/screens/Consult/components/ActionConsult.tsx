@@ -7,6 +7,8 @@ import {
 } from "@nextui-org/react";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { MdEdit, MdDelete } from "react-icons/md";
+import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
+import { IoMdDocument } from "react-icons/io";
 
 interface IProps {
   id: string;
@@ -22,6 +24,12 @@ export function ActionConsult({ id }: IProps) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu>
+          <DropdownItem startContent={<HiOutlineClipboardDocumentList />} key="edit">
+            Generar Receta
+          </DropdownItem>
+          <DropdownItem startContent={<IoMdDocument />} key="edit">
+            Generar Consulta
+          </DropdownItem>
           <DropdownItem showDivider startContent={<MdEdit />} key="edit">
             Editar
           </DropdownItem>
