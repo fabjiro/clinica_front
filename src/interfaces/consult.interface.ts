@@ -1,3 +1,4 @@
+import { IUserModel } from "../domain/model/user/user.model";
 import { IImage } from "./image.interface";
 import { IPatient } from "./patient.interface";
 
@@ -28,4 +29,5 @@ export interface IConsult {
   nextappointment: string;
   createdAt: string;
   count: number;
+  userCreatedBy: IUserModel,
 }

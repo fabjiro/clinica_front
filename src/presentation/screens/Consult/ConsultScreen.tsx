@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BaseScreen } from "../BaseScreen";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Input } from "@nextui-org/react";
+import { Input, User } from "@nextui-org/react";
 import { CiSearch } from "react-icons/ci";
 import { IPatient } from "../../../interfaces/patient.interface";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetConsultByPatientId } from "../Files/query/consult.query";
 import { useMemo } from "react";
-import moment from 'moment/min/moment-with-locales';
+import moment from "moment/min/moment-with-locales";
 import { ActionConsult } from "./components/ActionConsult";
 
 const columns: GridColDef[] = [
@@ -21,6 +21,17 @@ const columns: GridColDef[] = [
     field: "col2",
     headerName: "Atendido por",
     flex: 1,
+    renderCell: (params) => (
+      <div className="flex items-center justify-start w-full h-full">
+
+        <User
+          name={params.row.col2.name}
+          avatarProps={{
+            src: params.row.col2.url,
+          }}
+        />
+      </div>
+    ),
   },
   {
     field: "col8",
@@ -54,19 +65,22 @@ export function ConsultScreen() {
   const { data: consultData, isFetching: isLoadingConsult } =
     useGetConsultByPatientId(patientId);
 
-const rows = useMemo(() => {
-  if (!consultData) {
-    return [];
-  }
+  const rows = useMemo(() => {
+    if (!consultData) {
+      return [];
+    }
 
-  return consultData.map((consult, index) => ({
-    colId: index + 1,
-    id: consult.id,
-    col1: consult.motive,
-    col2: null,
-    col8: moment(consult.createdAt).locale("es").format("L"),
-  }));
-}, [consultData])
+    return consultData.map((consult, index) => ({
+      colId: index + 1,
+      id: consult.id,
+      col1: consult.motive,
+      col2: {
+        name: consult.userCreatedBy.name,
+        url: consult.userCreatedBy.avatar?.compactUrl,
+      },
+      col8: moment(consult.createdAt).locale("es").format("L"),
+    }));
+  }, [consultData]);
 
   return (
     <BaseScreen
