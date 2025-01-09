@@ -117,7 +117,7 @@ export function FormConsult() {
           <Input
             onChange={(e) => setFieldValue("oxygenSaturation", e.target.value)}
             size="sm"
-            label="Sturacion de oxigeno"
+            label="Saturacion de oxigeno"
             endContent="%"
           />
         </div>
@@ -148,7 +148,7 @@ export function FormConsult() {
             errorMessage={errors.antecedentPerson}
             value={values.antecedentPerson}
             onChange={(e) => setFieldValue("antecedentPerson", e.target.value)}
-            label="Antecendentes Personlaes"
+            label="Antecendentes Personales"
           />
           <Textarea
             onChange={(e) => setFieldValue("antecedentFamily", e.target.value)}
@@ -159,7 +159,7 @@ export function FormConsult() {
           <Autocomplete
             isLoading={isLoading}
             defaultItems={allExamns ?? []}
-            label="Examen complemantarios"
+            label="Examen complementario"
             size="sm"
             onSelectionChange={(e) => setFieldValue("examComplementary", e)}
           >

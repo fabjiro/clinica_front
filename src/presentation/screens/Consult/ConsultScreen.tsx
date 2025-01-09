@@ -9,6 +9,7 @@ import { useGetConsultByPatientId } from "../Files/query/consult.query";
 import { useMemo } from "react";
 import moment from "moment/min/moment-with-locales";
 import { ActionConsult } from "./components/ActionConsult";
+import { useState } from "react";
 
 const columns: GridColDef[] = [
   { field: "colId", headerName: "N.", width: 90 },
@@ -52,6 +53,7 @@ export function ConsultScreen() {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const clientQuery = useQueryClient();
+  const [searchByWord, setSearchByWord] = useState<string | undefined>();
 
   if (!patientId) {
     navigate("/");
@@ -70,6 +72,24 @@ export function ConsultScreen() {
       return [];
     }
 
+    if (searchByWord) {
+      return consultData
+        .filter((consult) =>
+          consult.motive.toLowerCase().includes(searchByWord.toLowerCase())
+        )
+        .map((consult, index) => ({
+          colId: index + 1,
+          id: consult.id,
+          col1: consult.motive,
+          col2: {
+          name: consult.userCreatedBy.name,
+          url: consult.userCreatedBy.avatar?.compactUrl,
+      },
+      col8: moment(consult.createdAt).locale("es").format("L"),
+          
+        }));
+    }
+
     return consultData.map((consult, index) => ({
       colId: index + 1,
       id: consult.id,
@@ -80,7 +100,7 @@ export function ConsultScreen() {
       },
       col8: moment(consult.createdAt).locale("es").format("L"),
     }));
-  }, [consultData]);
+  }, [consultData, searchByWord]);
 
   return (
     <BaseScreen
@@ -95,6 +115,7 @@ export function ConsultScreen() {
           variant="bordered"
           startContent={<CiSearch />}
           className="max-w-sm"
+          onChange={(e) => setSearchByWord(e.target.value)}
         />
         <div className="flex-1 overflow-auto">
           <DataGrid columns={columns} rows={rows} disableColumnMenu />

@@ -73,6 +73,7 @@ export function ExamScreen() {
     <>
     <BaseScreen
         titlePage="Examenes"
+        showBackButton
         actions={
             <Button
               onClick={() => {
@@ -88,15 +89,6 @@ export function ExamScreen() {
     >
       <div className="flex flex-col gap-2 flex-1">
         <div className="flex flex-col items-start gap-2">
-          <Button
-          onClick={() => {
-           navigate("/files");
-          }}
-          className="text-sm px-4 py-2"
-          >
-          <IoArrowBack />
-          {"Volver"}
-          </Button>
         </div>
         <Input
           label=""
