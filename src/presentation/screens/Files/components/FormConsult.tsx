@@ -144,6 +144,7 @@ export function FormConsult() {
 
         <div className="flex flex-row gap-4">
           <Textarea
+            isRequired
             isInvalid={!!errors.antecedentPerson}
             errorMessage={errors.antecedentPerson}
             value={values.antecedentPerson}

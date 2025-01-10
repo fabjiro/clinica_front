@@ -9,17 +9,31 @@ import { FaEllipsisVertical } from "react-icons/fa6";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { IoMdDocument } from "react-icons/io";
+import { useConfirmStore } from "../../../storage/confim.storage";
+import { useDeleteConsult } from "../../Files/query/consult.query";
 
 interface IProps {
   id: string;
 }
 
 export function ActionConsult({ id }: IProps) {
+  const { mutate: handleDeleteConsult, status: statusDelete } = useDeleteConsult();
+    const showConfirm = useConfirmStore((state) => state.showConfirm);
+
+
+  const handleDelete = () => {
+    showConfirm("Eliminar", "¿Desea eliminar el consulta?", () => {
+      handleDeleteConsult(id);
+    });
+  };
+
+  const isLoading = statusDelete === "pending";
+
   return (
     <div className="flex flex-row gap-2 items-center justify-center h-full w-full">
       <Dropdown backdrop="blur" className="rounded-md">
         <DropdownTrigger>
-          <Button size="sm" isIconOnly variant="light">
+          <Button isLoading={isLoading} size="sm" isIconOnly variant="light">
             <FaEllipsisVertical />
           </Button>
         </DropdownTrigger>
@@ -38,6 +52,7 @@ export function ActionConsult({ id }: IProps) {
             color="danger"
             key="edit"
             startContent={<MdDelete />}
+            onPress={handleDelete}
           >
             Eliminar
           </DropdownItem>
