@@ -1,4 +1,5 @@
 export interface IConsultReqDto {
+  id?: string;
   patient: string;
   nextappointment: string;
   weight: number;

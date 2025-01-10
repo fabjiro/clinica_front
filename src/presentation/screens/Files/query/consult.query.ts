@@ -28,6 +28,34 @@ export function useGetConsultByPatientId(patientId: string) {
   });
 }
 
+export async function updateConsult(params: Partial<IConsultReqDto>) {
+  await axiosInstance.put(`${BASE_URL}`, params);
+}
+
+export function useUpdateConsult() {
+  const queryClient = useQueryClient();
+  const { patientId } = useParams();
+  return useMutation({
+    mutationKey: ["updateConsult"],
+    mutationFn: updateConsult,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllPatient"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getConsultByPatientId", patientId],
+      })
+
+      toast.success("Consulta actualizada", {
+        position: "top-right",
+      });
+    },
+    onError: () => {
+      toast.error("Error al actualizar consulta", {
+        position: "top-right",
+      });
+    }
+  });
+}
+
 export function useCreateConsult() {
   const queryClient = useQueryClient();
   return useMutation({
