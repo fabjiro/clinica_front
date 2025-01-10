@@ -10,6 +10,10 @@ import { useMemo } from "react";
 import moment from "moment/min/moment-with-locales";
 import { ActionConsult } from "./components/ActionConsult";
 import { useState } from "react";
+import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
+import { BaseModal } from "../../components/Base/BaseModal";
+import { FormConsult } from "../Files/components/FormConsult";
+import { useConsutlFormStore } from "../../storage/form.storage";
 
 const columns: GridColDef[] = [
   { field: "colId", headerName: "N.", width: 90 },
@@ -24,7 +28,6 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params) => (
       <div className="flex items-center justify-start w-full h-full">
-
         <User
           name={params.row.col2.name}
           avatarProps={{
@@ -60,6 +63,12 @@ export function ConsultScreen() {
     return null;
   }
 
+  const {
+    modeForm,
+    toggleForm: toggleFormConsult,
+    showForm,
+  } = useConsutlFormStore();
+
   const patient = (
     clientQuery.getQueryData<IPatient[]>(["getAllPatient"]) ?? []
   ).find((patient) => patient.id === patientId);
@@ -82,11 +91,10 @@ export function ConsultScreen() {
           id: consult.id,
           col1: consult.motive,
           col2: {
-          name: consult.userCreatedBy.name,
-          url: consult.userCreatedBy.avatar?.compactUrl,
-      },
-      col8: moment(consult.createdAt).locale("es").format("L"),
-          
+            name: consult.userCreatedBy.name,
+            url: consult.userCreatedBy.avatar?.compactUrl,
+          },
+          col8: moment(consult.createdAt).locale("es").format("L"),
         }));
     }
 
@@ -103,24 +111,39 @@ export function ConsultScreen() {
   }, [consultData, searchByWord]);
 
   return (
-    <BaseScreen
-      isLoading={isLoadingConsult}
-      showBackButton
-      titlePage={`Consultas de ${patient?.name}`}
-    >
-      <div className="flex flex-col gap-2 flex-1">
-        <Input
-          label=""
-          placeholder="Buscar consulta..."
-          variant="bordered"
-          startContent={<CiSearch />}
-          className="max-w-sm"
-          onChange={(e) => setSearchByWord(e.target.value)}
-        />
-        <div className="flex-1 overflow-auto">
-          <DataGrid columns={columns} rows={rows} disableColumnMenu />
+    <>
+      <BaseScreen
+        isLoading={isLoadingConsult}
+        showBackButton
+        titlePage={`Consultas de ${patient?.name}`}
+      >
+        <div className="flex flex-col gap-2 flex-1">
+          <Input
+            label=""
+            placeholder="Buscar consulta..."
+            variant="bordered"
+            startContent={<CiSearch />}
+            className="max-w-sm"
+            onChange={(e) => setSearchByWord(e.target.value)}
+          />
+          <div className="flex-1 overflow-auto">
+            <DataGrid columns={columns} rows={rows} disableColumnMenu />
+          </div>
         </div>
-      </div>
-    </BaseScreen>
+      </BaseScreen>
+      <BaseModal
+        size="full"
+        scrollBehavior="inside"
+        isOpen={showForm}
+        onOpenChange={toggleFormConsult}
+        title={
+          modeForm === MODEFORMENUM.CREATE
+            ? "Nueva Consulta"
+            : "Editar Consulta"
+        }
+      >
+        <FormConsult />
+      </BaseModal>
+    </>
   );
 }

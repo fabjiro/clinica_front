@@ -11,15 +11,37 @@ import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { IoMdDocument } from "react-icons/io";
 import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeleteConsult } from "../../Files/query/consult.query";
+import { useQueryClient } from "@tanstack/react-query";
+import { IConsult } from "../../../../interfaces/consult.interface";
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
+import { useConsutlFormStore } from "../../../storage/form.storage";
+import { useParams } from "react-router-dom";
 
 interface IProps {
   id: string;
 }
 
 export function ActionConsult({ id }: IProps) {
-  const { mutate: handleDeleteConsult, status: statusDelete } = useDeleteConsult();
-    const showConfirm = useConfirmStore((state) => state.showConfirm);
+  const { mutate: handleDeleteConsult, status: statusDelete } =
+    useDeleteConsult();
+  const { patientId } = useParams();
+  const showConfirm = useConfirmStore((state) => state.showConfirm);
+  const clientQuery = useQueryClient();
+  const { toggleForm, setItem, setModeForm } = useConsutlFormStore();
 
+  const handleUpdate = () => {
+    const consult = (
+      clientQuery.getQueryData<IConsult[]>(["getConsultByPatientId", patientId]) ?? []
+    ).find((param) => param.id === id);
+
+    console.log(consult);
+
+    if (!consult) return;
+
+    setItem(consult);
+    setModeForm(MODEFORMENUM.UPDATE);
+    toggleForm();
+  };
 
   const handleDelete = () => {
     showConfirm("Eliminar", "¿Desea eliminar el consulta?", () => {
@@ -38,13 +60,21 @@ export function ActionConsult({ id }: IProps) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu>
-          <DropdownItem startContent={<HiOutlineClipboardDocumentList />} key="edit">
+          <DropdownItem
+            startContent={<HiOutlineClipboardDocumentList />}
+            key="edit"
+          >
             Generar Receta
           </DropdownItem>
           <DropdownItem startContent={<IoMdDocument />} key="edit">
             Generar Consulta
           </DropdownItem>
-          <DropdownItem showDivider startContent={<MdEdit />} key="edit">
+          <DropdownItem
+            onPress={handleUpdate}
+            showDivider
+            startContent={<MdEdit />}
+            key="edit"
+          >
             Editar
           </DropdownItem>
           <DropdownItem
