@@ -19,4 +19,5 @@ export interface IConsultReqDto {
   systolicPressure?: number;
   diastolicPressure?: number;
   imageExam?: string;
+
 }

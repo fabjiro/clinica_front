@@ -12,6 +12,8 @@ import { useGetExam } from "../query/exam.query";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
+import { fromDate, getLocalTimeZone } from "@internationalized/date";
+import moment from "moment";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
@@ -40,7 +42,7 @@ export function FormConsult() {
           size="sm"
           isInvalid={!!errors.patient}
           errorMessage={errors.patient}
-          // selectedKey={values.group}
+          selectedKey={values.patient}
           onSelectionChange={(e) => setFieldValue("patient", e)}
         >
           {(item) => (
@@ -192,6 +194,7 @@ export function FormConsult() {
           <DatePicker
             isRequired
             label="Proxima cita"
+            value={values.nextappointment && fromDate(new Date(moment(values.nextappointment).format("L")) ,getLocalTimeZone()) || undefined}
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
             onChange={(e) => setFieldValue("nextappointment", e?.toString())}

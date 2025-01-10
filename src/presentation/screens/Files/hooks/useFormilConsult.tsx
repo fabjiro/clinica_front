@@ -12,7 +12,27 @@ export function useFormikConsult() {
 
   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
 
-  const initialValues: Partial<IConsultReqDto> = isCreateMode ? {} : {};
+  const initialValues: Partial<IConsultReqDto> = isCreateMode ? {} : {
+    patient: item?.patient?.id,
+    nextappointment: item?.nextappointment,
+    weight: item?.weight,
+    size: item?.size,
+    recipe: item?.recipe,
+    motive: item?.motive,
+    antecedentPerson: item?.antecedentPersonal,
+    diagnostic: item?.diagnosis,
+    clinicalhistory: item?.clinicalhistory,
+    bilogicalEvaluation: item?.bilogicalEvaluation,
+    psychologicalEvaluation: item?.psychologicalEvaluation,
+    socialEvaluation: item?.socialEvaluation,
+    functionalEvaluation: item?.functionalEvaluation,
+    pulse: item?.pulse !== null ? Number(item?.pulse) : undefined,
+    oxygenSaturation: item?.oxygenSaturation !== null ? Number(item?.oxygenSaturation) : undefined,
+    systolicPressure: item?.systolicPressure !== null ? Number(item?.systolicPressure) : undefined,
+    diastolicPressure: item?.diastolicPressure !== null ? Number(item?.diastolicPressure) : undefined,
+    antecedentFamily: item?.antecedentFamily,
+    examComplementary: item?.complementaryTest,
+  };
 
   const {
     handleChange,
