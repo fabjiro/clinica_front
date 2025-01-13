@@ -121,6 +121,7 @@ export function FormPatient() {
           isRequired
           size="sm"
           label="Fecha de nacimiento"
+          showMonthAndYearPickers
           value={values.birthday && parseDate(moment.utc(values.birthday).format('YYYY-MM-DD')) || undefined}
           hideTimeZone={true}
           granularity="day"

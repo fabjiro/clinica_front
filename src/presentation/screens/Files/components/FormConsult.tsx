@@ -194,6 +194,7 @@ export function FormConsult() {
           <DatePicker
             isRequired
             label="Proxima cita"
+            showMonthAndYearPickers
             value={values.nextappointment && parseAbsoluteToLocal(moment.utc(values.nextappointment).format()) || undefined}
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
