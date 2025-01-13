@@ -12,7 +12,7 @@ import { useGetExam } from "../query/exam.query";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
-import {parseDate } from "@internationalized/date";
+import {fromDate, getLocalTimeZone, parseAbsoluteToLocal, parseDate, parseZonedDateTime } from "@internationalized/date";
 import moment from "moment";
 
 export function FormConsult() {
@@ -28,6 +28,14 @@ export function FormConsult() {
 
   const isLoading =
     statusGetAllPatient === "pending" || statusGetAllExam === "pending";
+
+    // console.log(values.nextappointment);
+
+    // console.log(moment.utc(values.nextappointment));
+    // console.log(moment.utc(values.nextappointment).toString());
+    // console.log(moment.utc(values.nextappointment).toLocaleString());
+    console.log(moment.utc(values.nextappointment).format());
+    
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -194,12 +202,14 @@ export function FormConsult() {
           <DatePicker
             isRequired
             label="Proxima cita"
-            value={values.nextappointment && parseDate(moment.utc(values.nextappointment).format("YYYY-MM-DD")) || undefined}
+            value={values.nextappointment && parseAbsoluteToLocal(moment.utc(values.nextappointment).format()) || undefined}
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
-            onChange={(e) => setFieldValue("nextappointment", e?.toString())}
+            onChange={(e) => {
+              setFieldValue("nextappointment", e?.toAbsoluteString());
+            }}
             hideTimeZone={true}
-            granularity="day"
+            // granularity="day"
 
           />
         </div>
