@@ -12,7 +12,7 @@ import { useGetExam } from "../query/exam.query";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
-import {fromDate, getLocalTimeZone, parseAbsoluteToLocal, parseDate, parseZonedDateTime } from "@internationalized/date";
+import {parseAbsoluteToLocal} from "@internationalized/date";
 import moment from "moment";
 
 export function FormConsult() {
@@ -27,15 +27,7 @@ export function FormConsult() {
   });
 
   const isLoading =
-    statusGetAllPatient === "pending" || statusGetAllExam === "pending";
-
-    // console.log(values.nextappointment);
-
-    // console.log(moment.utc(values.nextappointment));
-    // console.log(moment.utc(values.nextappointment).toString());
-    // console.log(moment.utc(values.nextappointment).toLocaleString());
-    console.log(moment.utc(values.nextappointment).format());
-    
+    statusGetAllPatient === "pending" || statusGetAllExam === "pending";    
 
   return (
     <div className="flex flex-col items-center w-full">
