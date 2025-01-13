@@ -12,8 +12,7 @@ import { useGetExam } from "../query/exam.query";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
-import { fromDate, getLocalTimeZone } from "@internationalized/date";
-import moment from "moment";
+import {parseDate } from "@internationalized/date";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
@@ -194,11 +193,13 @@ export function FormConsult() {
           <DatePicker
             isRequired
             label="Proxima cita"
-            value={values.nextappointment && fromDate(new Date(moment(values.nextappointment).format("L")) ,getLocalTimeZone()) || undefined}
+            value={values.nextappointment && parseDate(values.nextappointment) || undefined}
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
             onChange={(e) => setFieldValue("nextappointment", e?.toString())}
             hideTimeZone={true}
+            granularity="day"
+
           />
         </div>
         <Textarea

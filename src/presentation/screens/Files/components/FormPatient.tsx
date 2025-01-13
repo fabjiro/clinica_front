@@ -11,7 +11,7 @@ import { useGetAllCivilStatus } from "../query/civilstatus.query";
 import { usePatientStore } from "../store/patient.store";
 import { useFormikPatient } from "../hooks/useFormikPatient";
 import { useEffect } from "react";
-import { getLocalTimeZone, fromDate} from "@internationalized/date";
+import { parseDate} from "@internationalized/date";
 import moment from "moment";
 export function FormPatient() {
   const { data: DataCivilStatus, status: statusGetRoles } =
@@ -121,8 +121,9 @@ export function FormPatient() {
           isRequired
           size="sm"
           label="Fecha de nacimiento"
-          value={values.birthday && fromDate(new Date(moment(values.birthday).format("L")) ,getLocalTimeZone()) || undefined}
+          value={values.birthday && parseDate(moment.utc(values.birthday).format('YYYY-DD-MM')) || undefined}
           hideTimeZone={true}
+          granularity="day"
         />
         <Autocomplete
           isInvalid={!!typeSexError}
