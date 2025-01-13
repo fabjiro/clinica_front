@@ -13,6 +13,7 @@ import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
 import {parseDate } from "@internationalized/date";
+import moment from "moment";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
@@ -193,7 +194,7 @@ export function FormConsult() {
           <DatePicker
             isRequired
             label="Proxima cita"
-            value={values.nextappointment && parseDate(values.nextappointment) || undefined}
+            value={values.nextappointment && parseDate(moment.utc(values.nextappointment).format("YYYY-MM-DD")) || undefined}
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
             onChange={(e) => setFieldValue("nextappointment", e?.toString())}
