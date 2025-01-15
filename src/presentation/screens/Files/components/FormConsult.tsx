@@ -199,7 +199,12 @@ export function FormConsult() {
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
             onChange={(e) => {
-              setFieldValue("nextappointment", e?.toAbsoluteString());
+              console.log(e);
+              if(e?.toAbsoluteString) {
+                setFieldValue("nextappointment", e?.toAbsoluteString());
+              } else  {
+                setFieldValue("nextappointment", e?.toString());
+              }
             }}
             hideTimeZone={true}
             // granularity="day"
