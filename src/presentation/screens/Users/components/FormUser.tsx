@@ -5,8 +5,14 @@ import { useFormikUser } from "../hooks/useFormikUser";
 import { useEffect } from "react";
 import { useUserStore } from "../store/user.store";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
+import { FaFileImage } from "react-icons/fa6";
+import { useFilePicker } from "use-file-picker";
 
 export function FormUser() {
+  const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
+    accept: ".png, .jpg, .jpeg",
+    multiple: false,
+  });
 
   const { data: dataRoles, status: statusGetRoles } = useGetAllRoles();
 
@@ -33,11 +39,7 @@ export function FormUser() {
 
   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
 
-  const {
-    Name: nameError,
-    Email: emailError,
-    Rol: rolError,
-  } = errors;
+  const { Name: nameError, Email: emailError, Rol: rolError } = errors;
 
   return (
     <div className="flex flex-col gap-4">
@@ -78,6 +80,28 @@ export function FormUser() {
           <SelectItem key={roles.id}>{roles.name}</SelectItem>
         ))}
       </Select>
+      <Input
+        isInvalid={!!errors.Password}
+        errorMessage={errors.Password}
+        value={values.Password}
+        isRequired
+        onChange={(e) => setFieldValue("Password", e.target.value)}
+        size="sm"
+        label="Contraseña"
+        disabled={isLoadingAddUser}
+      />
+      <Button
+        variant="flat"
+        onPress={openFilePicker}
+        // isLoading={loading}
+        startContent={<FaFileImage />}
+        color="primary"
+        fullWidth
+        // disabled={isLoadingAddProduct || isLoadingUpdateProduct}
+      >
+        {" "}
+        Avatar
+      </Button>
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button
           onClick={() => handleSubmit()}

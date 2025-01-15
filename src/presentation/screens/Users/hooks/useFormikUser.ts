@@ -19,6 +19,8 @@ export function useFormikUser() {
         Name: "",
         Email: "",
         Rol: RolEnum.CUSTOMER,
+        Password: "",
+        Avatar: "",
       }
     : {
         Name: user?.name,
@@ -46,6 +48,7 @@ export function useFormikUser() {
           Email: values.Email!,
           Rol: values.Rol,
           Avatar: values.Avatar,
+          Password: values.Password!,
         });
       } else {
         mutateUpdate({
@@ -53,6 +56,7 @@ export function useFormikUser() {
           Name: values.Name!,
           Rol: values.Rol,
           Avatar: values.Avatar,
+          Password: values.Password!,
         });
       }
     },
@@ -70,3 +74,5 @@ export function useFormikUser() {
     updateUserStatus,
   };
 }
+
+//xd

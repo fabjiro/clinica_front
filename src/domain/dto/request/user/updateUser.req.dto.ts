@@ -4,5 +4,6 @@ export interface IUpdateUserReqDto {
     Rol?: string;
     Status?: string;
     Avatar?: string;
+    Password?: string;
   }
   

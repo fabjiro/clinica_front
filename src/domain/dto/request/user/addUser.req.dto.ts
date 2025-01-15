@@ -4,4 +4,5 @@ export interface IAddUserReqDto {
   Rol?: string;
   Status?: string;
   Avatar?: string;
+  Password: string;
 }

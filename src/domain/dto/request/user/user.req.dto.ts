@@ -3,4 +3,5 @@ export interface IUserReqDto {
   Email?: string;
   Rol?: string;
   Avatar?: string;
+  Password?: string;
 }
