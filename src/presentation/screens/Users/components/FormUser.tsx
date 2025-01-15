@@ -7,6 +7,7 @@ import { useUserStore } from "../store/user.store";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
+import { FileUtils } from "../../../../utils/file.utils";
 
 export function FormUser() {
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
@@ -32,6 +33,17 @@ export function FormUser() {
       toggleForm();
     }
   }, [addUserStatus, updateUserStatus]);
+
+  useEffect(() => {
+    if (plainFiles.length > 0) {
+      (async () => {
+        setFieldValue(
+          "Avatar",
+          await FileUtils.convertFileToBase64(plainFiles[0])
+        );
+      })();
+    }
+  }, [plainFiles]);
 
   const isLoadingRoles = statusGetRoles === "pending";
   const isLoadingAddUser = addUserStatus === "pending";
