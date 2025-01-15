@@ -68,7 +68,7 @@ export function useFormikConsult() {
         updateConsult({
           id: item?.id!,
           ...values,
-          nextappointment: undefined,
+          nextappointment: values.nextappointment!,
         })
       }
     },
