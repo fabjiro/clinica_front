@@ -34,8 +34,6 @@ export function ActionConsult({ id }: IProps) {
       clientQuery.getQueryData<IConsult[]>(["getConsultByPatientId", patientId]) ?? []
     ).find((param) => param.id === id);
 
-    console.log(consult);
-
     if (!consult) return;
 
     setItem(consult);

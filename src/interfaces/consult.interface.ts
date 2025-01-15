@@ -26,7 +26,7 @@ export interface IConsult {
   imageExamId: string;
   image: IImage;
   recipe: string;
-  nextappointment: string;
+  nextappointment: Date;
   createdAt: string;
   count: number;
   userCreatedBy: IUserModel,

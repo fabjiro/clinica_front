@@ -4,6 +4,7 @@ import { IConsultReqDto } from "../../../../Dto/Request/consult.req.dto";
 import { useConsutlFormStore } from "../../../storage/form.storage";
 import { consultSchemaValidation } from "../schemas/consult.schema";
 import { useCreateConsult, useUpdateConsult } from "../query/consult.query";
+import moment from "moment";
 
 export function useFormikConsult() {
   const { status: addConsultStatus, mutate: createConsult } =
@@ -15,7 +16,7 @@ export function useFormikConsult() {
 
   const initialValues: Partial<IConsultReqDto> = isCreateMode ? {} : {
     patient: item?.patient?.id,
-    nextappointment: item?.nextappointment,
+    nextappointment: moment(item?.nextappointment).toISOString(),
     weight: item?.weight,
     size: item?.size,
     recipe: item?.recipe,
