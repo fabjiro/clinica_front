@@ -10,6 +10,13 @@ export async function getAllPatient() {
   return data;
 }
 
+export function useGetAllPatient() {
+  return useQuery({
+    queryKey: ["getAllPatient"],
+    queryFn: getAllPatient,
+  });
+}
+
 export async function AddPatient(params: IPatientReqDto) {
   await axiosInstance.post<IPatient>(BASE_URL, params);
 }
@@ -22,12 +29,7 @@ export async function DeletePatient(id: string) {
   await axiosInstance.delete<IPatient>(`${BASE_URL}/${id}`);
 }
 
-export function useGetAllPatient() {
-  return useQuery({
-    queryKey: ["getAllPatient"],
-    queryFn: getAllPatient,
-  });
-}
+
 
 export function useAddPatient() {
   const queryClient = useQueryClient();

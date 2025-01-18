@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
-    "@mui/x-charts": "^7.23.2",
+    "@mui/x-charts": "7.23.2",
     "@emotion/styled": "^11.13.0",
     "@internationalized/date": "^3.6.0",
     "@mui/material": "^6.1.7",
@@ -34,7 +34,7 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
-    "react-lottie": "git+https://github.com/davidmann4/react-lottie.git#patch-1",
+    
     "react-router-dom": "^6.26.2",
     "reflect-metadata": "^0.2.2",
     "use-file-picker": "^2.1.2",
