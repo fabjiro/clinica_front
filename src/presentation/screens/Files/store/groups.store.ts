@@ -7,7 +7,7 @@ interface IGroupStore {
   showForm: boolean;
   toggleForm: () => void;
   setExam: (patient: IExam) => void;
-  exam?: IExam;
+  exam?: IExam; 
   modeForm: MODEFORMENUM;
   setModeForm: (mode: MODEFORMENUM) => void;
   titleForm?: string;

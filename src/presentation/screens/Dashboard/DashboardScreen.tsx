@@ -17,8 +17,8 @@ export function DashboardScreen() {
   return (
     <div>
       <BaseScreen titlePage="Dashboard">
-        <>
-          <div className="flex">
+        <div className="p-2">
+          <div className="flex bg-white rounded-md shadow-md">
             {/* Gráfico de barras */}
             <BarChart
               dataset={(dataTopPatient ?? []).map((item) => ({
@@ -45,20 +45,23 @@ export function DashboardScreen() {
             />
           </div>
           {/* Gráfico de líneas */}
-          <LineChart
-            xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-            yAxis={[{ data: [5, 15, 25, 35, 40, 50] }]}
-            series={[
-              {
-                data: [2, 5.5, 2, 8.5, 1.5, 5],
-                area: true,
-              },
-            ]}
-            width={500} // Tamaño igualado
-            height={228} // Tamaño igualado
-            className="flex-1"
-          />
-        </>
+          <div className="bg-white rounded-md shadow-md">
+
+            <LineChart
+              xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+              yAxis={[{ data: [5, 15, 25, 35, 40, 50] }]}
+              series={[
+                {
+                  data: [2, 5.5, 2, 8.5, 1.5, 5],
+                  area: true,
+                },
+              ]}
+              width={500} // Tamaño igualado
+              height={228} // Tamaño igualado
+              className="flex-1"
+            />
+          </div>
+        </div>
       </BaseScreen>
     </div>
   );
