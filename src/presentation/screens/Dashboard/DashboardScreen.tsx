@@ -17,10 +17,13 @@ export function DashboardScreen() {
   return (
     <div>
       <BaseScreen titlePage="Dashboard">
-        <div className="p-2">
-          <div className="flex bg-white rounded-md shadow-md">
+        <div className="p-2 flex flex-col gap-4">
+          <div className="bg-white flex flex-col  rounded-md shadow-md items-center justify-center">
+            <h1 className="text-md font-semibold">Gráfico de líneas</h1>
+
             {/* Gráfico de barras */}
-            <BarChart
+           <div className="w-full flex">
+           <BarChart
               dataset={(dataTopPatient ?? []).map((item) => ({
                 title: item.name ?? "",
                 cantidad: item.total ?? 0,
@@ -36,17 +39,17 @@ export function DashboardScreen() {
               series={[
                 {
                   dataKey: "cantidad",
-                  label: "Cantidad de consultas",
                 },
               ]}
               layout="horizontal"
               width={400} // Tamaño igualado
               height={300} // Tamaño igualado
             />
+           </div>
           </div>
           {/* Gráfico de líneas */}
-          <div className="bg-white rounded-md shadow-md">
-
+          <div className="bg-white rounded-md shadow-md flex flex-col items-center justify-center">
+            <h1 className="text-md font-semibold">Gráfico de líneas</h1>
             <LineChart
               xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
               yAxis={[{ data: [5, 15, 25, 35, 40, 50] }]}
