@@ -1,16 +1,54 @@
 import { LineChart } from "@mui/x-charts";
 import { BaseScreen } from "../BaseScreen";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { useGetTopPatient, useGetConsultByDate } from "./querys/reports.query";
+import { useGetTopPatient, useGetConsultByDate, useGetPatientByDate } from "./querys/reports.query";
+import { useMemo } from "react";
+import moment from "moment";
 
 export function DashboardScreen() {
   const { data: dataTopPatient, status: statusGetTopPatient } =
     useGetTopPatient();
 
-  const { data: dataConsultByDate, status: statusGetConsultByDate } =
-    useGetConsultByDate();
+  const { data: dataConsultByDate } = useGetConsultByDate();
+  const { data: dataPatientByDate } = useGetPatientByDate();
 
-  console.log(dataConsultByDate);
+    const { dataXaxis, dataCountConsult, dataCountPatatient } = useMemo(() => {
+
+      if(!dataConsultByDate || !dataPatientByDate) return {
+        dataXaxis: [],
+        dataCountConsult: [],
+        dataCountPatatient: [],
+      }
+
+      const dataXaxis = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        return moment(date).format("MMM Do YY");
+      }).reverse();
+    
+      // Inicializamos los datos con ceros
+      const dataCountConsult = Array(dataXaxis.length).fill(0);
+      const dataCountPatatient = Array(dataXaxis.length).fill(0);
+    
+      // Mapeamos los datos de movimiento a índices correspondientes
+      for (let i = 0; i < dataXaxis.length; i++) {
+        const formattedDate = moment(dataXaxis[i]).format("MMM Do YY");
+        const consult = dataConsultByDate.find(item => moment(item.date).format("MMM Do YY") === formattedDate);
+        const patient = dataPatientByDate.find(item => moment(item.date).format("MMM Do YY") === formattedDate);
+        if (consult) {
+          dataCountConsult[i] = consult.count;
+        }
+        if (patient) {
+          dataCountPatatient[i] = patient.count;
+        }
+      }
+        
+      return {
+        dataXaxis,
+        dataCountConsult,
+        dataCountPatatient,
+      };
+    }, [dataConsultByDate, dataPatientByDate]);
 
   return (
     <div>
