@@ -25,9 +25,10 @@ export function DashboardScreen() {
       };
 
     const dataXaxis = Array.from({ length: 7 }, (_, i) => {
+      // get date utc
       const date = new Date();
       date.setDate(date.getDate() - i);
-      return moment(date).format("MMM Do YY");
+      return moment(date).format("l");
     }).reverse();
 
     // Inicializamos los datos con ceros
@@ -36,12 +37,12 @@ export function DashboardScreen() {
 
     // Mapeamos los datos de movimiento a índices correspondientes
     for (let i = 0; i < dataXaxis.length; i++) {
-      const formattedDate = moment(dataXaxis[i]).format("MMM Do YY");
+      const formattedDate = moment(dataXaxis[i]).format("l");
       const consult = dataConsultByDate.find(
-        (item) => moment(item.date).format("MMM Do YY") === formattedDate
+        (item) => moment(item.date).format("l") === formattedDate
       );
       const patient = dataPatientByDate.find(
-        (item) => moment(item.date).format("MMM Do YY") === formattedDate
+        (item) => moment(item.date).format("l") === formattedDate
       );
       if (consult) {
         dataCountConsult[i] = consult.count;
