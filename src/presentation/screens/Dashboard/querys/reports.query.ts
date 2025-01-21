@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../../../config/axios.config";
-import { IReport } from "../../../../interfaces/reports.interface";
+import { IReport, IConsultByDate } from "../../../../interfaces/reports.interface";
 
 
 const BASE_URL = "/report";
@@ -18,6 +18,21 @@ export function useGetTopPatient() {
     queryFn: getTopPatient,
   });
 }
+
+export async function getConsultByDate() {
+  const { data } = await axiosInstance.get<IConsultByDate[]>(
+    `${BASE_URL}/consult-by-date`
+  );
+  return data;
+}
+
+export function useGetConsultByDate() {
+  return useQuery({
+    queryKey: ["getConsultByDate"],
+    queryFn: getConsultByDate,
+  });
+}
+
 
 
 
