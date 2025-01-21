@@ -13,8 +13,10 @@ export function DashboardScreen() {
   const { data: dataTopPatient, status: statusGetTopPatient } =
     useGetTopPatient();
 
-  const { data: dataConsultByDate, isLoading: isLoadingConsult } = useGetConsultByDate();
-  const { data: dataPatientByDate, isLoading: isLoadingPatient } = useGetPatientByDate();
+  const { data: dataConsultByDate, isLoading: isLoadingConsult } =
+    useGetConsultByDate();
+  const { data: dataPatientByDate, isLoading: isLoadingPatient } =
+    useGetPatientByDate();
 
   const { dataXaxis, dataCountConsult, dataCountPatatient } = useMemo(() => {
     if (!dataConsultByDate || !dataPatientByDate)
@@ -23,9 +25,9 @@ export function DashboardScreen() {
         dataCountConsult: [],
         dataCountPatatient: [],
       };
-
+    // get date utc
+    
     const dataXaxis = Array.from({ length: 7 }, (_, i) => {
-      // get date utc
       const date = new Date();
       date.setDate(date.getDate() - i);
       return moment(date).format("l");
@@ -37,7 +39,7 @@ export function DashboardScreen() {
 
     // Mapeamos los datos de movimiento a índices correspondientes
     for (let i = 0; i < dataXaxis.length; i++) {
-      const formattedDate = moment(dataXaxis[i]).format("l");
+      const formattedDate = moment.utc(dataXaxis[i]).format("l");
       const consult = dataConsultByDate.find(
         (item) => moment(item.date).format("l") === formattedDate
       );
@@ -45,10 +47,10 @@ export function DashboardScreen() {
         (item) => moment(item.date).format("l") === formattedDate
       );
       if (consult) {
-        dataCountConsult[i] = consult.count;
+        dataCountConsult[(i + 1)] = consult.count;
       }
       if (patient) {
-        dataCountPatatient[i] = patient.count;
+        dataCountPatatient[(i + 1)] = patient.count;
       }
     }
 
