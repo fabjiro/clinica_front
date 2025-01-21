@@ -7,3 +7,8 @@ export interface IReport {
     count: number
     date: Date
   }
+
+  export interface IPatientByDate {
+    count: number
+    date: Date
+  }
