@@ -26,3 +26,4 @@ export const createFormStore = <T>() => {
 // export const useAttributeFormStore = createFormStore<AttributesEntity>();
 
 export const useConsutlFormStore = createFormStore<IConsult>();
+export const useReportFormStore =  createFormStore<number>();

@@ -26,7 +26,7 @@ export function DashboardScreen() {
         dataCountPatatient: [],
       };
     // get date utc
-    
+
     const dataXaxis = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
       date.setDate(date.getDate() - i);
@@ -47,10 +47,10 @@ export function DashboardScreen() {
         (item) => moment(item.date).format("l") === formattedDate
       );
       if (consult) {
-        dataCountConsult[(i + 1)] = consult.count;
+        dataCountConsult[i + 1] = consult.count;
       }
       if (patient) {
-        dataCountPatatient[(i + 1)] = patient.count;
+        dataCountPatatient[i + 1] = patient.count;
       }
     }
 
@@ -63,9 +63,9 @@ export function DashboardScreen() {
 
   return (
     <div>
-      <BaseScreen titlePage="Dashboard">
-        <div className="p-2 flex flex-col gap-4">
-          <div className="bg-white flex flex-col  rounded-md shadow-md items-center justify-center">
+      <BaseScreen>
+        <div className=" flex flex-col gap-2">
+          <div className="bg-white flex flex-col  rounded-md shadow-lg items-center justify-center">
             <h1 className="text-md font-semibold">Pacientes mas recurrentes</h1>
 
             {/* Gráfico de barras */}
@@ -86,17 +86,20 @@ export function DashboardScreen() {
                 series={[
                   {
                     dataKey: "cantidad",
+                    label: "Consultas",
                   },
                 ]}
                 layout="horizontal"
-                width={400} // Tamaño igualado
-                height={300} // Tamaño igualado
+                width={450} // Tamaño igualado
+                height={260} // Tamaño igualado
               />
             </div>
           </div>
           {/* Gráfico de líneas */}
-          <div className="bg-white rounded-md shadow-md flex flex-col items-center justify-center">
-            <h1 className="text-md font-semibold">Gráfico de líneas</h1>
+          <div className="bg-white rounded-md shadow-lg flex flex-col items-center justify-center">
+            <h1 className="text-md font-semibold">
+              Pacientes y consultas creadas los ultimos 7 dias
+            </h1>
             <LineChart
               series={[
                 {
@@ -107,14 +110,14 @@ export function DashboardScreen() {
                 {
                   data: dataCountPatatient,
                   label: "Pacientes",
-                  color: "yellow",
+                  color: "red",
                 },
               ]}
               xAxis={[{ data: dataXaxis, scaleType: "band" }]}
               className="flex-1"
               loading={isLoadingConsult || isLoadingPatient}
-              width={500} // Tamaño igualado
-              height={228} // Tamaño igualado
+              width={600} // Tamaño igualado
+              height={260} // Tamaño igualado
             />
           </div>
         </div>

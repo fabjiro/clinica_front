@@ -70,7 +70,12 @@ export function FileScreen() {
   const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
   const { toggleForm, setModeForm } = usePatientStore();
-  const { modeForm, setModeForm: setModeFormConsult, toggleForm: toggleFormConsult, showForm } = useConsutlFormStore();
+  const {
+    modeForm,
+    setModeForm: setModeFormConsult,
+    toggleForm: toggleFormConsult,
+    showForm,
+  } = useConsutlFormStore();
 
   const row = useMemo(() => {
     if (!dataPatient) return [];
@@ -185,8 +190,8 @@ export function FileScreen() {
       </BaseScreen>
       <ModalPatient />
       <BaseModal
-      size="full"
-      scrollBehavior="inside"
+        size="full"
+        scrollBehavior="inside"
         isOpen={showForm}
         onOpenChange={toggleFormConsult}
         title={
