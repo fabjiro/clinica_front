@@ -14,7 +14,6 @@ export const ReportForm = () => {
 
   const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
 
-
   const { data: dataRecentDiagnostics, refetch: handleGetRecentDiagnotics } =
     useGetRecentDiagnostics(
       rangeDate
@@ -40,7 +39,7 @@ export const ReportForm = () => {
       <div className="flex flex-col gap-2 items-center justify-center">
         <p>Por Rango de fechas</p>
         <DateRangePicker
-          value={rangeDate}
+          value={rangeDate ?? null}
           onChange={(value) => {
             if (value !== null) {
               setRangeDate(value);
@@ -51,6 +50,14 @@ export const ReportForm = () => {
           granularity="day"
           fullWidth
         />
+        <Button
+          onPress={() => {
+            setRangeDate(undefined);
+          }}
+          fullWidth
+        >
+          Limpiar fechas
+        </Button>
         <Button onPress={hadleClickExport} fullWidth color="success">
           Exportar
         </Button>
