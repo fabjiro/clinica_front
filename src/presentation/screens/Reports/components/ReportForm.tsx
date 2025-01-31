@@ -15,10 +15,14 @@ export const ReportForm = () => {
   const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
 
   const { data: dataRecentDiagnostics, refetch: handleGetRecentDiagnotics } =
-    useGetRecentDiagnostics({
-      endDate: moment(rangeDate?.end.toDate("utc")!).format("l"),
-      startDate: moment(rangeDate?.start.toDate("utc")!).format("l"),
-    });
+    useGetRecentDiagnostics(
+      rangeDate
+        ? {
+            startDate: moment(rangeDate.start).format("l"),
+            endDate: moment(rangeDate.end).format("l"),
+          }
+        : undefined
+    );
 
   useEffect(() => {
     console.log(dataRecentDiagnostics);
