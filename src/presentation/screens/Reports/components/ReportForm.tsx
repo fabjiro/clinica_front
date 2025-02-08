@@ -6,7 +6,9 @@ import {
 } from "@nextui-org/react";
 import { useGetRecentDiagnostics } from "../query/diagnostic.query";
 import { useGetMasterData } from "../query/master.query";
-import { useGetRegisteredPatients } from "../query/register.patient.query"; // Importa el hook
+import { useGetNextConsults } from "../query/nextconsult.query";
+import { useGetRegisteredPatientsByUser } from "../query/registerpatientbyuser.query";
+import { useGetRegisteredPatients } from "../query/register.patient.query";
 import { useEffect, useState } from "react";
 import { useReportFormStore } from "../../../storage/form.storage";
 import moment from "moment";
@@ -37,6 +39,28 @@ export const ReportForm = () => {
       : undefined
   );
 
+  const { data: dataNextConsults, refetch: handleGetNextConsults } =
+    useGetNextConsults(
+      rangeDate
+        ? {
+            startDate: moment(rangeDate.start.toString()).format("l"),
+            endDate: moment(rangeDate.end.toString()).format("l"),
+          }
+        : undefined
+    );
+
+  const {
+    data: dataRegisteredPatientsByUser,
+    refetch: handleGetRegisteredPatientsByUser,
+  } = useGetRegisteredPatientsByUser(
+    rangeDate
+      ? {
+          startDate: moment(rangeDate.start.toString()).format("l"),
+          endDate: moment(rangeDate.end.toString()).format("l"),
+        }
+      : undefined
+  );
+
   const { data: dataRegisteredPatients, refetch: handleGetRegisteredPatients } =
     useGetRegisteredPatients(
       rangeDate
@@ -50,16 +74,28 @@ export const ReportForm = () => {
   useEffect(() => {
     console.log(dataRecentDiagnostics);
     console.log(dataMaster);
-    console.log(dataRegisteredPatients); // Agrega esto para depuración
-  }, [dataRecentDiagnostics, dataMaster, dataRegisteredPatients]);
+    console.log(dataNextConsults);
+    console.log(dataRegisteredPatientsByUser);
+    console.log(dataRegisteredPatients);
+  }, [
+    dataRecentDiagnostics,
+    dataMaster,
+    dataNextConsults,
+    dataRegisteredPatientsByUser,
+    dataRegisteredPatients,
+  ]);
 
   const hadleClickExport = () => {
     if (item === 5) {
       handleGetRecentDiagnotics();
     } else if (item === 1) {
-      handleGetMasterData(); // Llama al endpoint "master" cuando item es 1
+      handleGetMasterData();
+    } else if (item === 2) {
+      handleGetNextConsults();
+    } else if (item === 3) {
+      handleGetRegisteredPatientsByUser();
     } else if (item === 4) {
-      handleGetRegisteredPatients(); // Llama al endpoint "register-patient" cuando item es 4
+      handleGetRegisteredPatients();
     }
   };
 
@@ -67,9 +103,13 @@ export const ReportForm = () => {
     if (item === 5) {
       return dataRecentDiagnostics;
     } else if (item === 1) {
-      return dataMaster; // Devuelve los datos del endpoint "master"
+      return dataMaster;
+    } else if (item === 2) {
+      return dataNextConsults;
+    } else if (item === 3) {
+      return dataRegisteredPatientsByUser;
     } else if (item === 4) {
-      return dataRegisteredPatients; // Devuelve los datos del endpoint "register-patient"
+      return dataRegisteredPatients;
     }
     return [];
   };

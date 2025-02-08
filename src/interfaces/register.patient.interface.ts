@@ -1,5 +1,5 @@
 export interface IRegisterPatient {
     Name: string
-    Age: number
+    Age: string
     CreatedAt: string
   }
