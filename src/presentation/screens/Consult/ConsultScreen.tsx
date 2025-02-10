@@ -24,7 +24,7 @@ const columns: GridColDef[] = [
   },
   {
     field: "col2",
-    headerName: "Atendido por",
+    headerName: "Registrado por",
     flex: 1,
     renderCell: (params) => (
       <div className="flex items-center justify-start w-full h-full">

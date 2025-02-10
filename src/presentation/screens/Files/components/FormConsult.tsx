@@ -12,7 +12,7 @@ import { useGetExam } from "../query/exam.query";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
-import {parseAbsoluteToLocal} from "@internationalized/date";
+import { parseAbsoluteToLocal } from "@internationalized/date";
 import moment from "moment";
 
 export function FormConsult() {
@@ -27,7 +27,7 @@ export function FormConsult() {
   });
 
   const isLoading =
-    statusGetAllPatient === "pending" || statusGetAllExam === "pending";    
+    statusGetAllPatient === "pending" || statusGetAllExam === "pending";
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -195,20 +195,25 @@ export function FormConsult() {
             isRequired
             label="Proxima cita"
             showMonthAndYearPickers
-            value={values.nextappointment && parseAbsoluteToLocal(moment.utc(values.nextappointment).format()) || undefined}
+            value={
+              (values.nextappointment &&
+                parseAbsoluteToLocal(
+                  moment.utc(values.nextappointment).format()
+                )) ||
+              undefined
+            }
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
             onChange={(e) => {
               console.log(e);
-              if(e?.toAbsoluteString) {
+              if (e?.toAbsoluteString) {
                 setFieldValue("nextappointment", e?.toAbsoluteString());
-              } else  {
+              } else {
                 setFieldValue("nextappointment", e?.toString());
               }
             }}
             hideTimeZone={true}
             // granularity="day"
-
           />
         </div>
         <Textarea
