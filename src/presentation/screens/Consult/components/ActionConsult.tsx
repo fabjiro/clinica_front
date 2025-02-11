@@ -18,7 +18,8 @@ import { useConsutlFormStore } from "../../../storage/form.storage";
 import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument, rgb, PDFPage } from "pdf-lib";
+import { saveAs } from "file-saver";
 
 interface IProps {
   id: string;
@@ -516,6 +517,169 @@ export function ActionConsult({ id }: IProps) {
     doc.save(fileName);
   };
 
+  const handleGenerateRecipePDF = async () => {
+    // Obtener los datos de la consulta
+    const consult = (
+      clientQuery.getQueryData<IConsult[]>([
+        "getConsultByPatientId",
+        patientId,
+      ]) ?? []
+    ).find((param) => param.id === id);
+
+    if (!consult) {
+      alert("No se encontró la consulta.");
+      return;
+    }
+
+    console.log("Consult Data:", consult);
+    try {
+      // URL del PDF existente o carga un archivo local esta en la carpeta public de proyecto
+      const existingPdfUrl = "../../../../../public/receta medica.pdf";
+      const existingPdfBytes = await fetch(existingPdfUrl).then((res) =>
+        res.arrayBuffer()
+      );
+
+      // Cargar el PDF existente
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+      // Obtener la primera página
+      const firstPage = pdfDoc.getPages()[0];
+
+      // Escribir en coordenadas específicas (ajusta los valores según el diseño del PDF)
+      firstPage.drawText(consult.patient?.name || "N/A", {
+        x: 122,
+        y: 458,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+
+      firstPage.drawText(
+        new Date(consult.createdAt).toLocaleDateString() || "N/A",
+        {
+          x: 322,
+          y: 458,
+          size: 12,
+          color: rgb(0, 0, 0),
+        }
+      );
+
+      firstPage.drawText(
+        calculateAge(consult.patient?.birthday || "N/A").toString(),
+        {
+          x: 90,
+          y: 435,
+          size: 12,
+          color: rgb(0, 0, 0),
+        }
+      );
+
+      firstPage.drawText(
+        consult.patient?.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
+          ? "Masculino"
+          : "Femeninio",
+        {
+          x: 195,
+          y: 435,
+          size: 10,
+          color: rgb(0, 0, 0),
+        }
+      );
+
+      firstPage.drawText(consult.weight ? `${consult.weight} kg` : "N/A", {
+        x: 330,
+        y: 435,
+        size: 12,
+        color: rgb(0, 0, 0),
+      });
+
+      firstPage.drawText(consult.diagnosis || "N/A", {
+        x: 110,
+        y: 412,
+        size: 12,
+        color: rgb(0, 0, 0),
+      });
+
+      drawWrappedText(firstPage, consult.recipe || "N/A", 50, 360, 12, 15);
+
+      // Guardar el nuevo PDF
+      const modifiedPdfBytes = await pdfDoc.save();
+
+      // Descargar el archivo
+      const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
+      saveAs(blob, "Receta_Medica.pdf");
+    } catch (error) {
+      console.error("Error generando la receta:", error);
+    }
+  };
+
+  /**
+   * Divide el texto en líneas según un ancho máximo de caracteres.
+   */
+  function splitTextIntoLines(text: string, maxLength: number): string[] {
+    const words = text.split(" ");
+    const lines: string[] = [];
+    let currentLine = "";
+
+    for (const word of words) {
+      if ((currentLine + word).length > maxLength) {
+        lines.push(currentLine.trim());
+        currentLine = word + " ";
+      } else {
+        currentLine += word + " ";
+      }
+    }
+
+    if (currentLine.trim().length > 0) {
+      lines.push(currentLine.trim());
+    }
+
+    return lines;
+  }
+
+  /**
+   * Dibuja texto con saltos de línea en una página PDF.
+   */
+  function drawWrappedText(
+    page: PDFPage,
+    text: string,
+    x: number,
+    y: number,
+    fontSize: number,
+    lineHeight: number
+  ) {
+    const maxWidth = 50; // Define el ancho máximo en caracteres antes de hacer un salto de línea
+    const lines = splitTextIntoLines(text, maxWidth);
+    let currentY = y;
+
+    for (const line of lines) {
+      page.drawText(line, {
+        x,
+        y: currentY,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+      });
+      currentY -= lineHeight; // Mueve hacia abajo la posición del texto
+    }
+  }
+
+  const calculateAge = (birthday: string): number => {
+    const birthDate = new Date(birthday); // Convierte la fecha de string a Date
+    const today = new Date(); // Fecha actual
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    // Ajusta la edad si el cumpleaños aún no ha ocurrido este año
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
+
   const isLoading = statusDelete === "pending";
 
   return (
@@ -530,6 +694,7 @@ export function ActionConsult({ id }: IProps) {
           <DropdownItem
             startContent={<HiOutlineClipboardDocumentList />}
             key="recipe"
+            onPress={handleGenerateRecipePDF}
           >
             Generar Receta
           </DropdownItem>
