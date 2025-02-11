@@ -17,7 +17,7 @@ import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import { useConsutlFormStore } from "../../../storage/form.storage";
 import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 interface IProps {
   id: string;
@@ -55,6 +55,7 @@ export function ActionConsult({ id }: IProps) {
   };
 
   const handleGeneratePDF = () => {
+    // Obtener los datos de la consulta
     const consult = (
       clientQuery.getQueryData<IConsult[]>([
         "getConsultByPatientId",
@@ -67,125 +68,423 @@ export function ActionConsult({ id }: IProps) {
       return;
     }
 
+    console.log("Consult Data:", consult);
+    // Crear un nuevo documento PDF
     const doc = new jsPDF();
-    const marginLeft = 20;
-    let y = 30;
-    const rowHeight = 10; // Altura base de la fila
 
-    // Título centrado
+    const pageWidth = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
+    const text = "Consulta médica";
+    const textWidth = doc.getTextWidth(text); // Obtiene el ancho del texto
+
+    // Configurar fuente en negrita
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("Consulta Médica", 105, 20, { align: "center" });
 
-    doc.setFontSize(12);
+    // Escribir texto centrado
+    doc.text(text, (pageWidth - textWidth) / 2, 20);
+    // Saltos de línea
+    let currentY = 30; // Comienza en y = 30 después del encabezado
 
-    // Dibujar la tabla con encabezados y valores
-    const content = [
-      {
-        label: "Fecha:",
-        value: new Date(consult.createdAt).toLocaleDateString() || "N/A",
-      },
-      { label: "Nombre del paciente:", value: consult.patient?.name || "N/A" },
-      { label: "Motivo:", value: consult.motive || "N/A" },
-      {
-        label: "Evaluación Biológica:",
-        value: consult.bilogicalEvaluation || "N/A",
-      },
-      {
-        label: "Evaluación Psicológica:",
-        value: consult.psychologicalEvaluation || "N/A",
-      },
-      { label: "Evaluación Social:", value: consult.socialEvaluation || "N/A" },
-      {
-        label: "Evaluación Funcional:",
-        value: consult.functionalEvaluation || "N/A",
-      },
-      {
-        label: "Historial clinico:",
-        value: consult.clinicalhistory || "N/A",
-      },
-      {
-        label: "Peso:",
-        value: consult.weight ? `${consult.weight} kg` : "N/A",
-      },
-      { label: "Tamaño:", value: consult.size ? `${consult.size} cm` : "N/A" },
-      { label: "Pulso:", value: consult.pulse || "N/A" },
-      {
-        label: "Saturación de Oxígeno:",
-        value: consult.oxygenSaturation || "N/A",
-      },
-      {
-        label: "Presión Arterial:",
-        value:
-          consult.systolicPressure && consult.diastolicPressure
-            ? `${consult.systolicPressure}/${consult.diastolicPressure} mmHg`
-            : "N/A",
-      },
-      { label: "Diagnóstico:", value: consult.diagnosis || "N/A" },
-      { label: "Médico:", value: consult.userCreatedBy?.name || "N/A" },
-      {
-        label: "Antecedentes Personales:",
-        value: consult.antecedentPersonal || "N/A",
-      },
-      {
-        label: "Antecedentes Familiares:",
-        value: consult.antecedentFamily || "N/A",
-      },
-      {
-        label: "Exámenes Complementarios:",
-        value: consult.complementaryTest || "N/A",
-      },
-      { label: "Receta:", value: consult.recipe || "N/A" },
-      {
-        label: "Próxima cita:",
-        value: consult.nextappointment
-          ? new Date(consult.nextappointment).toLocaleDateString()
-          : "N/A",
-      },
-      { label: "Imagen del Examen:", value: consult.imageExamId || "N/A" },
-    ];
+    autoTable(doc, {
+      startY: currentY, // Comienza la tabla después de los saltos de línea
+      body: [
+        [
+          {
+            content: "Nombre del paciente:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+          {
+            content: "Fecha consulta:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+        ],
+        [
+          {
+            content: consult.patient?.name || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: new Date(consult.createdAt).toLocaleDateString() || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        // Segunda fila que se ve como encabezado
+        [
+          {
+            content: "Motivo:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content: "Peso:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content: "Tamaño:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content: "Pulso",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+        ],
+        [
+          {
+            content: consult.motive || "N/A",
+            colSpan: 1,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.weight ? `${consult.weight} kg` : "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content: consult.size ? `${consult.size} cm` : "N/A",
+            colSpan: 1,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.pulse ? `${consult.pulse} Lpm` : "N/A",
+            colSpan: 1,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Saturacion de Oxígeno:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content: "Presión Arterial:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content: "Historial clínico:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+        ],
+        [
+          {
+            content: consult.oxygenSaturation
+              ? `${consult.oxygenSaturation}%`
+              : "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+            colSpan: 1,
+          },
+          {
+            content:
+              consult.systolicPressure && consult.diastolicPressure
+                ? `${consult.systolicPressure}/${consult.diastolicPressure} mmHg`
+                : "N/A",
+            colSpan: 1,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.clinicalhistory || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+      ],
+      theme: "grid",
+    });
 
-    content.forEach(({ label, value }, index) => {
-      const labelWidth = 60; // Ancho para las celdas de etiquetas
-      const valueWidth = 120; // Ancho para las celdas de valores
-      const centerXLabel = marginLeft + labelWidth / 2; // Centrar texto de la etiqueta
-      const centerXValue = marginLeft + labelWidth + valueWidth / 2; // Centrar texto del valor
+    // Obtener la posición actual después de la primera tabla
+    const finalY = (doc as any).lastAutoTable?.finalY || 10; // Espaciado de 10 unidades
 
-      // Cuadro gris claro para los encabezados (etiquetas)
-      doc.setFillColor(220, 220, 220);
-      doc.rect(marginLeft, y, labelWidth, rowHeight, "F"); // Rectángulo para la etiqueta
+    // Encabezado de Evaluación Geriátrica
+    const textt = "Evaluación Geriátrica";
+    const textWidthh = doc.getTextWidth(textt); // Corrige la variable usada
+    const pageWidthh = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
 
-      // Cuadro transparente para los valores
-      doc.setFillColor(255, 255, 255); // Blanco
-      doc.rect(marginLeft + labelWidth, y, valueWidth, rowHeight, "F"); // Rectángulo para el valor
+    doc.setFont("helvetica", "bold");
+    doc.text(textt, (pageWidthh - textWidthh) / 2, finalY + 10); // Coloca el texto debajo de la primera tabla
 
-      // Texto en los encabezados (centrado)
-      doc.setFont("helvetica", "bold");
-      doc.text(label, centerXLabel, y + 6, { align: "center" }); // Texto del encabezado centrado
+    // Segunda tabla (Evaluación Geriátrica)
 
-      // Texto en los valores con ajuste automático de líneas (centrado)
-      doc.setFont("helvetica", "normal");
-      const splitValue = doc.splitTextToSize(value, valueWidth); // Ajustar el texto al tamaño de la columna de valor
-      doc.text(splitValue, centerXValue, y + 6, { align: "center" }); // Texto del valor centrado
+    autoTable(doc, {
+      startY: finalY + 20,
+      body: [
+        [
+          {
+            content: "Evaluacion Biologica",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+          {
+            content: "Evalucaion Psicologica:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+        ],
+        [
+          {
+            content: consult.bilogicalEvaluation || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.psychologicalEvaluation || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Evaluacion Social",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+          {
+            content: "Evaluacion Funcional:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+        ],
+        [
+          {
+            content: consult.socialEvaluation || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.functionalEvaluation || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+      ],
+      theme: "grid",
+    });
 
-      // Dibujar las líneas de separación en negro
-      doc.setDrawColor(0, 0, 0); // Color de las líneas (negro)
-      doc.rect(marginLeft, y, labelWidth, rowHeight); // Línea para la etiqueta
-      doc.rect(
-        marginLeft + labelWidth,
-        y,
-        valueWidth,
-        rowHeight * splitValue.length
-      ); // Línea para el valor, ajustando la altura
+    const finalY2 = (doc as any).lastAutoTable?.finalY || finalY + 10;
+    const textResultados = "Resultados y Diagnósticos";
+    const textWidthResultados = doc.getTextWidth(textResultados);
 
-      // Actualizar la posición 'y' después de la fila
-      y += rowHeight * splitValue.length; // Mover a la siguiente fila
-
-      // Verificar si la posición 'y' excede el límite de la página (por ejemplo, 270)
-      if (y > 270) {
-        doc.addPage(); // Agregar una nueva página
-        y = 30; // Reiniciar la posición 'y' para la nueva página
-      }
+    doc.setFont("helvetica", "bold");
+    doc.text(
+      textResultados,
+      (pageWidth - textWidthResultados) / 2,
+      finalY2 + 10
+    );
+    autoTable(doc, {
+      startY: finalY2 + 20,
+      body: [
+        [
+          {
+            content: "Diagnostico:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+          {
+            content: "Receta:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+        ],
+        [
+          {
+            content: consult.diagnosis || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.recipe || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Registrado por:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+          {
+            content: "Proxima Cita:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+        ],
+        [
+          {
+            content: consult.userCreatedBy?.name || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consult.nextappointment
+              ? new Date(consult.nextappointment).toLocaleDateString()
+              : "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+      ],
+      theme: "grid",
     });
 
     // Guardar el PDF con el nombre del paciente o un nombre genérico si es null
@@ -193,6 +492,7 @@ export function ActionConsult({ id }: IProps) {
       ? `Consulta_Medica_${consult.patient.name}.pdf`
       : "Consulta_Medica.pdf";
 
+    // Guardar el archivo
     doc.save(fileName);
   };
 
