@@ -1,4 +1,5 @@
 import { IUserModel } from "../domain/model/user/user.model";
+import { IExam } from "./exam.interface";
 import { IImage } from "./image.interface";
 import { IPatient } from "./patient.interface";
 
@@ -21,12 +22,12 @@ export interface IConsult {
   antecedentPersonal: string;
   antecedentFamily: string;
   examComplementaryId: string;
-  complementaryTest: string;
+  complementaryTest: IExam;
   diagnosis: string;
   imageExamId: string;
   image: IImage;
   recipe: string;
-  nextappointment: Date;
+  nextappointment: string;
   createdAt: string;
   count: number;
   userCreatedBy: IUserModel,

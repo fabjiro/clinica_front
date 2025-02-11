@@ -18,6 +18,7 @@ import { useConsutlFormStore } from "../../../storage/form.storage";
 import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { PDFDocument, rgb } from "pdf-lib";
 
 interface IProps {
   id: string;
@@ -399,6 +400,27 @@ export function ActionConsult({ id }: IProps) {
       body: [
         [
           {
+            content: "Examen Complementario:",
+            styles: {
+              fontStyle: "bold",
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+            colSpan: 2,
+          },
+          {
+            content: consult.complementaryTest?.name || "N/A",
+            colSpan: 2,
+            styles: {
+              lineColor: [0, 0, 0],
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
             content: "Diagnostico:",
             styles: {
               fontStyle: "bold",
@@ -472,9 +494,7 @@ export function ActionConsult({ id }: IProps) {
             },
           },
           {
-            content: consult.nextappointment
-              ? new Date(consult.nextappointment).toLocaleDateString()
-              : "N/A",
+            content: consult.nextappointment || "N/A",
             colSpan: 2,
             styles: {
               lineColor: [0, 0, 0],
