@@ -48,22 +48,22 @@ const rows = [
   },
   {
     id: 3,
-    col1: "Registros realizados por usuarios ",
+    col1: "Pacientes Registrados",
     col2: "#3",
   },
   {
     id: 4,
-    col1: "Pacientes Registrados",
+    col1: "Consultas realizadas",
     col2: "#4",
   },
   {
     id: 5,
-    col1: "Diagnosticos realizados",
+    col1: "Registros realizados por usuarios ",
     col2: "#5",
   },
   {
     id: 6,
-    col1: "Consultas realizadas",
+    col1: "Diagnosticos realizados",
     col2: "#6",
   },
 ];

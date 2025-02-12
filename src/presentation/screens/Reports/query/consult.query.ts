@@ -6,30 +6,27 @@ interface IRangeDate {
   endDate: string;
 }
 
-const BASE_URL = "/Patient";
+const BASE_URL = "/Consult";
 
-
-// Para traer por fecha de registro
-export async function getRegisteredPatients(params?: IRangeDate) {
+// para traer todos
+// para traer por fecha
+export async function getRecentConsults(params?: IRangeDate) {
   console.log(params);
   const queryParams = new URLSearchParams();
 
- 
   if (params?.endDate) queryParams.append("endDate", params.endDate.toString());
   if (params?.startDate) queryParams.append("startDate", params.startDate.toString());
 
   const { data } = await axiosInstance.get(
-    `${BASE_URL}${
-      queryParams.toString() ? `?${queryParams.toString()}` : ""
-    }`
+    `${BASE_URL}${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
   );
   return data;
 }
 
-export function useGetRegisteredPatients(params?: IRangeDate) {
+export function useGetRecentConsults(params?: IRangeDate) {
   return useQuery({
-    queryKey: ["getRegisteredPatients"],
-    queryFn: () => getRegisteredPatients(params),
+    queryKey: ["getRecentConsults"],
+    queryFn: () => getRecentConsults(params),
     enabled: false,
   });
 }

@@ -9,18 +9,22 @@ import { useGetMasterData } from "../query/master.query";
 import { useGetNextConsults } from "../query/nextconsult.query";
 import { useGetRegisteredPatientsByUser } from "../query/registerpatientbyuser.query";
 import { useGetRegisteredPatients } from "../query/register.patient.query";
+import { useGetRecentConsults } from "../query/consult.query";
 import { useEffect, useState } from "react";
 import { useReportFormStore } from "../../../storage/form.storage";
 import moment from "moment";
-import CsvDownloadButton from "react-json-to-csv";
+import * as XLSX from "xlsx";
 import { SiCcleaner } from "react-icons/si";
+
+interface ReportData {
+  [key: string]: string | number | boolean | null;
+}
 
 export const ReportForm = () => {
   const item = useReportFormStore((state) => state.item);
-
   const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
 
-  const { data: dataRecentDiagnostics, refetch: handleGetRecentDiagnotics } =
+  const { data: dataRecentDiagnostics, refetch: handleGetRecentDiagnostics } =
     useGetRecentDiagnostics(
       rangeDate
         ? {
@@ -71,47 +75,176 @@ export const ReportForm = () => {
         : undefined
     );
 
+  const { data: dataConsult, refetch: handleGetConsult } = useGetRecentConsults(
+    rangeDate
+      ? {
+          startDate: moment(rangeDate.start.toString()).format("l"),
+          endDate: moment(rangeDate.end.toString()).format("l"),
+        }
+      : undefined
+  );
+
   useEffect(() => {
     console.log(dataRecentDiagnostics);
     console.log(dataMaster);
     console.log(dataNextConsults);
     console.log(dataRegisteredPatientsByUser);
     console.log(dataRegisteredPatients);
+    console.log(dataConsult);
   }, [
     dataRecentDiagnostics,
     dataMaster,
     dataNextConsults,
     dataRegisteredPatientsByUser,
     dataRegisteredPatients,
+    dataConsult,
   ]);
 
-  const hadleClickExport = () => {
-    if (item === 5) {
-      handleGetRecentDiagnotics();
+  const handleClickExport = () => {
+    if (item === 6) {
+      handleGetRecentDiagnostics();
     } else if (item === 1) {
       handleGetMasterData();
     } else if (item === 2) {
       handleGetNextConsults();
-    } else if (item === 3) {
+    } else if (item === 5) {
       handleGetRegisteredPatientsByUser();
-    } else if (item === 4) {
+    } else if (item === 3) {
       handleGetRegisteredPatients();
+    } else if (item === 4) {
+      handleGetConsult();
     }
   };
 
-  const getDataForExport = () => {
-    if (item === 5) {
-      return dataRecentDiagnostics;
+  const getDataForExport = (): ReportData[] => {
+    const filterDataRegisteredPatients = (data: ReportData[] | undefined) =>
+      data
+        ? data.map(
+            ({ rol, avatar, civilStatus, typeSex, birthday, ...rest }) => ({
+              ...rest,
+              civilStatusName:
+                typeof civilStatus === "object" && civilStatus !== null
+                  ? (civilStatus as { name: string }).name // Aseguramos que civilStatus es un objeto con la propiedad name
+                  : "", // Si no es un objeto o no tiene name, se devuelve una cadena vacía
+              typeSex:
+                typeSex === "6274ba64-08f7-4f5b-ac4a-eb82849351b4"
+                  ? "Masculino"
+                  : "Femenino",
+              birthday:
+                typeof birthday === "string"
+                  ? birthday.split("T")[0]
+                  : birthday ?? "", // Devuelve "" si es undefined o null
+            })
+          )
+        : [];
+
+    const filterDataNextConsults = (data: ReportData[] | undefined) =>
+      data
+        ? data.map(({ nextAppointment, ...rest }) => ({
+            ...rest,
+            nextcite:
+              typeof nextAppointment === "string"
+                ? nextAppointment.replace("T", " ").replace("Z", "") // Cambia 'T' por espacio y elimina 'Z'
+                : "", // Devuelve "" si nextAppointment es undefined o no es una cadena
+          }))
+        : [];
+
+    const filterDataConsult = (data: ReportData[] | undefined) =>
+      data
+        ? data.map(
+            ({
+              id,
+              patientId,
+              patient,
+              complementaryTest,
+              userCreatedBy,
+              count,
+              createdAt,
+              image,
+              ...rest
+            }) => {
+              const patientName =
+                typeof patient === "object" && patient !== null
+                  ? (patient as { name: string }).name
+                  : ""; // Aseguramos que patient es un objeto con la propiedad name
+
+              const complementaryTestName =
+                typeof complementaryTest === "object" &&
+                complementaryTest !== null
+                  ? (complementaryTest as { name: string }).name
+                  : "";
+
+              const userCreatedByName =
+                typeof userCreatedBy === "object" && userCreatedBy !== null
+                  ? (userCreatedBy as { name: string }).name
+                  : "";
+
+              const CreatedAtt =
+                typeof createdAt === "string"
+                  ? createdAt.replace("T", " ").split(".")[0] // Cambia 'T' por espacio y elimina 'Z'
+                  : ""; // Devuelve "" si createdAt es undefined o no es una cadena
+
+              // Reorganizamos el objeto para que `patientName` esté en la segunda posición
+              return {
+                id,
+                patientId,
+                patientName, // Se coloca al principio
+                CreatedAtt,
+                ...rest, // El resto de las propiedades se mantienen
+                userCreatedByName,
+                complementaryTestName,
+              };
+            }
+          )
+        : [];
+
+    if (item === 6) {
+      return dataRecentDiagnostics || [];
     } else if (item === 1) {
-      return dataMaster;
+      return dataMaster || [];
     } else if (item === 2) {
-      return dataNextConsults;
+      return filterDataNextConsults(dataNextConsults) || [];
+    } else if (item === 5) {
+      return dataRegisteredPatientsByUser || [];
     } else if (item === 3) {
-      return dataRegisteredPatientsByUser;
+      return filterDataRegisteredPatients(dataRegisteredPatients || []);
     } else if (item === 4) {
-      return dataRegisteredPatients;
+      return filterDataConsult(dataConsult) || [];
     }
     return [];
+  };
+
+  const exportToExcel = () => {
+    const data = getDataForExport();
+    if (data.length === 0) {
+      alert("No hay datos para exportar");
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte");
+
+    // Autoajustar el ancho de las columnas
+    worksheet["!cols"] = Object.keys(data[0]).map((key) => ({
+      wch: Math.max(
+        ...data.map((row) => {
+          const valueLength = String(row[key]).length;
+          return valueLength > 40 ? 40 : valueLength; // Limita a 40 caracteres como máximo
+        }),
+        key.length
+      ),
+    }));
+
+    // Autoajustar el alto de las filas para textos largos
+    worksheet["!rows"] = data.map((row) => ({
+      hpx: Math.max(
+        20,
+        Object.values(row).some((val) => String(val).length > 50) ? 40 : 20
+      ),
+    }));
+
+    XLSX.writeFile(workbook, "Reporte.xlsx");
   };
 
   return (
@@ -143,13 +276,11 @@ export const ReportForm = () => {
         </div>
 
         <div className="w-full max-w-xs flex flex-col gap-2">
-          <Button onPress={hadleClickExport} fullWidth color="success">
+          <Button onPress={handleClickExport} fullWidth color="success">
             Generar Reporte
           </Button>
-          <Button color="primary" fullWidth>
-            <CsvDownloadButton data={getDataForExport()}>
-              Descargar Reporte en excel
-            </CsvDownloadButton>
+          <Button onPress={exportToExcel} color="primary" fullWidth>
+            Descargar Reporte en Excel
           </Button>
         </div>
       </div>
