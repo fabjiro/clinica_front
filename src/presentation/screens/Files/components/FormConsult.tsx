@@ -14,12 +14,22 @@ import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import moment from "moment";
+import { useEffect } from "react";
+import { useConsutlFormStore } from "../../../storage/form.storage";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
   const { data: allExamns, status: statusGetAllExam } = useGetExam();
 
-  const { values, errors, setFieldValue, handleSubmit } = useFormikConsult();
+  const toggleForm = useConsutlFormStore((state) => state.toggleForm);
+  const {
+    values,
+    errors,
+    setFieldValue,
+    handleSubmit,
+    addConsultStatus,
+    updateConsultStatus,
+  } = useFormikConsult();
 
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
     accept: ".png, .jpg, .jpeg",
@@ -28,6 +38,15 @@ export function FormConsult() {
 
   const isLoading =
     statusGetAllPatient === "pending" || statusGetAllExam === "pending";
+
+  const isLoadingUpdateConsult = updateConsultStatus === "pending";
+  const isLoadingAddConsult = addConsultStatus === "pending";
+
+  useEffect(() => {
+    if (addConsultStatus == "success" || updateConsultStatus == "success") {
+      toggleForm();
+    }
+  }, [addConsultStatus, updateConsultStatus]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -226,10 +245,12 @@ export function FormConsult() {
         />
 
         <div className="flex flex-row gap-4 justify-end items-center">
-          {/* <Button onClick={() => toggleForm()}>Cancelar</Button> */}
+          <Button onClick={() => toggleForm()}>Cancelar</Button>
           <Button
             onClick={() => handleSubmit()}
-            isLoading={isLoading}
+            isLoading={
+              isLoading || isLoadingAddConsult || isLoadingUpdateConsult
+            }
             //   disabled={isLoadingRoles}
             color="primary"
           >
