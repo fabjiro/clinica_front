@@ -60,6 +60,8 @@ export default function UserScreen() {
     }));
   }, [usersData]);
 
+  console.log(usersData);
+
   useEffect(() => {
     console.log(statusGetUsers);
   }, [statusGetUsers]);

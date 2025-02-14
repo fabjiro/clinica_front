@@ -25,6 +25,9 @@ export function useFormikUser() {
     : {
         Name: user?.name,
         Rol: user?.rol?.id,
+        Email: user?.email,
+        Password: user?.password,
+        
       };
 
   const {

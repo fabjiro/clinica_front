@@ -7,6 +7,7 @@ export class UserEntity {
   email: string;
   rol?: RolEntity;
   avatar?: ImageEntity;
+  password?: string;
 
   constructor(
     id: string,
@@ -14,12 +15,14 @@ export class UserEntity {
     email: string,
     rol?: RolEntity,
     avatar?: ImageEntity,
+    password?: string,
   ) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.rol = rol;
     this.avatar = avatar;
+    password && (this.password = password);
   }
   // from json
   static fromJson(json: any): UserEntity {
@@ -29,6 +32,7 @@ export class UserEntity {
       json.email,
       json.rol !== null ? RolEntity.fromJson(json.rol) : undefined,
       json.avatar !== null ? ImageEntity.fromJson(json.avatar) : undefined,
+      json.password,
     );
   }
 }

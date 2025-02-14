@@ -16,6 +16,7 @@ import { parseAbsoluteToLocal } from "@internationalized/date";
 import moment from "moment";
 import { useEffect } from "react";
 import { useConsutlFormStore } from "../../../storage/form.storage";
+import { FileUtils } from "../../../../utils/file.utils";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
@@ -43,10 +44,19 @@ export function FormConsult() {
   const isLoadingAddConsult = addConsultStatus === "pending";
 
   useEffect(() => {
-    if (addConsultStatus == "success" || updateConsultStatus == "success") {
+    if (addConsultStatus === "success" || updateConsultStatus === "success") {
       toggleForm();
     }
-  }, [addConsultStatus, updateConsultStatus]);
+
+    if (plainFiles.length > 0) {
+      (async () => {
+        setFieldValue(
+          "Examen",
+          await FileUtils.convertFileToBase64(plainFiles[0])
+        );
+      })();
+    }
+  }, [addConsultStatus, updateConsultStatus, plainFiles]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -208,7 +218,8 @@ export function FormConsult() {
             fullWidth
             // disabled={isLoadingAddProduct || isLoadingUpdateProduct}
           >
-            Imagen del examen
+            {" "}
+            Examen
           </Button>
           <DatePicker
             isRequired

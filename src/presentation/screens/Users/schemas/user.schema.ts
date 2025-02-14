@@ -15,5 +15,6 @@ export const userSchemaValidation = () => {
         .required("El correo es requerido"),
     }),
     Rol: Yup.string().required("El Rol es requerido"),
+    Password: Yup.string().required("La contraseña es requerida"),
   });
 };

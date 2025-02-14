@@ -41,7 +41,7 @@ export function ActionConsult({ id }: IProps) {
       ]) ?? []
     ).find((param) => param.id === id);
 
-    console.log("Consult Data:", consult);
+    console.log(consult);
 
     if (!consult) return;
 

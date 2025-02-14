@@ -65,18 +65,18 @@ export function FormUser() {
         label="Nombre"
         disabled={isLoadingAddUser || isLoadingUpdateUser}
       />
-      {isCreateMode && (
-        <Input
-          isInvalid={!!emailError}
-          errorMessage={emailError}
-          value={values.Email}
-          isRequired
-          onChange={(e) => setFieldValue("Email", e.target.value)}
-          size="sm"
-          label="Correo"
-          disabled={isLoadingAddUser}
-        />
-      )}
+
+      <Input
+        isInvalid={!!emailError}
+        errorMessage={emailError}
+        value={values.Email}
+        isRequired
+        onChange={(e) => setFieldValue("Email", e.target.value)}
+        size="sm"
+        label="Correo"
+        disabled={isLoadingAddUser}
+      />
+
       <Select
         isInvalid={!!rolError}
         errorMessage={rolError}
