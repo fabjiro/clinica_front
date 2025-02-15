@@ -13,7 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IPatient } from "../../../../interfaces/patient.interface";
 import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeletePatient } from "../query/patient.query";
-import { IoIosDocument } from "react-icons/io";
+import { IoIosDocument, IoMdDocument } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
@@ -62,7 +62,7 @@ export function ActionPatient({ id }: IProps) {
         <DropdownMenu>
           <DropdownItem
             showDivider
-            startContent={<MdEdit />}
+            startContent={<IoMdDocument />}
             key="edit"
             // onClick={handleUpdate} aun me falta hacer la funcion
           >
