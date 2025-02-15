@@ -61,6 +61,14 @@ export function ActionPatient({ id }: IProps) {
         </DropdownTrigger>
         <DropdownMenu>
           <DropdownItem
+            showDivider
+            startContent={<MdEdit />}
+            key="edit"
+            // onClick={handleUpdate} aun me falta hacer la funcion
+          >
+            Generar Ficha del Paciente
+          </DropdownItem>
+          <DropdownItem
             startContent={<IoIosDocument />}
             key="consult"
             onClick={() => navigate("/files/patient/" + id)}
