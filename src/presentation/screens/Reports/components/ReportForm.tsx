@@ -1,8 +1,11 @@
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   DateRangePicker,
   DateValue,
   RangeValue,
+  Spinner,
 } from "@nextui-org/react";
 import { useGetRecentDiagnostics } from "../query/diagnostic.query";
 import { useGetMasterData } from "../query/master.query";
@@ -15,6 +18,7 @@ import { useReportFormStore } from "../../../storage/form.storage";
 import moment from "moment";
 import * as XLSX from "xlsx";
 import { SiCcleaner } from "react-icons/si";
+import toast from "react-hot-toast";
 
 interface ReportData {
   [key: string]: string | number | boolean | null;
@@ -23,6 +27,12 @@ interface ReportData {
 export const ReportForm = () => {
   const item = useReportFormStore((state) => state.item);
   const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
+
+  const [loading, setLoading] = useState(false);
+
+  const [isReady, setIsReady] = useState<boolean | null>(null);
+
+  const toggleForm = useReportFormStore((state) => state.toggleForm);
 
   const { data: dataRecentDiagnostics, refetch: handleGetRecentDiagnostics } =
     useGetRecentDiagnostics(
@@ -91,6 +101,12 @@ export const ReportForm = () => {
     console.log(dataRegisteredPatientsByUser);
     console.log(dataRegisteredPatients);
     console.log(dataConsult);
+
+    if (isReady) {
+      toast.success("Datos listos para descargar el reporte creada", {
+        position: "top-right",
+      });
+    }
   }, [
     dataRecentDiagnostics,
     dataMaster,
@@ -98,21 +114,21 @@ export const ReportForm = () => {
     dataRegisteredPatientsByUser,
     dataRegisteredPatients,
     dataConsult,
+    isReady,
   ]);
 
-  const handleClickExport = () => {
-    if (item === 6) {
-      handleGetRecentDiagnostics();
-    } else if (item === 1) {
-      handleGetMasterData();
-    } else if (item === 2) {
-      handleGetNextConsults();
-    } else if (item === 5) {
-      handleGetRegisteredPatientsByUser();
-    } else if (item === 3) {
-      handleGetRegisteredPatients();
-    } else if (item === 4) {
-      handleGetConsult();
+  const handleClickExport = async () => {
+    setLoading(true);
+    try {
+      if (item === 6) await handleGetRecentDiagnostics();
+      else if (item === 1) await handleGetMasterData();
+      else if (item === 2) await handleGetNextConsults();
+      else if (item === 5) await handleGetRegisteredPatientsByUser();
+      else if (item === 3) await handleGetRegisteredPatients();
+      else if (item === 4) await handleGetConsult();
+    } finally {
+      setLoading(false);
+      setIsReady(true);
     }
   };
 
@@ -245,6 +261,8 @@ export const ReportForm = () => {
     }));
 
     XLSX.writeFile(workbook, "Reporte.xlsx");
+    setIsReady(false);
+    toggleForm();
   };
 
   return (
@@ -276,10 +294,36 @@ export const ReportForm = () => {
         </div>
 
         <div className="w-full max-w-xs flex flex-col gap-2">
-          <Button onPress={handleClickExport} fullWidth color="success">
-            Generar Reporte
+          {/* <Autocomplete */}
+          {/* // isLoading={isLoading}
+          isRequired
+          // defaultItems={allPatient ?? []}
+          label="Paciente"
+          size="sm"
+          // isInvalid={!!errors.patient}
+          // errorMessage={errors.patient}
+          // selectedKey={values.patient}
+          // onSelectionChange={(e) => setFieldValue("patient", e)}
+        > */}
+          {/* {(item) => (
+            // <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
+          )} */}
+          {/* </Autocomplete> */}
+          <Button
+            onPress={handleClickExport}
+            fullWidth
+            color="success"
+            isDisabled={isReady === true} // Se deshabilita solo si isReady es true
+          >
+            {loading ? <Spinner size="sm" /> : "Generar Reporte"}
           </Button>
-          <Button onPress={exportToExcel} color="primary" fullWidth>
+
+          <Button
+            onPress={exportToExcel}
+            color="primary"
+            fullWidth
+            isDisabled={isReady === false}
+          >
             Descargar Reporte en Excel
           </Button>
         </div>
