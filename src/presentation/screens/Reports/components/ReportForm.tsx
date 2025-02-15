@@ -19,6 +19,8 @@ import moment from "moment";
 import * as XLSX from "xlsx";
 import { SiCcleaner } from "react-icons/si";
 import toast from "react-hot-toast";
+import { useGetAllUsers } from "../../Users/query/user.query";
+import { useFormikUser } from "../../Users/hooks/useFormikUser";
 
 interface ReportData {
   [key: string]: string | number | boolean | null;
@@ -32,7 +34,13 @@ export const ReportForm = () => {
 
   const [isReady, setIsReady] = useState<boolean | null>(null);
 
+  const { data: allUser, status: statusGetAllUser } = useGetAllUsers();
+
+  const isLoading = statusGetAllUser === "pending";
+
   const toggleForm = useReportFormStore((state) => state.toggleForm);
+
+  const { setFieldValue } = useFormikUser();
 
   const { data: dataRecentDiagnostics, refetch: handleGetRecentDiagnostics } =
     useGetRecentDiagnostics(
@@ -121,11 +129,11 @@ export const ReportForm = () => {
     setLoading(true);
     try {
       if (item === 6) await handleGetRecentDiagnostics();
-      else if (item === 1) await handleGetMasterData();
+      else if (item === 4) await handleGetConsult();
       else if (item === 2) await handleGetNextConsults();
       else if (item === 5) await handleGetRegisteredPatientsByUser();
-      else if (item === 3) await handleGetRegisteredPatients();
-      else if (item === 4) await handleGetConsult();
+      else if (item === 1) await handleGetRegisteredPatients();
+      else if (item === 3) await handleGetMasterData();
     } finally {
       setLoading(false);
       setIsReady(true);
@@ -133,6 +141,13 @@ export const ReportForm = () => {
   };
 
   const getDataForExport = (): ReportData[] => {
+    const filterDataMaster = (data: ReportData[] | undefined) =>
+      data
+        ? data.map(({ registerBy, ...rest }) => ({
+            ...rest,
+          }))
+        : [];
+
     const filterDataRegisteredPatients = (data: ReportData[] | undefined) =>
       data
         ? data.map(
@@ -216,16 +231,16 @@ export const ReportForm = () => {
 
     if (item === 6) {
       return dataRecentDiagnostics || [];
-    } else if (item === 1) {
-      return dataMaster || [];
+    } else if (item === 4) {
+      return filterDataConsult(dataConsult) || [];
     } else if (item === 2) {
       return filterDataNextConsults(dataNextConsults) || [];
     } else if (item === 5) {
       return dataRegisteredPatientsByUser || [];
-    } else if (item === 3) {
+    } else if (item === 1) {
       return filterDataRegisteredPatients(dataRegisteredPatients || []);
-    } else if (item === 4) {
-      return filterDataConsult(dataConsult) || [];
+    } else if (item === 3) {
+      return filterDataMaster(dataMaster) || [];
     }
     return [];
   };
@@ -268,47 +283,50 @@ export const ReportForm = () => {
   return (
     <div>
       <div className="flex flex-col gap-4 items-center justify-center">
-        <p>Por Rango de fechas</p>
-
-        <div className="flex gap-2 items-center">
-          <DateRangePicker
-            value={rangeDate ?? null}
-            onChange={(value) => {
-              if (value !== null) {
-                setRangeDate(value);
-              }
-            }}
-            size="md"
-            className="max-w-xs"
-            granularity="day"
-            fullWidth
-          />
-          <Button
-            onPress={() => {
-              setRangeDate(undefined);
-            }}
-            fullWidth
-          >
-            <SiCcleaner />
-          </Button>
-        </div>
+        {item !== undefined && item >= 2 && item <= 6 && (
+          <>
+            <p>Por Rango de fechas</p>
+            <div className="flex gap-2 items-center">
+              <DateRangePicker
+                value={rangeDate ?? null}
+                onChange={(value) => {
+                  if (value !== null) {
+                    setRangeDate(value);
+                  }
+                }}
+                size="md"
+                className="max-w-xs"
+                granularity="day"
+                fullWidth
+              />
+              <Button
+                onPress={() => {
+                  setRangeDate(undefined);
+                }}
+                fullWidth
+              >
+                <SiCcleaner />
+              </Button>
+            </div>
+          </>
+        )}
 
         <div className="w-full max-w-xs flex flex-col gap-2">
-          {/* <Autocomplete */}
-          {/* // isLoading={isLoading}
-          isRequired
-          // defaultItems={allPatient ?? []}
-          label="Paciente"
-          size="sm"
-          // isInvalid={!!errors.patient}
-          // errorMessage={errors.patient}
-          // selectedKey={values.patient}
-          // onSelectionChange={(e) => setFieldValue("patient", e)}
-        > */}
-          {/* {(item) => (
-            // <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
-          )} */}
-          {/* </Autocomplete> */}
+          {item === 5 && (
+            <Autocomplete
+              isLoading={isLoading}
+              isRequired
+              defaultItems={allUser ?? []}
+              label="Usuario"
+              size="sm"
+              onSelectionChange={(e) => setFieldValue("Name", e)}
+            >
+              {(item) => (
+                <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
+              )}
+            </Autocomplete>
+          )}
+
           <Button
             onPress={handleClickExport}
             fullWidth
