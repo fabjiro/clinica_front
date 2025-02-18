@@ -32,7 +32,7 @@ export const ReportForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [isReady, setIsReady] = useState<boolean | null>(null);
+  const [isReady, setIsReady] = useState<boolean | null>(false);
 
   const { data: allUser, status: statusGetAllUser } = useGetAllUsers();
 
