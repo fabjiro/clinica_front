@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { FaEllipsisVertical } from "react-icons/fa6";
+import { FaEllipsisVertical, FaIdCard } from "react-icons/fa6";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { usePatientStore } from "../store/patient.store";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
@@ -13,7 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IPatient } from "../../../../interfaces/patient.interface";
 import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeletePatient } from "../query/patient.query";
-import { IoIosDocument, IoMdDocument } from "react-icons/io";
+import { IoIosDocument } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
@@ -62,7 +62,7 @@ export function ActionPatient({ id }: IProps) {
         <DropdownMenu>
           <DropdownItem
             showDivider
-            startContent={<IoMdDocument />}
+            startContent={<FaIdCard />}
             key="edit"
             // onClick={handleUpdate} aun me falta hacer la funcion
           >
@@ -73,7 +73,7 @@ export function ActionPatient({ id }: IProps) {
             key="consult"
             onClick={() => navigate("/files/patient/" + id)}
           >
-            Consultas
+            Ver Consultas
           </DropdownItem>
           <DropdownItem
             showDivider

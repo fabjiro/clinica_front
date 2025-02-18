@@ -1,6 +1,6 @@
 import { ISidebarItem } from "../interfaces/sidebar.interfaces";
 import { MdBackup } from "react-icons/md";
-import { FaUsersGear } from "react-icons/fa6";
+import { FaUserGear, FaUsersGear } from "react-icons/fa6";
 import { IoDocumentText } from "react-icons/io5";
 import { VscFileSubmodule } from "react-icons/vsc";
 import { LuLayoutDashboard } from "react-icons/lu";
@@ -25,7 +25,12 @@ export const listItemSidebar: ISidebarItem[] = [
     path: "/users",
     icon: <FaUsersGear />,
   },
-
+  {
+    name: "Roles",
+    key: "roles",
+    path: "/roles",
+    icon: <FaUserGear />,
+  },
   {
     name: "Reportes",
     key: "reports",

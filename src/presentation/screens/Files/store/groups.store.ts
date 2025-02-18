@@ -21,7 +21,7 @@ export const useGroupsStore = create<IGroupStore>()((set, get) => ({
   setModeForm: (mode: MODEFORMENUM) => set({ modeForm: mode, titleForm: mode === MODEFORMENUM.CREATE ? "Nuevo Examen" : "Editar Examen" }),
   toggleForm: () => set({ showForm: !get().showForm }),
   setPatient: (exam: IExam) => set({ exam }),
-  patient: undefined,
+  // patient: undefined,
   titleForm: "",
   showDeleteModal: false,
 }));

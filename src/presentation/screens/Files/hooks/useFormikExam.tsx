@@ -7,16 +7,19 @@ import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 
 export function useFormikExam() {
   const { mutate, status: statusAddExam } = useAddExam();
-  const { mutate: mutateUpdateExam, status: statusUpdateExam} = useUpdateExam();
-//   const { mutate: mutateUpdate, status: statusUpdatePatient } = useUpdatePatient();
+  const { mutate: mutateUpdateExam, status: statusUpdateExam } =
+    useUpdateExam();
+  //   const { mutate: mutateUpdate, status: statusUpdatePatient } = useUpdatePatient();
   const { exam, modeForm } = useGroupsStore();
 
   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
 
-  const initialValues: Partial<IExamReqDto> = isCreateMode ?  { group: "", name: "" } : {
-    group: exam?.group.id,
-    name: exam?.name
-  };
+  const initialValues: Partial<IExamReqDto> = isCreateMode
+    ? { group: "", name: "" }
+    : {
+        group: exam?.group.id,
+        name: exam?.name,
+      };
 
   const {
     handleChange,
@@ -33,13 +36,13 @@ export function useFormikExam() {
     validateOnBlur: false,
     validationSchema: () => examSchemaValidation(),
     onSubmit: (values) => {
-      if(isCreateMode) {
-        mutate({group: values.group!, name: values.name!});
+      if (isCreateMode) {
+        mutate({ group: values.group!, name: values.name! });
       } else {
         mutateUpdateExam({
           id: exam?.id,
           group: values.group,
-          name: values.name
+          name: values.name,
         });
       }
     },
@@ -54,6 +57,6 @@ export function useFormikExam() {
     errors,
     values,
     statusAddExam,
-    statusUpdateExam
+    statusUpdateExam,
   };
 }
