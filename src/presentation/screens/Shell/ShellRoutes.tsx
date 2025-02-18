@@ -21,7 +21,7 @@ export default function ShellRoutes() {
   }
 
   if (isAuthenticated) {
-    const rolid = dataMe?.rol?.id;
+    const rolid = dataMe?.rol?.rolId;
 
     if (rolid === RolEnum.ADMIN) {
       return <AdminRoutesLazy />;
