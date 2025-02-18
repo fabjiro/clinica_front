@@ -74,21 +74,51 @@ export function ActionConsult({ id }: IProps) {
     // Crear un nuevo documento PDF
     const doc = new jsPDF();
 
-    const pageWidth = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
-    const text = "Consulta médica";
-    const textWidth = doc.getTextWidth(text); // Obtiene el ancho del texto
+    // const pageWidth = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
+    // const text = "Consulta médica";
+    // const textWidth = doc.getTextWidth(text); // Obtiene el ancho del texto
 
-    // Configurar fuente en negrita
-    doc.setFont("helvetica", "bold");
+    // // Configurar fuente en negrita
+    // doc.setFont("helvetica", "bold");
 
-    // Escribir texto centrado
-    doc.text(text, (pageWidth - textWidth) / 2, 20);
+    // // Escribir texto centrado
+    // doc.text(text, (pageWidth - textWidth) / 2, 20);
+
+    // doc.addImage(
+    //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
+    //   "JPEG", // Formato de la imagen
+    //   10, // Posición X
+    //   10, // Posición Y
+    //   10, // Ancho
+    //   10 // Alto
+    // );
+
+    // // Agregar los textos
+    // doc.setFontSize(6); // Establecer tamaño de fuente pequeño
+    // doc.text("Hola", 20, 15); // Texto "Hola" al lado de la imagen
+    // doc.text("Adios", 20, 20); // Texto "Adios" debajo de "Hola"
+    // doc.text("xdxdxdxd", 20, 25); // Texto "xdxdxdxd" debajo de "Adios"
+
     // Saltos de línea
     let currentY = 30; // Comienza en y = 30 después del encabezado
 
     autoTable(doc, {
       startY: currentY, // Comienza la tabla después de los saltos de línea
       body: [
+        [
+          {
+            content: "Consulta Médica",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 14,
+              fillColor: [0, 76, 153],
+              lineColor: [0, 0, 0],
+              textColor: [255, 255, 255],
+              halign: "center",
+            },
+            colSpan: 4,
+          },
+        ],
         [
           {
             content: "Nombre del paciente:",
@@ -283,21 +313,35 @@ export function ActionConsult({ id }: IProps) {
     });
 
     // Obtener la posición actual después de la primera tabla
-    const finalY = (doc as any).lastAutoTable?.finalY || 10; // Espaciado de 10 unidades
+    // const finalY = (doc as any).lastAutoTable?.finalY || 10; // Espaciado de 10 unidades
 
-    // Encabezado de Evaluación Geriátrica
-    const textt = "Evaluación Geriátrica";
-    const textWidthh = doc.getTextWidth(textt); // Corrige la variable usada
-    const pageWidthh = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
+    // // Encabezado de Evaluación Geriátrica
+    // const textt = "Evaluación Geriátrica";
+    // const textWidthh = doc.getTextWidth(textt); // Corrige la variable usada
+    // const pageWidthh = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
 
-    doc.setFont("helvetica", "bold");
-    doc.text(textt, (pageWidthh - textWidthh) / 2, finalY + 10); // Coloca el texto debajo de la primera tabla
+    // doc.setFont("helvetica", "bold");
+    // doc.text(textt, (pageWidthh - textWidthh) / 2, finalY + 10); // Coloca el texto debajo de la primera tabla
 
     // Segunda tabla (Evaluación Geriátrica)
 
     autoTable(doc, {
-      startY: finalY + 20,
+      // startY: finalY + 20,
       body: [
+        [
+          {
+            content: "Evaluación Geriátrica",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 14,
+              fillColor: [0, 76, 153],
+              lineColor: [0, 0, 0],
+              textColor: [255, 255, 255],
+              halign: "center",
+            },
+            colSpan: 4,
+          },
+        ],
         [
           {
             content: "Evaluacion Biologica",
@@ -386,19 +430,33 @@ export function ActionConsult({ id }: IProps) {
       theme: "grid",
     });
 
-    const finalY2 = (doc as any).lastAutoTable?.finalY || finalY + 10;
-    const textResultados = "Resultados y Diagnósticos";
-    const textWidthResultados = doc.getTextWidth(textResultados);
+    // const finalY2 = (doc as any).lastAutoTable?.finalY || finalY + 10;
+    // const textResultados = "Resultados y Diagnósticos";
+    // const textWidthResultados = doc.getTextWidth(textResultados);
 
-    doc.setFont("helvetica", "bold");
-    doc.text(
-      textResultados,
-      (pageWidth - textWidthResultados) / 2,
-      finalY2 + 10
-    );
+    // doc.setFont("helvetica", "bold");
+    // doc.text(
+    //   textResultados,
+    //   (pageWidth - textWidthResultados) / 2,
+    //   finalY2 + 10
+    // );
     autoTable(doc, {
-      startY: finalY2 + 20,
+      // startY: finalY2 + 20,
       body: [
+        [
+          {
+            content: "Resultados y Diagnósticoss",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 14,
+              fillColor: [0, 76, 153],
+              lineColor: [0, 0, 0],
+              textColor: [255, 255, 255],
+              halign: "center",
+            },
+            colSpan: 4,
+          },
+        ],
         [
           {
             content: "Examen Complementario:",

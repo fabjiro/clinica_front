@@ -15,6 +15,8 @@ import { useConfirmStore } from "../../../storage/confim.storage";
 import { useDeletePatient } from "../query/patient.query";
 import { IoIosDocument } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 
 interface IProps {
   id: string;
@@ -46,6 +48,317 @@ export function ActionPatient({ id }: IProps) {
     });
   };
 
+  const handleGenerateFicha = () => {
+    const patient = (
+      clientQuery.getQueryData<IPatient[]>(["getAllPatient"]) ?? []
+    ).find((patient) => patient.id === id);
+
+    if (!patient) {
+      alert("No se encontró el paciente.");
+      return;
+    }
+
+    console.log("patient Data:", patient);
+
+    const doc = new jsPDF("landscape");
+
+    // doc.addImage(
+    //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
+    //   "JPEG", // Formato de la imagen
+    //   10, // Posición X
+    //   10, // Posición Y
+    //   10, // Ancho
+    //   10 // Alto
+    // );
+
+    // // Agregar los textos
+    // doc.setFontSize(6); // Establecer tamaño de fuente pequeño
+    // doc.text("Hola", 20, 15); // Texto "Hola" al lado de la imagen
+    // doc.text("Adios", 20, 20); // Texto "Adios" debajo de "Hola"
+    // doc.text("xdxdxdxd", 20, 25); // Texto "xdxdxdxd" debajo de "Adios"
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Ficha del Paciente",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 30,
+              fillColor: [0, 76, 153],
+              lineColor: [0, 0, 0],
+              textColor: [255, 255, 255],
+              halign: "center",
+            },
+            colSpan: 3,
+          },
+        ],
+        [
+          {
+            content: "Nombre del paciente:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Fecha de creación:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Identificación:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: patient?.name || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: new Date(patient?.createdAt).toLocaleDateString() || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: patient?.identification || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Teléfono:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Edad:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Dirección:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: patient?.phone || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: patient?.age || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: patient?.address || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Fecha de Nacimiento:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Sexo:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Estado Civil:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: new Date(patient?.birthday).toLocaleDateString() || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content:
+              patient?.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
+                ? "Femenino"
+                : "Masculino",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+
+          {
+            content: patient?.civilStatus?.name || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Persona de Contacto:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Teléfono de Contacto:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Número de Consultas:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: patient?.contactPerson || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: patient?.contactPhone || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: patient?.consultCount || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+      ],
+      theme: "grid",
+      styles: {
+        font: "helvetica", // Puedes ajustar el tipo de fuente si lo necesitas
+
+        cellPadding: 4, // Espaciado dentro de las celdas
+      },
+      margin: { top: 30, left: 20, right: 20 }, // Márgenes para centrar la tabla en la página
+      tableWidth: "auto", // Esto asegura que la tabla se ajuste bien al tamaño de la página
+    });
+
+    const fileName = patient?.name
+      ? `Ficha_del_Paciente_${patient.name}.pdf`
+      : "Ficha_del_Paciente_.pdf";
+
+    doc.save(fileName);
+  };
+
   return (
     <div className="flex flex-row gap-2 items-center justify-center h-full w-full">
       <Dropdown backdrop="blur" className="rounded-md">
@@ -64,7 +377,7 @@ export function ActionPatient({ id }: IProps) {
             showDivider
             startContent={<FaIdCard />}
             key="edit"
-            // onClick={handleUpdate} aun me falta hacer la funcion
+            onClick={handleGenerateFicha}
           >
             Generar Ficha del Paciente
           </DropdownItem>
