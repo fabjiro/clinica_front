@@ -30,13 +30,12 @@ interface IProps {
 }
 
 export function ActionSubRol({ id }: IProps) {
-  const {
-    toggleForm: toggleFormSubRol,
-    setModeForm,
-    setSubRol,
-  } = useSubRolStore();
-  //   const { status: statusDeleteExam, mutate: handleDeleteExam } =
-  //     useDeleteExam();
+  // const {
+  //   toggleForm: toggleFormSubRol,
+  //   setModeForm,
+  //   setSubRol,
+  // } = useSubRolStore();
+
   const { status: statusDeleteSubRol, mutate: handleDeleteSubRol } =
     useDeleteSubRol();
   const clientQuery = useQueryClient();
@@ -49,9 +48,11 @@ export function ActionSubRol({ id }: IProps) {
 
     if (!subRol) return;
 
-    setSubRol(subRol);
-    setModeForm(MODEFORMENUM.UPDATE);
-    toggleFormSubRol();
+    console.log(subRol);
+
+    // setSubRol(subRol);
+    // setModeForm(MODEFORMENUM.UPDATE);
+    // toggleFormSubRol();
   };
 
   const handleDelete = () => {

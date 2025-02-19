@@ -7,4 +7,5 @@ export interface IUserModel {
   email: string;
   rol?: IRolModel;
   avatar?: IImageModel;
+  password?: string;
 }

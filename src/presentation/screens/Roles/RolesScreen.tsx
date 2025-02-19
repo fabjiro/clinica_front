@@ -29,6 +29,11 @@ export function RolesScreen() {
     { field: "colId", headerName: "N", width: 90 },
     {
       field: "col1",
+      headerName: "Rol",
+      flex: 1,
+    },
+    {
+      field: "col2",
       headerName: "Nombre SubRol",
       flex: 1,
     },
@@ -60,11 +65,12 @@ export function RolesScreen() {
     //           }));
     //       }
 
-    return dataSubRol.map((rol, index) => ({
+    return dataSubRol.map((roldata, index) => ({
       colId: index + 1,
-      id: rol.id,
+      id: roldata.id,
+      // col1: roldata.rol.name,
+      col2: roldata.name,
       //   col1: rol.group.name,
-      col1: rol.name,
     }));
   }, [dataSubRol]);
 
