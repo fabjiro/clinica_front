@@ -17,6 +17,9 @@ import { IoIosDocument } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { VscFileSymlinkDirectory } from "react-icons/vsc";
+import { IConsult } from "../../../../interfaces/consult.interface";
+import { useGetConsultByPatientId } from "../query/consult.query";
 
 interface IProps {
   id: string;

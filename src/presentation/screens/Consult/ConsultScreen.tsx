@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BaseScreen } from "../BaseScreen";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Input, User } from "@nextui-org/react";
+import { Button, Input, User } from "@nextui-org/react";
 import { CiSearch } from "react-icons/ci";
 import { IPatient } from "../../../interfaces/patient.interface";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,6 +14,10 @@ import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 import { BaseModal } from "../../components/Base/BaseModal";
 import { FormConsult } from "../Files/components/FormConsult";
 import { useConsutlFormStore } from "../../storage/form.storage";
+import { VscFileSymlinkDirectory } from "react-icons/vsc";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
+import { useGetAllUsers } from "../Users/query/user.query";
 
 const columns: GridColDef[] = [
   { field: "colId", headerName: "N.", width: 90 },
@@ -110,12 +114,811 @@ export function ConsultScreen() {
     }));
   }, [consultData, searchByWord]);
 
+  console.log(consultData);
+
+  function generateConsultationPDF(consultations: any[]) {
+    const doc = new jsPDF();
+
+    console.log(consultations[0].patient.name);
+
+    autoTable(doc, {
+      body: [
+        [
+          {
+            content: "Ficha del Paciente",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 30,
+              fillColor: [0, 76, 153],
+              lineColor: [0, 0, 0],
+              textColor: [255, 255, 255],
+              halign: "center",
+            },
+            colSpan: 3,
+          },
+        ],
+        [
+          {
+            content: "Nombre del paciente:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Fecha de creación:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Identificación:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: consultations[0].patient?.name || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content:
+              new Date(
+                consultations[0].patient?.createdAt
+              ).toLocaleDateString() || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consultations[0].patient?.identification || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Teléfono:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Edad:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Dirección:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: consultations[0].patient?.phone || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consultations[0].patient?.age || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consultations[0].patient?.address || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Fecha de Nacimiento:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Sexo:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Estado Civil:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content:
+              new Date(
+                consultations[0].patient?.birthday
+              ).toLocaleDateString() || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content:
+              consultations[0].patient?.typeSex ===
+              "c2594acf-bb7c-49d0-9506-f556179670ab"
+                ? "Femenino"
+                : "Masculino",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+
+          {
+            content: consultations[0].patient?.civilStatus?.name || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: "Persona de Contacto:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Teléfono de Contacto:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: "Número de Consultas:",
+            styles: {
+              fontStyle: "bold",
+              fontSize: 15,
+              fillColor: [200, 200, 200],
+              lineColor: [0, 0, 0],
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+        [
+          {
+            content: consultations[0].patient?.contactPerson || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consultations[0].patient?.contactPhone || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+          {
+            content: consultations[0].patient?.consultCount || "N/A",
+            styles: {
+              lineColor: [0, 0, 0],
+              fontSize: 15,
+              halign: "center",
+              textColor: [0, 0, 0],
+            },
+          },
+        ],
+      ],
+      theme: "grid",
+      styles: {
+        font: "helvetica", // Puedes ajustar el tipo de fuente si lo necesitas
+
+        cellPadding: 4, // Espaciado dentro de las celdas
+      },
+      margin: { top: 30, left: 20, right: 20 }, // Márgenes para centrar la tabla en la página
+      tableWidth: "auto", // Esto asegura que la tabla se ajuste bien al tamaño de la página
+    });
+
+    doc.addPage();
+
+    consultations.forEach((consult, index) => {
+      if (index > 0) doc.addPage(); // Añadir una nueva página para cada consulta
+
+      // doc.addImage(
+      //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
+      //   "JPEG",
+      //   10,
+      //   10,
+      //   10,
+      //   10
+      // );
+
+      // doc.setFontSize(6);
+      // doc.text("Hola", 20, 15);
+      // doc.text("Adios", 20, 20);
+      // doc.text("xdxdxdxd", 20, 25);
+
+      let currentY = 30;
+
+      autoTable(doc, {
+        startY: currentY, // Comienza la tabla después de los saltos de línea
+        body: [
+          [
+            {
+              content: "Consulta Médica",
+              styles: {
+                fontStyle: "bold",
+                fontSize: 14,
+                fillColor: [0, 76, 153],
+                lineColor: [0, 0, 0],
+                textColor: [255, 255, 255],
+                halign: "center",
+              },
+              colSpan: 4,
+            },
+          ],
+          [
+            {
+              content: "Nombre del paciente:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+            {
+              content: "Fecha consulta:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+          ],
+          [
+            {
+              content: consult.patient?.name || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content:
+                new Date(consult.createdAt).toLocaleDateString() || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+          // Segunda fila que se ve como encabezado
+          [
+            {
+              content: "Motivo:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content: "Peso:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content: "Tamaño:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content: "Pulso",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+          ],
+          [
+            {
+              content: consult.motive || "N/A",
+              colSpan: 1,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.weight ? `${consult.weight} kg` : "N/A",
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content: consult.size ? `${consult.size} cm` : "N/A",
+              colSpan: 1,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.pulse ? `${consult.pulse} Lpm` : "N/A",
+              colSpan: 1,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+          [
+            {
+              content: "Saturacion de Oxígeno:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content: "Presión Arterial:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content: "Historial clínico:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+          ],
+          [
+            {
+              content: consult.oxygenSaturation
+                ? `${consult.oxygenSaturation}%`
+                : "N/A",
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
+              content:
+                consult.systolicPressure && consult.diastolicPressure
+                  ? `${consult.systolicPressure}/${consult.diastolicPressure} mmHg`
+                  : "N/A",
+              colSpan: 1,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.clinicalhistory || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+        ],
+        theme: "grid",
+      });
+
+      autoTable(doc, {
+        // startY: finalY + 20,
+        body: [
+          [
+            {
+              content: "Evaluación Geriátrica",
+              styles: {
+                fontStyle: "bold",
+                fontSize: 14,
+                fillColor: [0, 76, 153],
+                lineColor: [0, 0, 0],
+                textColor: [255, 255, 255],
+                halign: "center",
+              },
+              colSpan: 4,
+            },
+          ],
+          [
+            {
+              content: "Evaluacion Biologica",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+            {
+              content: "Evalucaion Psicologica:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+          ],
+          [
+            {
+              content: consult.bilogicalEvaluation || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.psychologicalEvaluation || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+          [
+            {
+              content: "Evaluacion Social",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+            {
+              content: "Evaluacion Funcional:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+          ],
+          [
+            {
+              content: consult.socialEvaluation || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.functionalEvaluation || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+        ],
+        theme: "grid",
+      });
+
+      autoTable(doc, {
+        // startY: finalY2 + 20,
+        body: [
+          [
+            {
+              content: "Resultados y Diagnósticoss",
+              styles: {
+                fontStyle: "bold",
+                fontSize: 14,
+                fillColor: [0, 76, 153],
+                lineColor: [0, 0, 0],
+                textColor: [255, 255, 255],
+                halign: "center",
+              },
+              colSpan: 4,
+            },
+          ],
+          [
+            {
+              content: "Examen Complementario:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+            {
+              content: consult.complementaryTest?.name || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+          [
+            {
+              content: "Diagnostico:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+            {
+              content: "Receta:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+          ],
+          [
+            {
+              content: consult.diagnosis || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.recipe || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+          [
+            {
+              content: "Registrado por:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+            {
+              content: "Proxima Cita:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 2,
+            },
+          ],
+          [
+            {
+              content: consult.userCreatedBy?.name || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+            {
+              content: consult.nextappointment || "N/A",
+              colSpan: 2,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
+          ],
+        ],
+        theme: "grid",
+      });
+      //pagina de imagen examen complementario
+      doc.addPage();
+      //encabezado de pagina
+      // doc.addImage(
+      //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
+      //   "JPEG",
+      //   10,
+      //   10,
+      //   10,
+      //   10
+      // );
+
+      // doc.setFontSize(6);
+      // doc.text("Hola", 20, 15);
+      // doc.text("Adios", 20, 20);
+      // doc.text("xdxdxdxd", 20, 25);
+
+      //imagen examen complementario
+      // doc.addImage(
+      //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
+      //   "JPEG",
+      //   10,
+      //   30,
+      //   190,
+      //   150
+      // );
+    });
+
+    // Guardar el PDF con el nombre del paciente o un nombre genérico si es null
+    const fileName = patient?.name
+      ? `Consulta_Medica_${patient?.name}.pdf`
+      : "Consulta_Medica.pdf";
+
+    // Guardar el archivo
+    doc.save(fileName);
+  }
+
   return (
     <>
       <BaseScreen
         isLoading={isLoadingConsult}
         showBackButton
         titlePage={`Consultas de ${patient?.name}`}
+        actions={
+          <>
+            <Button
+              onClick={() => generateConsultationPDF(consultData || [])}
+              startContent={<VscFileSymlinkDirectory />}
+              color="primary"
+            >
+              Exportar Expediente
+            </Button>
+          </>
+        }
       >
         <div className="flex flex-col gap-2 flex-1">
           <Input
