@@ -24,8 +24,8 @@ export function useFormikSubRol() {
       rolId: "",
     }
   : {
+      rolId: subRol?.rol.id,
       name: subRol?.name,
-      rolId: subRol?.rol.id
     };
 
 
@@ -46,14 +46,14 @@ export function useFormikSubRol() {
     onSubmit: (values) => {
       if (isCreateMode) {
         mutate({
-          name: values.name!,
           rolId: values.rolId!,
+          name: values.name!,
         });
       } else {
         mutateUpdate({
             id: values.id,
-            name: values.name,
             rolId: values.rolId,
+            name: values.name,
         });
       }
     },

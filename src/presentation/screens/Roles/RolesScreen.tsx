@@ -29,7 +29,7 @@ export function RolesScreen() {
     { field: "colId", headerName: "N", width: 90 },
     {
       field: "col1",
-      headerName: "Rol",
+      headerName: "Nombre SubRol",
       flex: 1,
     },
     {
@@ -104,11 +104,11 @@ export function RolesScreen() {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 6,
+                    pageSize: 7,
                   },
                 },
               }}
-              pageSizeOptions={[6]}
+              pageSizeOptions={[7]}
             />
           </div>
         </div>

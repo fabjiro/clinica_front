@@ -5,7 +5,7 @@ import { ISubRolReqDto } from "../../../../Dto/Request/subrol.req.dto";
 import toast from "react-hot-toast";
 import { ISubRol } from "../../../../interfaces/subrol.interface";
 
-const BASE_URL = "../subrol";
+const BASE_URL = "/Rol/subrol";
 
 export async function GetAllSubRol() {
     const { data } = await axiosInstance.get<ISubRol[]>(BASE_URL);

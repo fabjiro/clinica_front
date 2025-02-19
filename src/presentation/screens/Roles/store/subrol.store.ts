@@ -8,7 +8,7 @@ import { ISubRol } from "../../../../interfaces/subrol.interface";
 interface ISubRolStore {
   showForm: boolean;
   toggleForm: () => void;
-  setRol: (subRol: ISubRol) => void;
+  setSubRol: (Rol: ISubRol) => void;
   subRol?: ISubRol; 
   modeForm: MODEFORMENUM;
   setModeForm: (mode: MODEFORMENUM) => void;
@@ -19,12 +19,13 @@ interface ISubRolStore {
 export const useSubRolStore = create<ISubRolStore>()((set, get) => ({
     showForm: false,
     modeForm: MODEFORMENUM.CREATE,
-    setRol: (subRol: ISubRol) => set({ subRol }), 
+    setSubRol: (subRol: ISubRol) => set({ subRol }), 
     setModeForm: (mode: MODEFORMENUM) => 
       set({ modeForm: mode, titleForm: mode === MODEFORMENUM.CREATE ? "Nuevo Sub-Rol" : "Editar sub-Rol" }),
     toggleForm: () => set({ showForm: !get().showForm }),
-    // rol: undefined, 
-    // titleForm: "",
+    setRol: (subRol: ISubRol) => set({ subRol }),
+    rol: undefined, 
+    titleForm: "",
     showDeleteModal: false,
   }));
   

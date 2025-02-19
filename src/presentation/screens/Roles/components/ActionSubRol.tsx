@@ -15,6 +15,9 @@ import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 // import { useQueryClient } from "@tanstack/react-query";
 
 import { useDeleteSubRol } from "../querys/subrol.query";
+import { ISubRol } from "../../../../interfaces/subrol.interface";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSubRolStore } from "../store/subrol.store";
 //   import { useExamStore } from "../store/Exam.store";
 //   import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 //   import { useQueryClient } from "@tanstack/react-query";
@@ -27,22 +30,28 @@ interface IProps {
 }
 
 export function ActionSubRol({ id }: IProps) {
-  //   const { toggleForm, setModeForm, setExam } = useGroupsStore();
+  const {
+    toggleForm: toggleFormSubRol,
+    setModeForm,
+    setSubRol,
+  } = useSubRolStore();
   //   const { status: statusDeleteExam, mutate: handleDeleteExam } =
   //     useDeleteExam();
   const { status: statusDeleteSubRol, mutate: handleDeleteSubRol } =
     useDeleteSubRol();
-  //   const clientQuery = useQueryClient();
+  const clientQuery = useQueryClient();
   const showConfirm = useConfirmStore((state) => state.showConfirm);
 
   const handleUpdate = () => {
-    // const Exam = (clientQuery.getQueryData<IExam[]>(["getAllExam"]) ?? []).find(
-    //   (Exam) => Exam.id === id
-    // );
-    // if (!Exam) return;
-    // setExam(Exam);
-    // setModeForm(MODEFORMENUM.UPDATE);
-    // toggleForm();
+    const subRol = (
+      clientQuery.getQueryData<ISubRol[]>(["getAllSubRol"]) ?? []
+    ).find((subRol) => subRol.id === id);
+
+    if (!subRol) return;
+
+    setSubRol(subRol);
+    setModeForm(MODEFORMENUM.UPDATE);
+    toggleFormSubRol();
   };
 
   const handleDelete = () => {
