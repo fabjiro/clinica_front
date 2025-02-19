@@ -5,6 +5,6 @@ export interface IUserRolEntity {
   id: string;
   name: string;
   email: string;
-  rol?: IRolEntity;
+  rol?: any;
   avatar?: IImageEntity;
 }
