@@ -204,6 +204,7 @@ export function FormConsult() {
             label="Examen complementario"
             size="sm"
             onSelectionChange={(e) => setFieldValue("examComplementary", e)}
+            defaultSelectedKey={values.examComplementary}
           >
             {(item) => (
               <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
