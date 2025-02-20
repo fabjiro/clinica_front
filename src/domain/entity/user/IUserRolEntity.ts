@@ -7,4 +7,5 @@ export interface IUserRolEntity {
   email: string;
   rol?: any;
   avatar?: IImageEntity;
+  routes?: string[];
 }
