@@ -8,6 +8,7 @@ import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import { FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { FileUtils } from "../../../../utils/file.utils";
+import { useGetSubRol } from "../../Roles/querys/subrol.query";
 
 export function FormUser() {
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
@@ -15,7 +16,7 @@ export function FormUser() {
     multiple: false,
   });
 
-  const { data: dataRoles, status: statusGetRoles } = useGetAllRoles();
+  const { data: dataRoles, status: statusGetRoles } = useGetSubRol();
 
   const {
     errors,
