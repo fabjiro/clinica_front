@@ -33,6 +33,11 @@ export function RolesScreen() {
       flex: 1,
     },
     {
+      field: "col2",
+      headerName: "Nombre SubRol",
+      flex: 1,
+    },
+    {
       field: "col3",
       headerName: "Acciones",
       width: 100,
@@ -60,11 +65,12 @@ export function RolesScreen() {
     //           }));
     //       }
 
-    return dataSubRol.map((rol, index) => ({
+    return dataSubRol.map((roldata, index) => ({
       colId: index + 1,
-      id: rol.id,
+      id: roldata.id,
+      // col1: roldata.rol.name,
+      col2: roldata.name,
       //   col1: rol.group.name,
-      col1: rol.name,
     }));
   }, [dataSubRol]);
 
@@ -104,11 +110,11 @@ export function RolesScreen() {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 6,
+                    pageSize: 7,
                   },
                 },
               }}
-              pageSizeOptions={[6]}
+              pageSizeOptions={[7]}
             />
           </div>
         </div>
