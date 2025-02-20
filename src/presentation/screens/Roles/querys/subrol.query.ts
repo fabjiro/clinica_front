@@ -9,7 +9,6 @@ const BASE_URL = "/Rol/subrol";
 
 export async function GetAllSubRol() {
     const { data } = await axiosInstance.get<ISubRol[]>(BASE_URL);
-    console.log(data);
     return data;
 }
 

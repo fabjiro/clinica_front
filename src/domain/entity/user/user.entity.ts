@@ -5,7 +5,7 @@ export class UserEntity {
   id: string;
   name: string;
   email: string;
-  rol?: RolEntity;
+  rol?: any;
   avatar?: ImageEntity;
   password?: string;
 
@@ -30,7 +30,7 @@ export class UserEntity {
       json.id,
       json.name,
       json.email,
-      json.rol !== null ? RolEntity.fromJson(json.rol) : undefined,
+      json.rol !== null ? json.rol : undefined,
       json.avatar !== null ? ImageEntity.fromJson(json.avatar) : undefined,
       json.password,
     );
