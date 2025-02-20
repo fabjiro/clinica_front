@@ -90,6 +90,7 @@ export function FormConsult() {
           <Textarea
             onChange={(e) => setFieldValue("clinicalhistory", e.target.value)}
             label="Historial clinico"
+            value={values.clinicalhistory}
           />
         </div>
         <Divider />
@@ -100,22 +101,26 @@ export function FormConsult() {
               setFieldValue("bilogicalEvaluation", e.target.value)
             }
             label="Biologico"
+            value={values.bilogicalEvaluation}
           />
           <Textarea
             onChange={(e) =>
               setFieldValue("psychologicalEvaluation", e.target.value)
             }
             label="Psicologico"
+            value={values.psychologicalEvaluation}
           />
           <Textarea
             onChange={(e) => setFieldValue("socialEvaluation", e.target.value)}
             label="Social"
+            value={values.socialEvaluation}
           />
           <Textarea
             onChange={(e) =>
               setFieldValue("functionalEvaluation", e.target.value)
             }
             label="Funcional"
+            value={values.functionalEvaluation}
           />
         </div>
         <div className="flex flex-row gap-4">
@@ -144,12 +149,14 @@ export function FormConsult() {
             size="sm"
             label="Pulso"
             endContent="Lpm"
+            value={values.pulse?.toString()}
           />
           <Input
             onChange={(e) => setFieldValue("oxygenSaturation", e.target.value)}
             size="sm"
             label="Saturacion de oxigeno"
             endContent="%"
+            value={values.oxygenSaturation?.toString()}
           />
         </div>
         <div className="flex flex-col">
@@ -161,6 +168,7 @@ export function FormConsult() {
               }
               size="sm"
               label="Sistolica"
+              value={values.systolicPressure?.toString()}
             />
             {/* <Button variant="light">/</Button> */}
             <Input
@@ -169,6 +177,7 @@ export function FormConsult() {
               }
               size="sm"
               label="Diastolica"
+              value={values.diastolicPressure?.toString()}
             />
           </div>
         </div>
@@ -185,6 +194,7 @@ export function FormConsult() {
           <Textarea
             onChange={(e) => setFieldValue("antecedentFamily", e.target.value)}
             label="Antecendentes Familiares"
+            value={values.antecedentFamily}
           />
         </div>
         <div className="flex flex-row gap-4">

@@ -18,7 +18,7 @@ export function useFormikUser() {
     ? {
         Name: "",
         Email: "",
-        Rol: RolEnum.CUSTOMER,
+        Rol: "",
         Password: "",
         Avatar: "",
       }
@@ -27,7 +27,6 @@ export function useFormikUser() {
         Rol: user?.rol?.id,
         Email: user?.email,
         Password: user?.password,
-        
       };
 
   const {

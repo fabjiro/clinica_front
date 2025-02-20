@@ -73,7 +73,7 @@ export function ShellAdminLayout() {
           <div className="flex-grow"></div>
 
           <div className="mb-5 flex flex-col gap-2">
-            <Button
+            {/* <Button
               onClick={() => navigate("/settings")}
               variant="light"
               color="primary"
@@ -81,7 +81,7 @@ export function ShellAdminLayout() {
               startContent={<IoSettings />}
             >
               Configuraciónes
-            </Button>
+            </Button> */}
             <LogOutButton />
           </div>
         </div>
