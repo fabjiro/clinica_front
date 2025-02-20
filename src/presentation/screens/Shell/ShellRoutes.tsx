@@ -10,17 +10,26 @@ const SellerRoutesLazy = lazy(() => import("../Seller/SellerRoutes"));
 const CustomerRoutesLazy = lazy(() => import("../Customer/CustomerRoutes"));
 
 
-const paginasPermitidas = [
-  'dashboard',
-  'files',
-]
 
 export default function ShellRoutes() {
   const { isAuth } = useAuthStore(); // Obtener estado y funciones del store
   const { data: dataMe } = useGetMe(); // Llamada a la API para obtener datos del usuario
   const location = useLocation();
   const rutaActual = location.pathname.split('/');
-  const ultimaRuta = rutaActual[rutaActual.length - 1]; 
+  // Función para verificar si una cadena es un UUID (parámetro)
+  const esParametro = (cadena: string) => {
+    // Expresión regular para validar un UUID
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    return uuidRegex.test(cadena);
+  };
+
+  // Obtener la última parte de la ruta que no sea un parámetro
+  let ultimaRuta = rutaActual
+    .filter(part => part !== '' && !esParametro(part)) // Filtrar partes vacías y parámetros
+    .pop(); // O
+
+
+    console.log(ultimaRuta);
   
   const isAuthenticated = isAuth();
 
@@ -33,7 +42,7 @@ export default function ShellRoutes() {
     const rolid = dataMe?.rol?.rol?.id;
 
 
-    if(dataMe?.routes && ultimaRuta !== "") {
+    if(dataMe?.routes && ultimaRuta && ultimaRuta !== "") {
       if(!dataMe.routes.includes(ultimaRuta)) {
         return <LoadingScreen message="No tienes permiso para acceder a esta página" />;
       }
