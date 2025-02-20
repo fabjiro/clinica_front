@@ -14,7 +14,7 @@ export function useFormikConsult() {
   const { item, modeForm } = useConsutlFormStore();
 
   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
-
+  
   const initialValues: Partial<IConsultReqDto> = isCreateMode
     ? {}
     : {
@@ -59,7 +59,7 @@ export function useFormikConsult() {
           item?.antecedentFamily !== null ? item?.antecedentFamily : undefined,
         examComplementary:
           item?.complementaryTest !== null
-            ? String(item?.complementaryTest)
+            ? String(item?.complementaryTest.id)
             : undefined,
         imageExam: item?.image !== null ? String(item?.image) : undefined,
       };
