@@ -57,6 +57,7 @@ export function useFormikUser() {
         mutateUpdate({
           Id: user?.id!,
           Name: values.Name!,
+          Email: values.Email!,
           Rol: values.Rol,
           Avatar: values.Avatar,
           Password: values.Password!,

@@ -6,7 +6,7 @@ import { CiSearch } from "react-icons/ci";
 import { IPatient } from "../../../interfaces/patient.interface";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetConsultByPatientId } from "../Files/query/consult.query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import moment from "moment/min/moment-with-locales";
 import { ActionConsult } from "./components/ActionConsult";
 import { useState } from "react";
@@ -18,6 +18,8 @@ import { VscFileSymlinkDirectory } from "react-icons/vsc";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 import { useGetAllUsers } from "../Users/query/user.query";
+import { PDFDocument, rgb } from "pdf-lib";
+import { saveAs } from "file-saver";
 
 const columns: GridColDef[] = [
   { field: "colId", headerName: "N.", width: 90 },
@@ -901,7 +903,7 @@ export function ConsultScreen() {
     // Guardar el archivo
     doc.save(fileName);
   }
-
+  
   return (
     <>
       <BaseScreen

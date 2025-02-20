@@ -9,12 +9,14 @@ export const userSchemaValidation = () => {
 
   return Yup.object().shape({
     Name: Yup.string().required("El nombre es requerido"),
+    Rol: Yup.string().required("El Rol es requerido"),
     ...(isCreateMode && {
       Email: Yup.string()
         .email("Debe ser un correo valido")
         .required("El correo es requerido"),
+        
+        Password: Yup.string().required("La contraseña es requerida"),
     }),
-    Rol: Yup.string().required("El Rol es requerido"),
-    Password: Yup.string().required("La contraseña es requerida"),
+    
   });
 };

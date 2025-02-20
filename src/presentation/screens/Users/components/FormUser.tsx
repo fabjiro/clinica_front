@@ -81,10 +81,11 @@ export function FormUser() {
       <Select
         isInvalid={!!rolError}
         errorMessage={rolError}
+        value={values.Rol ?? ""}
         label="Rol"
         disableSelectorIconRotation
         disabled={isLoadingRoles || isLoadingAddUser || isLoadingUpdateUser}
-        required
+        isRequired
         selectorIcon={<HiSelector />}
         defaultSelectedKeys={[values.Rol ?? ""]}
         onChange={(e) => setFieldValue("Rol", e.target.value)}

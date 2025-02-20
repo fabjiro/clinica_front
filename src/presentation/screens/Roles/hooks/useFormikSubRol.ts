@@ -24,6 +24,7 @@ export function useFormikSubRol() {
       rolId: "",
     }
   : {
+      id: subRol?.id,
       rolId: subRol?.rol.id,
       name: subRol?.name,
     };

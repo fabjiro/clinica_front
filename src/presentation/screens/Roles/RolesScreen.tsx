@@ -68,7 +68,7 @@ export function RolesScreen() {
     return dataSubRol.map((roldata, index) => ({
       colId: index + 1,
       id: roldata.id,
-      // col1: roldata.rol.name,
+      col1: roldata.rol.name,
       col2: roldata.name,
       //   col1: rol.group.name,
     }));
