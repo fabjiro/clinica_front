@@ -50,7 +50,7 @@ export function useFormikUser() {
           Name: values.Name!,
           Email: values.Email!,
           Rol: values.Rol,
-          Avatar: values.Avatar,
+          Avatar: values.Avatar === "" ? undefined : values.Avatar,
           Password: values.Password!,
         });
       } else {
