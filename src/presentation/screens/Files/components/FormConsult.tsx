@@ -51,7 +51,7 @@ export function FormConsult() {
     if (plainFiles.length > 0) {
       (async () => {
         setFieldValue(
-          "Examen",
+          "imageExam",
           await FileUtils.convertFileToBase64(plainFiles[0])
         );
       })();
