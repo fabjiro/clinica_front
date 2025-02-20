@@ -27,9 +27,6 @@ export default function ShellRoutes() {
   let ultimaRuta = rutaActual
     .filter(part => part !== '' && !esParametro(part)) // Filtrar partes vacías y parámetros
     .pop(); // O
-
-
-    console.log(ultimaRuta);
   
   const isAuthenticated = isAuth();
 
