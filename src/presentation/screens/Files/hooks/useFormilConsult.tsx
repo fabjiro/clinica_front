@@ -61,7 +61,8 @@ export function useFormikConsult() {
           item?.complementaryTest !== null
             ? String(item?.complementaryTest)
             : undefined,
-        imageExam: item?.image !== null ? String(item?.image) : undefined,
+        imageExam:
+          item?.imageExam !== null ? String(item?.imageExam) : undefined,
       };
 
   const {
