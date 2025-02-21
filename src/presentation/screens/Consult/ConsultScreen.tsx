@@ -401,9 +401,9 @@ export function ConsultScreen() {
       styles: {
         font: "helvetica", // Puedes ajustar el tipo de fuente si lo necesitas
 
-        cellPadding: 4, // Espaciado dentro de las celdas
+        cellPadding: 2, // Espaciado dentro de las celdas
       },
-      margin: { top: 30, left: 20, right: 20 }, // Márgenes para centrar la tabla en la página
+      margin: { top: 60, left: 5, right: 5 }, // Márgenes para centrar la tabla en la página
       tableWidth: "auto", // Esto asegura que la tabla se ajuste bien al tamaño de la página
     });
 
