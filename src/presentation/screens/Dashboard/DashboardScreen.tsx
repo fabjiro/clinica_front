@@ -63,65 +63,63 @@ export function DashboardScreen() {
 
   return (
     <div>
-      <BaseScreen>
-        <div className=" flex flex-col gap-2">
-          <div className="bg-white flex flex-col  rounded-md shadow-lg items-center justify-center">
-            <h1 className="text-md font-semibold">Pacientes mas recurrentes</h1>
+      <div className=" flex flex-col gap-2">
+        <div className="bg-white flex flex-col  rounded-md shadow-lg items-center justify-center mt-3">
+          <h1 className="text-md font-semibold">Pacientes mas recurrentes</h1>
 
-            {/* Gráfico de barras */}
-            <div className="w-full flex">
-              <BarChart
-                dataset={(dataTopPatient ?? []).map((item) => ({
-                  title: item.name ?? "",
-                  cantidad: item.total ?? 0,
-                }))}
-                loading={statusGetTopPatient === "pending"}
-                yAxis={[
-                  {
-                    dataKey: "title",
-                    scaleType: "band",
-                    // valueFormatter: (value) => (value ?? "").split(" ")[0],
-                  },
-                ]}
-                series={[
-                  {
-                    dataKey: "cantidad",
-                    label: "Consultas",
-                  },
-                ]}
-                layout="horizontal"
-                width={450} // Tamaño igualado
-                height={260} // Tamaño igualado
-              />
-            </div>
-          </div>
-          {/* Gráfico de líneas */}
-          <div className="bg-white rounded-md shadow-lg flex flex-col items-center justify-center">
-            <h1 className="text-md font-semibold">
-              Pacientes y consultas creadas los ultimos 7 dias
-            </h1>
-            <LineChart
-              series={[
+          {/* Gráfico de barras */}
+          <div className="w-full flex">
+            <BarChart
+              dataset={(dataTopPatient ?? []).map((item) => ({
+                title: item.name ?? "",
+                cantidad: item.total ?? 0,
+              }))}
+              loading={statusGetTopPatient === "pending"}
+              yAxis={[
                 {
-                  data: dataCountConsult,
-                  label: "Consultas",
-                  color: "green",
-                },
-                {
-                  data: dataCountPatatient,
-                  label: "Pacientes",
-                  color: "red",
+                  dataKey: "title",
+                  scaleType: "band",
+                  // valueFormatter: (value) => (value ?? "").split(" ")[0],
                 },
               ]}
-              xAxis={[{ data: dataXaxis, scaleType: "band" }]}
-              className="flex-1"
-              loading={isLoadingConsult || isLoadingPatient}
-              width={600} // Tamaño igualado
-              height={260} // Tamaño igualado
+              series={[
+                {
+                  dataKey: "cantidad",
+                  label: "Consultas",
+                },
+              ]}
+              layout="horizontal"
+              width={450} // Tamaño igualado
+              height={253} // Tamaño igualado
             />
           </div>
         </div>
-      </BaseScreen>
+        {/* Gráfico de líneas */}
+        <div className="bg-white rounded-md shadow-lg flex flex-col items-center justify-center">
+          <h1 className="text-md font-semibold">
+            Pacientes y consultas creadas los ultimos 7 dias
+          </h1>
+          <LineChart
+            series={[
+              {
+                data: dataCountConsult,
+                label: "Consultas",
+                color: "green",
+              },
+              {
+                data: dataCountPatatient,
+                label: "Pacientes",
+                color: "red",
+              },
+            ]}
+            xAxis={[{ data: dataXaxis, scaleType: "band" }]}
+            className="flex-1"
+            loading={isLoadingConsult || isLoadingPatient}
+            width={600} // Tamaño igualado
+            height={252} // Tamaño igualado
+          />
+        </div>
+      </div>
     </div>
   );
 }
