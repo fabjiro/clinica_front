@@ -14,6 +14,7 @@ import { ModalSubRol } from "./components/ModalSubRol";
 import { useSubRolStore } from "./store/subrol.store";
 import { ActionSubRol } from "./components/ActionSubRol";
 import { useGetSubRol } from "./querys/subrol.query";
+import { useGetPages } from "./querys/pages.query";
 
 export function RolesScreen() {
   // const {toggleForm: toggleFormGroup, setModeForm} = useGroupsStore();
@@ -22,8 +23,10 @@ export function RolesScreen() {
 
   const { toggleForm: toggleFormSubRol, setModeForm } = useSubRolStore();
   const { data: dataSubRol } = useGetSubRol();
+  const { data: dataPage } = useGetPages();
 
-  console.log(dataSubRol);
+  // console.log(dataSubRol);
+  console.log(dataPage);
 
   const columns: GridColDef[] = [
     { field: "colId", headerName: "N", width: 90 },

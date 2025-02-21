@@ -621,15 +621,15 @@ export function ActionConsult({ id }: IProps) {
         }
       );
 
-      firstPage.drawText(
-        new Date(consult.createdAt).toLocaleDateString() || "N/A",
-        {
-          x: 322,
-          y: 458,
-          size: 12,
-          color: rgb(0, 0, 0),
-        }
-      );
+      // firstPage.drawText(
+      //   new Date(consult.createdAt).toLocaleDateString() || "N/A",
+      //   {
+      //     x: 322,
+      //     y: 458,
+      //     size: 12,
+      //     color: rgb(0, 0, 0),
+      //   }
+      // );
 
       firstPage.drawText(
         calculateAge(consult.patient?.birthday || "N/A").toString(),
