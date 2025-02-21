@@ -5,6 +5,7 @@ import { BaseModal } from "../../components/Base/BaseModal";
 import { ReportForm } from "./components/ReportForm";
 import { useReportFormStore } from "../../storage/form.storage";
 import { useState } from "react";
+import { RiFileExcel2Line } from "react-icons/ri";
 
 export function ReportsScreen() {
   const [reportName, setReportName] = useState<string>("");
@@ -15,6 +16,11 @@ export function ReportsScreen() {
     {
       field: "col1",
       headerName: "Reporte",
+      flex: 1,
+    },
+    {
+      field: "col3",
+      headerName: "Parametros",
       flex: 1,
     },
     {
@@ -35,6 +41,7 @@ export function ReportsScreen() {
             stateForm.toggleForm();
           }}
         >
+          <RiFileExcel2Line />
           Generar Reporte
         </Button>
       ),
@@ -44,33 +51,39 @@ export function ReportsScreen() {
   const rows = [
     {
       id: 1,
-      col1: "Maestro-detalle",
+      col1: "Maestro-Detalle",
       col2: "#1",
+      col3: "Sin Parámetros",
     },
     {
       id: 2,
       col1: "Citas Pendientes",
       col2: "#2",
+      col3: "Rango de Fechas",
     },
     {
       id: 3,
-      col1: "Pacientes Registrados recientemente",
+      col1: "Pacientes Registrados Recientemente",
       col2: "#3",
+      col3: "Rango de Fechas",
     },
     {
       id: 4,
       col1: "Consultas Recientes",
       col2: "#4",
+      col3: "Rango de Fechas",
     },
     {
       id: 5,
-      col1: "Registros Realizados por usuarios ",
+      col1: "Registros Realizados por Usuarios",
       col2: "#5",
+      col3: "Usuario, Rango de Fechas",
     },
     {
       id: 6,
-      col1: "Diagnosticos Realizados",
+      col1: "Diagnósticos Realizados",
       col2: "#6",
+      col3: "Rango de Fechas",
     },
   ];
 

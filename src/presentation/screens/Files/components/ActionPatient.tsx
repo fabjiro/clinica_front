@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { FaEllipsisVertical, FaIdCard } from "react-icons/fa6";
+import { FaEllipsisVertical, FaEye, FaIdCard } from "react-icons/fa6";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { usePatientStore } from "../store/patient.store";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
@@ -20,6 +20,7 @@ import autoTable from "jspdf-autotable";
 import { VscFileSymlinkDirectory } from "react-icons/vsc";
 import { IConsult } from "../../../../interfaces/consult.interface";
 import { useGetConsultByPatientId } from "../query/consult.query";
+import { SiFiles } from "react-icons/si";
 
 interface IProps {
   id: string;
@@ -385,11 +386,11 @@ export function ActionPatient({ id }: IProps) {
             Generar Ficha del Paciente
           </DropdownItem>
           <DropdownItem
-            startContent={<IoIosDocument />}
+            startContent={<SiFiles />}
             key="consult"
             onClick={() => navigate("/files/patient/" + id)}
           >
-            Ver Consultas
+            Ver Expediente
           </DropdownItem>
           <DropdownItem
             showDivider

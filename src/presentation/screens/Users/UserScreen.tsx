@@ -11,6 +11,7 @@ import { useUserStore } from "./store/user.store";
 import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 import { RefreshButton } from "../../components/Buttons/RefreshButton";
 import { ConstData } from "../../../const/const";
+import { TiUserAdd } from "react-icons/ti";
 
 const columns: GridColDef[] = [
   {
@@ -80,6 +81,7 @@ export default function UserScreen() {
               toggleForm();
             }}
           >
+            <TiUserAdd />
             Nuevo usuario
           </Button>
           {ConstData.HasElectronMode && (

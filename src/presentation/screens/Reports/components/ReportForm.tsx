@@ -21,6 +21,8 @@ import { SiCcleaner } from "react-icons/si";
 import toast from "react-hot-toast";
 import { useGetAllUsers } from "../../Users/query/user.query";
 import { useFormikUser } from "../../Users/hooks/useFormikUser";
+import { RiAiGenerate } from "react-icons/ri";
+import { HiOutlineDownload } from "react-icons/hi";
 
 interface ReportData {
   [key: string]: string | number | boolean | null;
@@ -332,6 +334,7 @@ export const ReportForm = () => {
             fullWidth
             color="success"
             isDisabled={isReady === true} // Se deshabilita solo si isReady es true
+            startContent={<RiAiGenerate />}
           >
             {loading ? <Spinner size="sm" /> : "Generar Reporte"}
           </Button>
@@ -342,7 +345,7 @@ export const ReportForm = () => {
             fullWidth
             isDisabled={isReady === false}
           >
-            Descargar Reporte en Excel
+            <HiOutlineDownload /> Descargar Reporte en Excel
           </Button>
         </div>
       </div>
