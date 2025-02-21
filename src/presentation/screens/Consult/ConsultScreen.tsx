@@ -21,6 +21,8 @@ import { useGetAllUsers } from "../Users/query/user.query";
 import { PDFDocument, rgb } from "pdf-lib";
 import { saveAs } from "file-saver";
 
+import img from "../Customer/receta medica.jpg";
+
 const columns: GridColDef[] = [
   { field: "colId", headerName: "N.", width: 90 },
   {
@@ -867,13 +869,6 @@ export function ConsultScreen() {
         ],
         theme: "grid",
       });
-      //pagina de imagen examen complementario
-      if (consult.image) {
-        if (consult.image.originalUrl) {
-          doc.addPage();
-          doc.addImage(consult.image.originalUrl, 10, 30, 190, 150);
-        }
-      }
 
       //encabezado de pagina
       // doc.addImage(
@@ -884,6 +879,50 @@ export function ConsultScreen() {
       //   10,
       //   10
       // );
+      //pagina de imagen examen complementario
+      if (consult.image) {
+        if (consult.image.originalUrl) {
+          doc.addPage();
+          doc.addImage(consult.image.originalUrl, 10, 30, 190, 150);
+        }
+      }
+
+      //receta medica
+      doc.addPage();
+      // Cargar la imagen (en este caso, la imagen se carga desde una URL)
+      const imgPath = img; // Cambia esto por la ruta de tu imagen
+
+      // Agregar la imagen al PDF como fondo (ajustar al tamaño de la página)
+      doc.addImage(
+        imgPath,
+        "JPEG",
+        0,
+        0,
+        doc.internal.pageSize.width,
+        doc.internal.pageSize.height
+      );
+
+      // Ahora puedes agregar más contenido encima de la imagen, por ejemplo, texto:
+      doc.setFontSize(16);
+      doc.text(consult.patient?.name || "N/A", 60, 60);
+      doc.text(consult.createdAt.split("T")[0] || "N/A", 155, 60);
+      doc.text(
+        calculateAge(consult.patient?.birthday || "N/A").toString(),
+        40,
+        72
+      );
+      doc.text(
+        consult.patient?.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
+          ? "Masculino"
+          : "Femeninio",
+        94,
+        72
+      );
+      doc.text(consult.weight ? `${consult.weight} kg` : "N/A", 160, 72);
+      doc.text(consult.diagnosis || "N/A", 50, 84);
+      doc.text(consult.recipe || "N/A", 20, 110);
+      doc.text(consult.userCreatedBy?.name || "N/A", 140, 270);
+      doc.text(consult.nextappointment || "N/A", 22, 257);
 
       // doc.setFontSize(6);
       // doc.text("Hola", 20, 15);
@@ -901,6 +940,24 @@ export function ConsultScreen() {
     // Guardar el archivo
     doc.save(fileName);
   }
+
+  const calculateAge = (birthday: string): number => {
+    const birthDate = new Date(birthday); // Convierte la fecha de string a Date
+    const today = new Date(); // Fecha actual
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    // Ajusta la edad si el cumpleaños aún no ha ocurrido este año
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
 
   return (
     <>

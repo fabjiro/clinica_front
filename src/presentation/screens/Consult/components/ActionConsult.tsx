@@ -575,7 +575,9 @@ export function ActionConsult({ id }: IProps) {
 
     // Guardar el PDF con el nombre del paciente o un nombre genérico si es null
     const fileName = consult.patient?.name
-      ? `Consulta_Medica_${consult.patient.name}.pdf`
+      ? `Consulta_Medica_${consult.patient.name}_${
+          consult.createdAt.split("T")[0]
+        }.pdf`
       : "Consulta_Medica.pdf";
 
     // Guardar el archivo
@@ -618,15 +620,12 @@ export function ActionConsult({ id }: IProps) {
         color: rgb(0, 0, 0),
       });
 
-      firstPage.drawText(
-        new Date(consult.nextappointment).toLocaleDateString() || "N/A",
-        {
-          x: 122,
-          y: 458,
-          size: 10,
-          color: rgb(0, 0, 0),
-        }
-      );
+      firstPage.drawText(consult.createdAt.split("T")[0] || "N/A", {
+        x: 322,
+        y: 458,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
 
       // firstPage.drawText(
       //   new Date(consult.createdAt).toLocaleDateString() || "N/A",
@@ -675,8 +674,15 @@ export function ActionConsult({ id }: IProps) {
       });
 
       firstPage.drawText(consult.nextappointment || "N/A", {
-        x: 55,
+        x: 50,
         y: 77,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+
+      firstPage.drawText(consult.userCreatedBy?.name || "N/A", {
+        x: 290,
+        y: 50,
         size: 10,
         color: rgb(0, 0, 0),
       });
@@ -688,7 +694,10 @@ export function ActionConsult({ id }: IProps) {
 
       // Descargar el archivo
       const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
-      saveAs(blob, "Receta_Medica.pdf");
+      const fileName = `Receta_Medica_${consult.patient?.name}_${
+        consult.createdAt.split("T")[0]
+      }.pdf`;
+      saveAs(blob, fileName);
     } catch (error) {
       console.error("Error generando la receta:", error);
     }
