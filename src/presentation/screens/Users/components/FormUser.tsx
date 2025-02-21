@@ -5,10 +5,11 @@ import { useFormikUser } from "../hooks/useFormikUser";
 import { useEffect } from "react";
 import { useUserStore } from "../store/user.store";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
-import { FaFileImage } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaFileImage } from "react-icons/fa6";
 import { useFilePicker } from "use-file-picker";
 import { FileUtils } from "../../../../utils/file.utils";
 import { useGetSubRol } from "../../Roles/querys/subrol.query";
+import { useToggle } from "../../../hooks/useToggle";
 
 export function FormUser() {
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
@@ -17,6 +18,7 @@ export function FormUser() {
   });
 
   const { data: dataRoles, status: statusGetRoles } = useGetSubRol();
+  const [isVisible, toggleVisibility] = useToggle(false);
 
   const {
     errors,
@@ -67,16 +69,18 @@ export function FormUser() {
         disabled={isLoadingAddUser || isLoadingUpdateUser}
       />
 
-      <Input
-        isInvalid={!!emailError}
-        errorMessage={emailError}
-        value={values.Email}
-        isRequired
-        onChange={(e) => setFieldValue("Email", e.target.value)}
-        size="sm"
-        label="Correo"
-        disabled={isLoadingAddUser}
-      />
+      {isCreateMode && (
+        <Input
+          isInvalid={!!emailError}
+          errorMessage={emailError}
+          value={values.Email}
+          isRequired
+          onChange={(e) => setFieldValue("Email", e.target.value)}
+          size="sm"
+          label="Correo"
+          disabled={isLoadingAddUser}
+        />
+      )}
 
       <Select
         isInvalid={!!rolError}
@@ -103,6 +107,21 @@ export function FormUser() {
         size="sm"
         label="Contraseña"
         disabled={isLoadingAddUser}
+        endContent={
+          <button
+            className="focus:outline-none"
+            type="button"
+            onClick={toggleVisibility}
+            aria-label="toggle password visibility"
+          >
+            {isVisible ? (
+              <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+            ) : (
+              <FaEye className="text-2xl text-default-400 pointer-events-none" />
+            )}
+          </button>
+        }
+        type={isVisible ? "text" : "password"}
       />
       <Button
         variant="flat"
