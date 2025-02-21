@@ -93,9 +93,16 @@ export default function UserScreen() {
           <DataGrid
             loading={isLoadingUsers}
             disableColumnMenu
-            hideFooter
             rows={rows}
             columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 7,
+                },
+              },
+            }}
+            pageSizeOptions={[7]}
           />
         </div>
         <BaseModal

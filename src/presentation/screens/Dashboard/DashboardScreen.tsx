@@ -47,10 +47,10 @@ export function DashboardScreen() {
         (item) => moment(item.date).format("l") === formattedDate
       );
       if (consult) {
-        dataCountConsult[i] = consult.count;
+        dataCountConsult[i + 1] = consult.count;
       }
       if (patient) {
-        dataCountPatatient[i] = patient.count;
+        dataCountPatatient[i + 1] = patient.count;
       }
     }
 

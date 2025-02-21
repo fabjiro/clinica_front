@@ -987,7 +987,19 @@ export function ConsultScreen() {
             onChange={(e) => setSearchByWord(e.target.value)}
           />
           <div className="flex-1 overflow-auto">
-            <DataGrid columns={columns} rows={rows} disableColumnMenu />
+            <DataGrid
+              columns={columns}
+              rows={rows}
+              disableColumnMenu
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 6,
+                  },
+                },
+              }}
+              pageSizeOptions={[6]}
+            />
           </div>
         </div>
       </BaseScreen>
