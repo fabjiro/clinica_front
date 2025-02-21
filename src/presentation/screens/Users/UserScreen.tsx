@@ -1,7 +1,7 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { useGetAllUsers } from "./query/user.query";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AvatarAndNameUser } from "./components/AvatarAndNameUser";
 import { UserAction } from "./components/UserAction";
 import { BaseModal } from "../../components/Base/BaseModal";
@@ -12,6 +12,7 @@ import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 import { RefreshButton } from "../../components/Buttons/RefreshButton";
 import { ConstData } from "../../../const/const";
 import { TiUserAdd } from "react-icons/ti";
+import { CiSearch } from "react-icons/ci";
 
 const columns: GridColDef[] = [
   {
@@ -43,11 +44,29 @@ export default function UserScreen() {
     isRefetching: isRefetchingUsers,
   } = useGetAllUsers();
 
+  const [searchByWord, setSearchByWord] = useState<string | undefined>();
+
   const { titleForm, toggleForm, showForm, setModeForm } = useUserStore();
 
   const rows = useMemo(() => {
     if (!usersData) {
       return [];
+    }
+
+    if (searchByWord) {
+      return usersData
+        .filter((user) =>
+          user.name.toLowerCase().includes(searchByWord.toLowerCase())
+        )
+        .map((user) => ({
+          id: user.id,
+          col1: {
+            name: user.name,
+            url: user.avatar?.compactUrl,
+          },
+          col2: user.email,
+          col3: user.rol?.name,
+        }));
     }
 
     return usersData.map((user) => ({
@@ -59,7 +78,7 @@ export default function UserScreen() {
       col2: user.email,
       col3: user.rol?.name,
     }));
-  }, [usersData]);
+  }, [usersData, searchByWord]);
 
   console.log(usersData);
 
@@ -91,6 +110,14 @@ export default function UserScreen() {
       }
     >
       <>
+        <Input
+          label=""
+          placeholder="Buscar Usuario..."
+          variant="bordered"
+          startContent={<CiSearch />}
+          className="max-w-sm"
+          onChange={(e) => setSearchByWord(e.target.value)}
+        />
         <div className="flex-1">
           <DataGrid
             loading={isLoadingUsers}
@@ -100,11 +127,11 @@ export default function UserScreen() {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 7,
+                  pageSize: 6,
                 },
               },
             }}
-            pageSizeOptions={[7]}
+            pageSizeOptions={[6]}
           />
         </div>
         <BaseModal

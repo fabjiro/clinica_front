@@ -15,10 +15,11 @@ import { useSubRolStore } from "./store/subrol.store";
 import { ActionSubRol } from "./components/ActionSubRol";
 import { useGetSubRol } from "./querys/subrol.query";
 import { useGetPages } from "./querys/pages.query";
+import { CiSearch } from "react-icons/ci";
 
 export function RolesScreen() {
   // const {toggleForm: toggleFormGroup, setModeForm} = useGroupsStore();
-  // const [searchByWord, setSearchByWord] = useState<string | undefined>();
+  const [searchByWord, setSearchByWord] = useState<string | undefined>();
   // const { data: dataExam} = useGetExam();
 
   const { toggleForm: toggleFormSubRol, setModeForm } = useSubRolStore();
@@ -54,19 +55,18 @@ export function RolesScreen() {
   const row = useMemo(() => {
     if (!dataSubRol) return [];
 
-    //   if (searchByWord) {
-    //         return dataSubRol
-    //           .filter((rol) =>
-    //             rol.name.toLowerCase().includes(searchByWord.toLowerCase())
-    //           )
-    //           .map((Exam, index) => ({
-    //             colId: index + 1,
-    //             id: Exam.id,
-    //             col1: Exam.group.name,
-    //             col2: Exam.name,
-
-    //           }));
-    //       }
+    if (searchByWord) {
+      return dataSubRol
+        .filter((rol) =>
+          rol.name.toLowerCase().includes(searchByWord.toLowerCase())
+        )
+        .map((roldata, index) => ({
+          colId: index + 1,
+          id: roldata.id,
+          col1: roldata.rol.name,
+          col2: roldata.name,
+        }));
+    }
 
     return dataSubRol.map((roldata, index) => ({
       colId: index + 1,
@@ -75,7 +75,7 @@ export function RolesScreen() {
       col2: roldata.name,
       //   col1: rol.group.name,
     }));
-  }, [dataSubRol]);
+  }, [dataSubRol, searchByWord]);
 
   return (
     <>
@@ -96,14 +96,14 @@ export function RolesScreen() {
       >
         <div className="flex flex-col gap-2 flex-1">
           <div className="flex flex-col items-start gap-2"></div>
-          {/* <Input
+          <Input
             label=""
-            placeholder="Buscar Examen..."
+            placeholder="Buscar Rol..."
             variant="bordered"
             startContent={<CiSearch />}
             onChange={(e) => setSearchByWord(e.target.value)}
             className="max-w-sm"
-          /> */}
+          />
 
           <div className="flex-1 overflow-auto">
             <DataGrid
@@ -113,11 +113,11 @@ export function RolesScreen() {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 7,
+                    pageSize: 6,
                   },
                 },
               }}
-              pageSizeOptions={[7]}
+              pageSizeOptions={[6]}
             />
           </div>
         </div>

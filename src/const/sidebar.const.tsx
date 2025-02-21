@@ -1,16 +1,15 @@
 import { ISidebarItem } from "../interfaces/sidebar.interfaces";
-import { MdBackup } from "react-icons/md";
+import { MdBackup, MdDashboard } from "react-icons/md";
 import { FaUserGear, FaUsersGear } from "react-icons/fa6";
 import { IoDocumentText } from "react-icons/io5";
 import { VscFileSubmodule } from "react-icons/vsc";
-import { LuLayoutDashboard } from "react-icons/lu";
 
 export const listItemSidebar: ISidebarItem[] = [
   {
     name: "Dashboard",
     key: "dashboard",
     path: "/dashboard",
-    icon: <LuLayoutDashboard />,
+    icon: <MdDashboard />,
   },
   {
     name: "Expedientes",
