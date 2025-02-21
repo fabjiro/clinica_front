@@ -25,7 +25,7 @@ export interface IConsult {
   complementaryTest: IExam;
   diagnosis: string;
   imageExamId: string;
-  imageExam: IImage;
+  image: IImage;
   recipe: string;
   nextappointment: string;
   createdAt: string;

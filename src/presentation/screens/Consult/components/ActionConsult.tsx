@@ -566,6 +566,13 @@ export function ActionConsult({ id }: IProps) {
       theme: "grid",
     });
 
+    if (consult.image) {
+      if (consult.image.originalUrl) {
+        doc.addPage();
+        doc.addImage(consult.image.originalUrl, 10, 30, 190, 150);
+      }
+    }
+
     // Guardar el PDF con el nombre del paciente o un nombre genérico si es null
     const fileName = consult.patient?.name
       ? `Consulta_Medica_${consult.patient.name}.pdf`

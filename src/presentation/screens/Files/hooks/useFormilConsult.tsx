@@ -14,12 +14,15 @@ export function useFormikConsult() {
   const { item, modeForm } = useConsutlFormStore();
 
   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
-  
+
   const initialValues: Partial<IConsultReqDto> = isCreateMode
     ? {}
     : {
         patient: item?.patient?.id,
-        nextappointment: moment(item?.nextappointment, "DD/MM/YYYY HH:mm:ss").toISOString(),
+        nextappointment: moment(
+          item?.nextappointment,
+          "DD/MM/YYYY HH:mm:ss"
+        ).toISOString(),
         weight: item?.weight,
         size: item?.size,
         recipe: item?.recipe,
@@ -61,8 +64,7 @@ export function useFormikConsult() {
           item?.complementaryTest !== null
             ? String(item?.complementaryTest.id)
             : undefined,
-        imageExam:
-          item?.imageExam !== null ? String(item?.imageExam) : undefined,
+        image: item?.image !== null ? String(item?.image) : undefined,
       };
 
   const {

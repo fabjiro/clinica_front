@@ -19,6 +19,6 @@ export interface IConsultReqDto {
   oxygenSaturation?: number;
   systolicPressure?: number;
   diastolicPressure?: number;
-  imageExam?: string;
+  image?: string;
 
 }

@@ -868,7 +868,13 @@ export function ConsultScreen() {
         theme: "grid",
       });
       //pagina de imagen examen complementario
-      doc.addPage();
+      if (consult.image) {
+        if (consult.image.originalUrl) {
+          doc.addPage();
+          doc.addImage(consult.image.originalUrl, 10, 30, 190, 150);
+        }
+      }
+
       //encabezado de pagina
       // doc.addImage(
       //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
@@ -885,14 +891,6 @@ export function ConsultScreen() {
       // doc.text("xdxdxdxd", 20, 25);
 
       //imagen examen complementario
-      // doc.addImage(
-      //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
-      //   "JPEG",
-      //   10,
-      //   30,
-      //   190,
-      //   150
-      // );
     });
 
     // Guardar el PDF con el nombre del paciente o un nombre genérico si es null
@@ -903,7 +901,7 @@ export function ConsultScreen() {
     // Guardar el archivo
     doc.save(fileName);
   }
-  
+
   return (
     <>
       <BaseScreen
