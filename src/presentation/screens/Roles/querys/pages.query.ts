@@ -4,7 +4,7 @@ import { IPagesReqDto } from "../../../../Dto/Request/pages.req.dto";
 import { IPages } from "../../../../interfaces/pages.interface";
 import toast from "react-hot-toast";
 
-const BASE_URL = "/Pages";
+const BASE_URL = "/Page";
 
 export async function GetAllPages() {
     const { data } = await axiosInstance.get<IPages[]>(BASE_URL);
