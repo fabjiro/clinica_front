@@ -19,10 +19,7 @@ export function useFormikConsult() {
     ? {}
     : {
         patient: item?.patient?.id,
-        nextappointment: moment(
-          item?.nextappointment,
-          "DD/MM/YYYY HH:mm:ss"
-        ).toISOString(),
+        nextappointment: item?.nextappointment,
         weight: item?.weight,
         size: item?.size,
         recipe: item?.recipe,

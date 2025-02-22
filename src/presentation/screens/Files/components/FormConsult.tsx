@@ -238,19 +238,16 @@ export function FormConsult() {
             showMonthAndYearPickers
             value={
               (values.nextappointment &&
-                parseAbsoluteToLocal(
-                  moment.utc(values.nextappointment).format()
-                )) ||
+                parseAbsoluteToLocal(values.nextappointment)) ||
               undefined
             }
             isInvalid={!!errors.nextappointment}
             errorMessage={errors.nextappointment}
             onChange={(e) => {
-              console.log(e);
               if (e?.toAbsoluteString) {
                 setFieldValue("nextappointment", e?.toAbsoluteString());
               } else {
-                setFieldValue("nextappointment", e?.toString());
+                setFieldValue("nextappointment", new Date(e?.toString()!).toISOString());
               }
             }}
             hideTimeZone={true}
