@@ -2,6 +2,8 @@ import {
   Autocomplete,
   AutocompleteItem,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Input,
   Select,
   SelectItem,
@@ -43,36 +45,6 @@ export function FormSubRol() {
   return (
     <div className="flex flex-col gap-4 ">
       <div className="flex flex-row gap-2">
-        {/* <Autocomplete
-            isLoading={isLoadingGroup}
-            isRequired
-            defaultItems={DataGroup ?? []}
-            label="Grupos"
-            size="sm"
-            isInvalid={!!groupError}
-            errorMessage={groupError}
-            selectedKey={values.group}
-            onSelectionChange={(e) => setFieldValue("group", e)}
-            >
-            {(item) => (
-                <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
-            )}
-            </Autocomplete> */}
-        {/* <Select
-          isInvalid={!!rolError}
-          errorMessage={rolError}
-          label="Rol"
-          disableSelectorIconRotation
-          disabled={isLoadingRoles}
-          required
-          selectorIcon={<HiSelector />}
-          defaultSelectedKeys={[values.rolId ?? ""]}
-          onChange={(e) => setFieldValue("Rol", e.target.value)}
-        >
-          {(dataRoles ?? []).map((roles) => (
-            <SelectItem key={roles.id}>{roles.name}</SelectItem>
-          ))}
-        </Select> */}
         <Autocomplete
           isLoading={isLoadingRoles}
           isRequired
@@ -95,9 +67,26 @@ export function FormSubRol() {
           value={values.name}
           onChange={(e) => setFieldValue("name", e.target.value)}
           size="sm"
-          label="Nuevo Sub-Rol"
+          label="Nombre Sub-Rol"
         />
       </div>
+
+      <b>
+        <h3>Permisos:</h3>
+      </b>
+      <CheckboxGroup
+        defaultValue={[]}
+        label="Seleccione los permisos"
+        orientation="horizontal"
+      >
+        <Checkbox value="Dashboard">Dashboard</Checkbox>
+        <Checkbox value="Expedientes">Expedientes</Checkbox>
+        <Checkbox value="Usuarios">Usuarios</Checkbox>
+        <Checkbox value="Roles">Roles</Checkbox>
+        <Checkbox value="Reportes">Reportes</Checkbox>
+        <Checkbox value="Copias de seguridad">Copias de seguridad</Checkbox>
+        <Checkbox value="Pacientes">Pacientes</Checkbox>
+      </CheckboxGroup>
 
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button onPress={() => toggleFormSubRol()}>Cancelar</Button>
