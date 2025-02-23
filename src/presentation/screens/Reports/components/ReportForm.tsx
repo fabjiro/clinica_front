@@ -32,6 +32,8 @@ export const ReportForm = () => {
   const item = useReportFormStore((state) => state.item);
   const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
 
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
 
   const [isReady, setIsReady] = useState<boolean | null>(false);
@@ -77,10 +79,11 @@ export const ReportForm = () => {
     data: dataRegisteredPatientsByUser,
     refetch: handleGetRegisteredPatientsByUser,
   } = useGetRegisteredPatientsByUser(
-    rangeDate
+    rangeDate && selectedUserId // Solo si el rango de fechas y el userId están definidos
       ? {
           startDate: moment(rangeDate.start.toString()).format("l"),
           endDate: moment(rangeDate.end.toString()).format("l"),
+          userId: selectedUserId, // Aquí pasamos el userId
         }
       : undefined
   );
@@ -250,7 +253,10 @@ export const ReportForm = () => {
   const exportToExcel = () => {
     const data = getDataForExport();
     if (data.length === 0) {
-      alert("No hay datos para exportar");
+      toast.error("No hay datos para exportar", {
+        position: "top-right",
+      });
+      toggleForm();
       return;
     }
 
@@ -321,7 +327,10 @@ export const ReportForm = () => {
               defaultItems={allUser ?? []}
               label="Usuario"
               size="sm"
-              onSelectionChange={(e) => setFieldValue("Name", e)}
+              onSelectionChange={(e) => {
+                const selectedUser = allUser?.find((user) => user.id === e);
+                setSelectedUserId(selectedUser ? selectedUser.id : null);
+              }}
             >
               {(item) => (
                 <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
