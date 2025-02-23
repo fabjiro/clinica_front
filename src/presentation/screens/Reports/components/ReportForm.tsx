@@ -185,6 +185,27 @@ export const ReportForm = () => {
           }))
         : [];
 
+    const filterDataByUser = (data: ReportData[] | undefined) =>
+      data
+        ? data.map(({ createdAt, ...rest }) => ({
+            ...rest,
+            createDate:
+              typeof createdAt === "string"
+                ? createdAt.replace("T", " ").split(".")[0] // Dividir por 'T' y quedarnos solo con la fecha
+                : "", // Devuelve "" si createdAt no es una cadena
+          }))
+        : [];
+    const filterDataDiagnostic = (data: ReportData[] | undefined) =>
+      data
+        ? data.map(({ createdAt, ...rest }) => ({
+            ...rest,
+            createDate:
+              typeof createdAt === "string"
+                ? createdAt.split("T")[0] // Dividir por 'T' y quedarnos solo con la fecha
+                : "", // Devuelve "" si createdAt no es una cadena
+          }))
+        : [];
+
     const filterDataConsult = (data: ReportData[] | undefined) =>
       data
         ? data.map(
@@ -235,13 +256,13 @@ export const ReportForm = () => {
         : [];
 
     if (item === 6) {
-      return dataRecentDiagnostics || [];
+      return filterDataDiagnostic(dataRecentDiagnostics) || [];
     } else if (item === 4) {
       return filterDataConsult(dataConsult) || [];
     } else if (item === 2) {
       return filterDataNextConsults(dataNextConsults) || [];
     } else if (item === 5) {
-      return dataRegisteredPatientsByUser || [];
+      return filterDataByUser(dataRegisteredPatientsByUser) || [];
     } else if (item === 1) {
       return filterDataRegisteredPatients(dataRegisteredPatients || []);
     } else if (item === 3) {
