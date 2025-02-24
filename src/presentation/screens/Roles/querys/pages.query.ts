@@ -4,6 +4,7 @@ import { IPagesReqDto } from "../../../../Dto/Request/pages.req.dto";
 import { IPages } from "../../../../interfaces/pages.interface";
 import toast from "react-hot-toast";
 
+
 const BASE_URL = "/Page";
 
 export async function GetAllPages() {
@@ -12,7 +13,7 @@ export async function GetAllPages() {
 }
 
 export async function AddPages(params: IPagesReqDto) {
-    await axiosInstance.post<IPages>(BASE_URL, params);
+    await axiosInstance.post<IPages>(`${BASE_URL}/toggle-page-permit`, params);
 }
 
 export function useGetPages() {

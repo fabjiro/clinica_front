@@ -14,15 +14,18 @@ import { useFilePicker } from "use-file-picker";
 import { useFormikConsult } from "../hooks/useFormilConsult";
 import { parseAbsoluteToLocal } from "@internationalized/date";
 import moment from "moment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useConsutlFormStore } from "../../../storage/form.storage";
 import { FileUtils } from "../../../../utils/file.utils";
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
+import toast from "react-hot-toast";
 
 export function FormConsult() {
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
   const { data: allExamns, status: statusGetAllExam } = useGetExam();
 
   const toggleForm = useConsutlFormStore((state) => state.toggleForm);
+  const modeForm = useConsutlFormStore((state) => state.modeForm);
   const {
     values,
     errors,
@@ -43,10 +46,21 @@ export function FormConsult() {
   const isLoadingUpdateConsult = updateConsultStatus === "pending";
   const isLoadingAddConsult = addConsultStatus === "pending";
 
+  const [noExam, setNoExam] = useState(true);
+  const [fileName, setFileName] = useState("");
+
   useEffect(() => {
     if (addConsultStatus === "success" || updateConsultStatus === "success") {
       toggleForm();
     }
+    if (
+      modeForm === MODEFORMENUM.UPDATE &&
+      values.examComplementary !== undefined
+    ) {
+      setNoExam(false);
+    }
+    console.log(values.examComplementary);
+    console.log(values.image);
 
     if (plainFiles.length > 0) {
       (async () => {
@@ -54,9 +68,32 @@ export function FormConsult() {
           "imageExam",
           await FileUtils.convertFileToBase64(plainFiles[0])
         );
+        setFileName(plainFiles[0]?.name || "");
       })();
     }
-  }, [addConsultStatus, updateConsultStatus, plainFiles]);
+  }, [addConsultStatus, updateConsultStatus, plainFiles, modeForm]);
+
+  const handleSubmitForm = () => {
+    // Verifica si hay un examen complementario seleccionado pero no hay imagen
+    if (values.examComplementary && !plainFiles[0]?.name) {
+      if (modeForm === MODEFORMENUM.CREATE) {
+        // Muestra la advertencia para que el usuario suba una imagen
+        toast.error("Debe subir una imagen del examen", {
+          position: "top-right",
+        });
+      } else {
+        handleSubmit();
+      }
+    } else if (values.examComplementary && modeForm === MODEFORMENUM.UPDATE) {
+      handleSubmit();
+    } else if (values.examComplementary === null) {
+      setFieldValue("examComplementary", undefined);
+      handleSubmit();
+    } else {
+      // Si la imagen está presente o no hay examen complementario, procede con el guardado
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -203,7 +240,12 @@ export function FormConsult() {
             defaultItems={allExamns ?? []}
             label="Examen complementario"
             size="sm"
-            onSelectionChange={(e) => setFieldValue("examComplementary", e)}
+            onSelectionChange={(e) => {
+              setFieldValue("examComplementary", e);
+              console.log(e);
+              // Cambiar el valor de noExam dependiendo de si se seleccionó un examen
+              setNoExam(e ? false : true); // Si hay un valor seleccionado, noExam será false, sino será true
+            }}
             defaultSelectedKey={values.examComplementary}
           >
             {(item) => (
@@ -227,10 +269,9 @@ export function FormConsult() {
             startContent={<FaFileImage />}
             color="primary"
             fullWidth
-            // disabled={isLoadingAddProduct || isLoadingUpdateProduct}
+            isDisabled={noExam}
           >
-            {" "}
-            Examen
+            {fileName ? fileName : "Imagen del Examen"}
           </Button>
           <DatePicker
             isRequired
@@ -247,7 +288,10 @@ export function FormConsult() {
               if (e?.toAbsoluteString) {
                 setFieldValue("nextappointment", e?.toAbsoluteString());
               } else {
-                setFieldValue("nextappointment", new Date(e?.toString()!).toISOString());
+                setFieldValue(
+                  "nextappointment",
+                  new Date(e?.toString()!).toISOString()
+                );
               }
             }}
             hideTimeZone={true}
@@ -266,7 +310,7 @@ export function FormConsult() {
         <div className="flex flex-row gap-4 justify-end items-center">
           <Button onClick={() => toggleForm()}>Cancelar</Button>
           <Button
-            onClick={() => handleSubmit()}
+            onClick={() => handleSubmitForm()}
             isLoading={
               isLoading || isLoadingAddConsult || isLoadingUpdateConsult
             }
