@@ -18,7 +18,7 @@ import { useConsutlFormStore } from "../../storage/form.storage";
 import { FormConsult } from "./components/FormConsult";
 
 const columns: GridColDef[] = [
-  { field: "colId", headerName: "N.", width: 90 },
+  { field: "colId", headerName: "Codigo", width: 90 },
   {
     field: "col1",
     headerName: "Nombre",
@@ -85,8 +85,8 @@ export function FileScreen() {
         .filter((patient) =>
           patient.name.toLowerCase().includes(searchByWord.toLowerCase())
         )
-        .map((patient, index) => ({
-          colId: index + 1,
+        .map((patient) => ({
+          colId: patient?.id.replace(/[^0-9]/g, "").substring(0, 6),
           id: patient.id,
           col1: patient.name,
           col2: patient.phone,
@@ -102,8 +102,8 @@ export function FileScreen() {
         }));
     }
 
-    return dataPatient.map((patient, index) => ({
-      colId: index + 1,
+    return dataPatient.map((patient) => ({
+      colId: patient?.id.replace(/[^0-9]/g, "").substring(0, 6),
       id: patient.id,
       col1: patient.name,
       col2: patient.phone,
