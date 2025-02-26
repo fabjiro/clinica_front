@@ -99,6 +99,14 @@ export function ActionConsult({ id }: IProps) {
     // doc.text("Adios", 20, 20); // Texto "Adios" debajo de "Hola"
     // doc.text("xdxdxdxd", 20, 25); // Texto "xdxdxdxd" debajo de "Adios"
 
+    // Eliminar letras y símbolos, quedándonos solo con los números
+    let numbersOnly = consult.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
+
+    // Obtener solo los primeros 6 números
+    let firstSixNumbers = numbersOnly.substring(0, 6);
+
+    // Concatenar con el texto
+    doc.text(`Código Consulta: ${firstSixNumbers}`, 20, 15);
     // Saltos de línea
     let currentY = 30; // Comienza en y = 30 después del encabezado
 
@@ -440,6 +448,7 @@ export function ActionConsult({ id }: IProps) {
     //   (pageWidth - textWidthResultados) / 2,
     //   finalY2 + 10
     // );
+
     autoTable(doc, {
       // startY: finalY2 + 20,
       body: [
@@ -553,7 +562,7 @@ export function ActionConsult({ id }: IProps) {
             },
           },
           {
-            content: consult.nextappointment || "N/A",
+            content: formateDate(consult.nextappointment) || "N/A",
             colSpan: 2,
             styles: {
               lineColor: [0, 0, 0],
@@ -569,7 +578,7 @@ export function ActionConsult({ id }: IProps) {
     if (consult.image) {
       if (consult.image.originalUrl) {
         doc.addPage();
-        doc.addImage(consult.image.originalUrl, 10, 30, 190, 150);
+        doc.addImage(consult.image.originalUrl, 10, 30, 190, 200);
       }
     }
 
@@ -582,6 +591,44 @@ export function ActionConsult({ id }: IProps) {
 
     // Guardar el archivo
     doc.save(fileName);
+  };
+
+  const formateDate = (date: string) => {
+    let dateString = date || "N/A"; // Si no existe el valor, se usará "N/A"
+
+    if (dateString !== "N/A") {
+      // Reemplazar "T" por espacio y eliminar la "Z"
+      dateString = dateString.replace("T", " ").replace("Z", "");
+
+      // Dividir la fecha en parte de fecha y hora
+      let [datePart, timePart] = dateString.split(" ");
+
+      // Extraer la hora, los minutos y los segundos
+      let [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+      // Restar 6 horas
+      hours -= 6;
+
+      // Si las horas quedan por debajo de 0 (es decir, resta de un día anterior), ajustamos
+      if (hours < 0) {
+        hours += 24; // Sumar 24 horas si queda negativo
+        // Ajustar el día, para eso usamos el objeto Date
+        let date = new Date(datePart); // Crear un objeto Date solo con la parte de la fecha
+        date.setDate(date.getDate() - 1); // Restamos un día
+        datePart = date.toISOString().split("T")[0]; // Formateamos solo la fecha (YYYY-MM-DD)
+      }
+
+      // Formatear la nueva hora con los minutos y segundos
+      let newTimePart = `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+      // Crear la nueva fecha con la hora ajustada
+      var formattedDate = `${datePart} ${newTimePart}`;
+      return formattedDate;
+
+      // Mostrar el resultado en el documento
+    }
   };
 
   const handleGenerateRecipePDF = async () => {
@@ -673,12 +720,57 @@ export function ActionConsult({ id }: IProps) {
         color: rgb(0, 0, 0),
       });
 
-      firstPage.drawText(consult.nextappointment || "N/A", {
-        x: 50,
-        y: 77,
-        size: 10,
-        color: rgb(0, 0, 0),
-      });
+      let dateString = consult.nextappointment || "N/A"; // Si no existe el valor, se usará "N/A"
+
+      if (dateString !== "N/A") {
+        // Reemplazar "T" por espacio y eliminar la "Z"
+        dateString = dateString.replace("T", " ").replace("Z", "");
+
+        // Dividir la fecha en parte de fecha y hora
+        let [datePart, timePart] = dateString.split(" ");
+
+        // Extraer la hora, los minutos y los segundos
+        let [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+        // Restar 6 horas
+        hours -= 6;
+
+        // Si las horas quedan por debajo de 0 (es decir, resta de un día anterior), ajustamos
+        if (hours < 0) {
+          hours += 24; // Sumar 24 horas si queda negativo
+          // Ajustar el día, para eso usamos el objeto Date
+          let date = new Date(datePart); // Crear un objeto Date solo con la parte de la fecha
+          date.setDate(date.getDate() - 1); // Restamos un día
+          datePart = date.toISOString().split("T")[0]; // Formateamos solo la fecha (YYYY-MM-DD)
+        }
+
+        // Formatear la nueva hora con los minutos y segundos
+        let newTimePart = `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+        // Crear la nueva fecha con la hora ajustada
+        let formattedDate = `${datePart} ${newTimePart}`;
+
+        // Mostrar el resultado en el documento
+        firstPage.drawText(formattedDate, {
+          x: 50,
+          y: 77,
+          size: 10,
+          color: rgb(0, 0, 0),
+        });
+      } else {
+        firstPage.drawText("N/A", {
+          // Opciones de estilo
+        });
+      }
+
+      // firstPage.drawText(consult.nextappointment || "N/A", {
+      //   x: 50,
+      //   y: 77,
+      //   size: 10,
+      //   color: rgb(0, 0, 0),
+      // });
 
       firstPage.drawText(consult.userCreatedBy?.name || "N/A", {
         x: 290,

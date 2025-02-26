@@ -81,6 +81,15 @@ export function ActionPatient({ id }: IProps) {
     // doc.text("Adios", 20, 20); // Texto "Adios" debajo de "Hola"
     // doc.text("xdxdxdxd", 20, 25); // Texto "xdxdxdxd" debajo de "Adios"
 
+    // Eliminar letras y símbolos, quedándonos solo con los números
+    let numbersOnly = patient?.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
+
+    // Obtener solo los primeros 6 números
+    let firstSixNumbers = numbersOnly.substring(0, 6);
+
+    // Concatenar con el texto
+    doc.text(`Código Expediente: ${firstSixNumbers}`, 20, 15);
+
     autoTable(doc, {
       body: [
         [

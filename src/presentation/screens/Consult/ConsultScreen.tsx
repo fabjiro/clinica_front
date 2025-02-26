@@ -125,6 +125,17 @@ export function ConsultScreen() {
 
     console.log(consultations[0].patient.name);
 
+    let id = consultations[0].patient.id;
+
+    // Eliminar letras y símbolos, quedándonos solo con los números
+    let numbersOnly = id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
+
+    // Obtener solo los primeros 6 números
+    let firstSixNumbers = numbersOnly.substring(0, 6);
+
+    // Concatenar con el texto
+    doc.text(`Código Expediente: ${firstSixNumbers}`, 20, 15);
+
     autoTable(doc, {
       body: [
         [
@@ -425,6 +436,16 @@ export function ConsultScreen() {
       // doc.text("Hola", 20, 15);
       // doc.text("Adios", 20, 20);
       // doc.text("xdxdxdxd", 20, 25);
+      let id = consult.id;
+
+      // Eliminar letras y símbolos, quedándonos solo con los números
+      let numbersOnly = id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
+
+      // Obtener solo los primeros 6 números
+      let firstSixNumbers = numbersOnly.substring(0, 6);
+
+      // Concatenar con el texto
+      doc.text(`Código Consulta: ${firstSixNumbers}`, 20, 15);
 
       let currentY = 30;
 
@@ -857,7 +878,7 @@ export function ConsultScreen() {
               },
             },
             {
-              content: consult.nextappointment || "N/A",
+              content: formateDate(consult.nextappointment) || "N/A",
               colSpan: 2,
               styles: {
                 lineColor: [0, 0, 0],
@@ -903,7 +924,7 @@ export function ConsultScreen() {
       );
 
       // Ahora puedes agregar más contenido encima de la imagen, por ejemplo, texto:
-      doc.setFontSize(16);
+      doc.setFontSize(12);
       doc.text(consult.patient?.name || "N/A", 60, 60);
       doc.text(consult.createdAt.split("T")[0] || "N/A", 155, 60);
       doc.text(
@@ -921,8 +942,8 @@ export function ConsultScreen() {
       doc.text(consult.weight ? `${consult.weight} kg` : "N/A", 160, 72);
       doc.text(consult.diagnosis || "N/A", 50, 84);
       doc.text(consult.recipe || "N/A", 20, 110);
-      doc.text(consult.userCreatedBy?.name || "N/A", 140, 270);
-      doc.text(consult.nextappointment || "N/A", 22, 257);
+      doc.text(consult.userCreatedBy?.name || "N/A", 145, 270);
+      doc.text(formateDate(consult.nextappointment) || "N/A", 27, 257);
 
       // doc.setFontSize(6);
       // doc.text("Hola", 20, 15);
@@ -940,6 +961,44 @@ export function ConsultScreen() {
     // Guardar el archivo
     doc.save(fileName);
   }
+
+  const formateDate = (date: string) => {
+    let dateString = date || "N/A"; // Si no existe el valor, se usará "N/A"
+
+    if (dateString !== "N/A") {
+      // Reemplazar "T" por espacio y eliminar la "Z"
+      dateString = dateString.replace("T", " ").replace("Z", "");
+
+      // Dividir la fecha en parte de fecha y hora
+      let [datePart, timePart] = dateString.split(" ");
+
+      // Extraer la hora, los minutos y los segundos
+      let [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+      // Restar 6 horas
+      hours -= 6;
+
+      // Si las horas quedan por debajo de 0 (es decir, resta de un día anterior), ajustamos
+      if (hours < 0) {
+        hours += 24; // Sumar 24 horas si queda negativo
+        // Ajustar el día, para eso usamos el objeto Date
+        let date = new Date(datePart); // Crear un objeto Date solo con la parte de la fecha
+        date.setDate(date.getDate() - 1); // Restamos un día
+        datePart = date.toISOString().split("T")[0]; // Formateamos solo la fecha (YYYY-MM-DD)
+      }
+
+      // Formatear la nueva hora con los minutos y segundos
+      let newTimePart = `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+      // Crear la nueva fecha con la hora ajustada
+      var formattedDate = `${datePart} ${newTimePart}`;
+      return formattedDate;
+
+      // Mostrar el resultado en el documento
+    }
+  };
 
   const calculateAge = (birthday: string): number => {
     const birthDate = new Date(birthday); // Convierte la fecha de string a Date
