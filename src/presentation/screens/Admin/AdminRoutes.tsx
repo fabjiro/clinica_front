@@ -9,6 +9,9 @@ const ReportsRoutesLazy = lazy(() => import("../Reports/ReportsRoutes"));
 const BackupsScreenLazy = lazy(() => import("../Backups/BackupScreen"));
 const NotFoundScreenLazy = lazy(() => import("../NotFoundScreen"));
 const RolesRoutesLazy = lazy(() => import("../Roles/RolesRoutes"));
+const ConfiguracionesRoutesLazy = lazy(
+  () => import("../Configurations/consfigurationsRoutes")
+);
 
 export default function AdminRoutes() {
   return (
@@ -22,6 +25,7 @@ export default function AdminRoutes() {
         <Route path="roles" element={<RolesRoutesLazy />} />
 
         <Route path="backups" element={<BackupsScreenLazy />} />
+        <Route path="configuraciones" element={<ConfiguracionesRoutesLazy />} />
         <Route path="*" element={<NotFoundScreenLazy />} />
       </Route>
     </Routes>

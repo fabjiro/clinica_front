@@ -45,7 +45,7 @@ export const listItemSidebar: ISidebarItem[] = [
   },
   {
     name: "Configuraciones",
-    key: "configconfiguraciones",
+    key: "configuraciones",
     path: "/configuraciones",
     icon: <GrConfigure />,
   },
