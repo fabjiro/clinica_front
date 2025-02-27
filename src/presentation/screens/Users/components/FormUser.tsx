@@ -2,7 +2,7 @@ import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { useGetAllRoles } from "../../../querys/rol/rol.query";
 import { HiSelector } from "react-icons/hi";
 import { useFormikUser } from "../hooks/useFormikUser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUserStore } from "../store/user.store";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import { FaEye, FaEyeSlash, FaFileImage } from "react-icons/fa6";
@@ -55,6 +55,25 @@ export function FormUser() {
   const isCreateMode = modeForm === MODEFORMENUM.CREATE;
 
   const { Name: nameError, Email: emailError, Rol: rolError } = errors;
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const evaluatePasswordStrength = (password: string): number => {
+    if (!password) return 0;
+
+    let score = 1; // Empieza en 1 si hay al menos un carácter
+    if (password.length >= 8) score += 1;
+    if (password.match(/\d/)) score += 1;
+    if (password.match(/[!@#$%^&*(),.?":{}|<>]/)) score += 1;
+    if (password.length >= 10) score += 1;
+
+    return score;
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    setFieldValue("Password", password);
+    setPasswordStrength(evaluatePasswordStrength(password));
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -103,7 +122,7 @@ export function FormUser() {
         errorMessage={errors.Password}
         value={values.Password}
         isRequired
-        onChange={(e) => setFieldValue("Password", e.target.value)}
+        onChange={handlePasswordChange}
         size="sm"
         label="Contraseña"
         disabled={isLoadingAddUser}
@@ -123,6 +142,49 @@ export function FormUser() {
         }
         type={isVisible ? "text" : "password"}
       />
+      {/* Barra de progreso de seguridad de contraseña */}
+      {passwordStrength > 0 && (
+        <div className="mt-2">
+          <div className="h-2 w-full bg-gray-200 rounded-md overflow-hidden">
+            <div
+              className={`h-full transition-all duration-500 transform ${
+                passwordStrength === 0
+                  ? "w-0 opacity-0"
+                  : passwordStrength === 1
+                  ? "w-1/4 bg-red-500 opacity-100"
+                  : passwordStrength === 2
+                  ? "w-1/2 bg-orange-400 opacity-100"
+                  : "w-full bg-green-500 opacity-100"
+              }`}
+            />
+          </div>
+          {/* Texto de fortaleza de contraseña */}
+          <p
+            className={`text-sm font-medium mt-1 ${
+              passwordStrength === 1
+                ? "text-red-500"
+                : passwordStrength === 2
+                ? "text-orange-400"
+                : passwordStrength === 3
+                ? "text-green-500"
+                : passwordStrength === 4
+                ? "text-green-500"
+                : "hidden"
+            }`}
+          >
+            {passwordStrength === 1
+              ? "Débil"
+              : passwordStrength === 2
+              ? "Regular"
+              : passwordStrength === 3
+              ? "Buena"
+              : passwordStrength === 4
+              ? "Segura"
+              : ""}
+          </p>
+        </div>
+      )}
+
       <Button
         variant="flat"
         onPress={openFilePicker}

@@ -10,7 +10,7 @@ import { IoMenu } from "react-icons/io5";
 import { NavBar } from "../../components/NavBar";
 import { LoadingScreen } from "../LoadingScreen";
 
-export function ShellSellerLayout() {
+export function SellCustomerLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const toggleNavbar = useNavBarStorage((state) => state.toggleNavBar);

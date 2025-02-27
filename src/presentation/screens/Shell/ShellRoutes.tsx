@@ -4,6 +4,7 @@ import { lazy } from "react";
 import { RolEnum } from "../../../enum/rol/rol.enum";
 import { useGetMe } from "../../querys/auth/auth.query";
 import { LoadingScreen } from "../LoadingScreen";
+import { LogOutButton } from "../../components/Buttons/LogOutButton";
 
 const AdminRoutesLazy = lazy(() => import("../Admin/AdminRoutes"));
 const SellerRoutesLazy = lazy(() => import("../Seller/SellerRoutes"));
@@ -39,7 +40,12 @@ export default function ShellRoutes() {
     if (dataMe?.routes && ultimaRuta && ultimaRuta !== "") {
       if (!dataMe.routes.includes(ultimaRuta)) {
         return (
-          <LoadingScreen message="No tienes permiso para acceder a esta página" />
+          <>
+            <LoadingScreen
+              message="No tienes permiso para acceder a esta ruta"
+              showBackButton
+            />
+          </>
         );
       }
     }
