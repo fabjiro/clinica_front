@@ -1,33 +1,19 @@
 import { Button, Input } from "@nextui-org/react";
 import { BaseScreen } from "../BaseScreen";
 import { IoIosAdd } from "react-icons/io";
-
-// import { ModalExam } from "./components/ModalExam";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-// import { useGetExam } from "./query/exam.query";
 import { useMemo, useState } from "react";
-// import { CiSearch } from "react-icons/ci";
-
-// import { ActionExam } from "./components/ActionExam";
 import { MODEFORMENUM } from "../../../enum/mode/mode.enum";
 import { ModalSubRol } from "./components/ModalSubRol";
 import { useSubRolStore } from "./store/subrol.store";
 import { ActionSubRol } from "./components/ActionSubRol";
 import { useGetSubRol } from "./querys/subrol.query";
-import { useGetPages } from "./querys/pages.query";
 import { CiSearch } from "react-icons/ci";
 
 export function RolesScreen() {
-  // const {toggleForm: toggleFormGroup, setModeForm} = useGroupsStore();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
-  // const { data: dataExam} = useGetExam();
-
   const { toggleForm: toggleFormSubRol, setModeForm } = useSubRolStore();
   const { data: dataSubRol } = useGetSubRol();
-  // const { data: dataPage } = useGetPages();
-
-  // // console.log(dataSubRol);
-  // console.log(dataPage);
 
   const columns: GridColDef[] = [
     { field: "colId", headerName: "N", width: 90 },
@@ -55,25 +41,24 @@ export function RolesScreen() {
   const row = useMemo(() => {
     if (!dataSubRol) return [];
 
+    let filteredData = dataSubRol;
+
     if (searchByWord) {
-      return dataSubRol
-        .filter((rol) =>
-          rol.name.toLowerCase().includes(searchByWord.toLowerCase())
-        )
-        .map((roldata, index) => ({
-          colId: index + 1,
-          id: roldata.id,
-          col1: roldata.rol.name,
-          col2: roldata.name,
-        }));
+      filteredData = filteredData.filter((rol) =>
+        rol.name.toLowerCase().includes(searchByWord.toLowerCase())
+      );
     }
 
-    return dataSubRol.map((roldata, index) => ({
+    // Ordenar alfabéticamente por el nombre del subrol (col2)
+    const sortedData = filteredData.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    return sortedData.map((roldata, index) => ({
       colId: index + 1,
       id: roldata.id,
       col1: roldata.rol.name,
       col2: roldata.name,
-      //   col1: rol.group.name,
     }));
   }, [dataSubRol, searchByWord]);
 
@@ -95,7 +80,6 @@ export function RolesScreen() {
         }
       >
         <div className="flex flex-col gap-2 flex-1">
-          <div className="flex flex-col items-start gap-2"></div>
           <Input
             label=""
             placeholder="Buscar Rol..."

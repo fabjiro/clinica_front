@@ -44,6 +44,7 @@ export default function ShellRoutes() {
             <LoadingScreen
               message="No tienes permiso para acceder a esta ruta"
               showBackButton
+              showLogOut
             />
           </>
         );

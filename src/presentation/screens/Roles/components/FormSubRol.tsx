@@ -17,9 +17,10 @@ import { useGetAllRoles } from "../../../querys/rol/rol.query";
 import { HiSelector } from "react-icons/hi";
 import { useGetPages } from "../querys/pages.query";
 import { useAddPages } from "../querys/pages.query"; // Importamos el hook de la mutación
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 
 export function FormSubRol() {
-  const { toggleForm: toggleFormSubRol } = useSubRolStore();
+  const { modeForm, toggleForm: toggleFormSubRol } = useSubRolStore();
 
   const { data: dataRoles, status: statusGetRoles } = useGetAllRoles();
   const isLoadingRoles = statusGetRoles === "pending";
@@ -71,6 +72,8 @@ export function FormSubRol() {
     setSelectedPages(checkedValues); // Actualiza el estado con los valores seleccionados
   };
 
+  const isUpdateMode = modeForm === MODEFORMENUM.UPDATE;
+
   return (
     <div className="flex flex-col gap-4 ">
       <div className="flex flex-row gap-2">
@@ -100,23 +103,27 @@ export function FormSubRol() {
         />
       </div>
 
-      <b>
-        <h3>Permisos:</h3>
-      </b>
-      <CheckboxGroup
-        value={selectedPages} // Vincula el estado local con los checkboxes
-        onChange={handleCheckboxChange} // Actualiza el estado local cuando cambian los checkboxes
-        label="Seleccione los permisos"
-        orientation="horizontal"
-      >
-        {dataPage &&
-          dataPage.map((page) => (
-            <Checkbox key={page.id} value={page.id}>
-              {page.url.charAt(0).toUpperCase() + page.url.slice(1)}{" "}
-              {/* Capitaliza el nombre */}
-            </Checkbox>
-          ))}
-      </CheckboxGroup>
+      {isUpdateMode && (
+        <>
+          <b>
+            <h3>Permisos:</h3>
+          </b>
+          <CheckboxGroup
+            value={selectedPages} // Vincula el estado local con los checkboxes
+            onChange={handleCheckboxChange} // Actualiza el estado local cuando cambian los checkboxes
+            label="Seleccione Rutas permitidas para el Sub-Rol"
+            orientation="horizontal"
+          >
+            {dataPage &&
+              dataPage.map((page) => (
+                <Checkbox key={page.id} value={page.id}>
+                  {page.url.charAt(0).toUpperCase() + page.url.slice(1)}{" "}
+                  {/* Capitaliza el nombre */}
+                </Checkbox>
+              ))}
+          </CheckboxGroup>
+        </>
+      )}
 
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button onPress={() => toggleFormSubRol()}>Cancelar</Button>

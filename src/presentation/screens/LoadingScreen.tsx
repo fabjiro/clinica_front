@@ -10,8 +10,13 @@ import { BaseConfirmModal } from "../components/Base/BaseConfirmModal";
 interface IProps {
   message?: string;
   showBackButton?: boolean;
+  showLogOut?: boolean;
 }
-export function LoadingScreen({ message, showBackButton = false }: IProps) {
+export function LoadingScreen({
+  message,
+  showBackButton = false,
+  showLogOut = false,
+}: IProps) {
   const navigate = useNavigate();
   const logOut = useAuthStore((state) => state.logOut);
   const [showConfirm, handleShowConfirm] = useToggle();
@@ -28,29 +33,33 @@ export function LoadingScreen({ message, showBackButton = false }: IProps) {
       )}
       <CircularProgress aria-label="Cargando..." />
       {message && <p>{message}</p>}
-      <div className="flex justify-center">
-        <Button
-          onClick={handleShowConfirm}
-          color="danger"
-          variant="light"
-          className="flex flex-row items-center justify-center w-auto px-4"
-          startContent={<MdLogout />}
-        >
-          Cerrar sesión
-        </Button>
-      </div>
-      <BaseConfirmModal
-        title="Cerrar sesión"
-        description="¿Deseas cerrar tu sesión?"
-        isOpen={showConfirm}
-        onConfirm={() => {
-          logOut();
-          handleShowConfirm();
-        }}
-        onCancel={() => {
-          handleShowConfirm();
-        }}
-      />
+      {showLogOut && (
+        <>
+          <div className="flex justify-center">
+            <Button
+              onClick={handleShowConfirm}
+              color="danger"
+              variant="light"
+              className="flex flex-row items-center justify-center w-auto px-4"
+              startContent={<MdLogout />}
+            >
+              Cerrar sesión
+            </Button>
+          </div>
+          <BaseConfirmModal
+            title="Cerrar sesión"
+            description="¿Deseas cerrar tu sesión?"
+            isOpen={showConfirm}
+            onConfirm={() => {
+              logOut();
+              handleShowConfirm();
+            }}
+            onCancel={() => {
+              handleShowConfirm();
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }

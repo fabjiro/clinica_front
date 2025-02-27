@@ -197,12 +197,17 @@ export const ReportForm = () => {
         : [];
     const filterDataDiagnostic = (data: ReportData[] | undefined) =>
       data
-        ? data.map(({ createdAt, ...rest }) => ({
+        ? data.map(({ createdAt, userCreatedBy, ...rest }) => ({
             ...rest,
             createDate:
               typeof createdAt === "string"
                 ? createdAt.split("T")[0] // Dividir por 'T' y quedarnos solo con la fecha
                 : "", // Devuelve "" si createdAt no es una cadena
+
+            userCreatedByName:
+              typeof userCreatedBy === "object" && userCreatedBy !== null
+                ? (userCreatedBy as { name: string }).name
+                : "",
           }))
         : [];
 

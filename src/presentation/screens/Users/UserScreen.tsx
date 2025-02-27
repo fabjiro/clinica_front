@@ -53,23 +53,18 @@ export default function UserScreen() {
       return [];
     }
 
-    if (searchByWord) {
-      return usersData
-        .filter((user) =>
+    const filteredData = searchByWord
+      ? usersData.filter((user) =>
           user.name.toLowerCase().includes(searchByWord.toLowerCase())
         )
-        .map((user) => ({
-          id: user.id,
-          col1: {
-            name: user.name,
-            url: user.avatar?.compactUrl,
-          },
-          col2: user.email,
-          col3: user.rol?.name,
-        }));
-    }
+      : usersData;
 
-    return usersData.map((user) => ({
+    // Ordenar alfabéticamente por nombre
+    const sortedData = filteredData.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    return sortedData.map((user) => ({
       id: user.id,
       col1: {
         name: user.name,

@@ -24,7 +24,12 @@ const columns: GridColDef[] = [
 ];
 
 export default function BackupScreen() {
-  const { data: dataBackups, status: statusGetBackups, refetch: refetchBackups, isRefetching: isRefetchingBackups } = useGetAllBackups();
+  const {
+    data: dataBackups,
+    status: statusGetBackups,
+    refetch: refetchBackups,
+    isRefetching: isRefetchingBackups,
+  } = useGetAllBackups();
   const { status: statusGenerateBackup, mutate: handleGenerateBackup } =
     useGenerateBackup();
   const showModalConfirm = useConfirmStore((state) => state.showConfirm);
@@ -34,15 +39,24 @@ export default function BackupScreen() {
       return [];
     }
 
-    return dataBackups.map((backup) => ({
-      id: backup.id,
-      col1: backup.name,
-      col2: backup.createdAt,
-      col3: backup.relactiveDate,
-    }));
+    return dataBackups
+      .sort((a, b) => {
+        const getTimeStamp = (name: string) => {
+          const match = name.match(/(\d{14})/);
+          return match ? parseInt(match[0], 10) : 0;
+        };
+        return getTimeStamp(b.name) - getTimeStamp(a.name);
+      })
+      .map((backup) => ({
+        id: backup.id,
+        col1: backup.name,
+        col2: backup.createdAt,
+        col3: backup.relactiveDate,
+      }));
   }, [dataBackups]);
 
-  const isLoadingBackups = statusGetBackups === "pending" || isRefetchingBackups;
+  const isLoadingBackups =
+    statusGetBackups === "pending" || isRefetchingBackups;
   const isLoadingGenerateBackup = statusGenerateBackup === "pending";
 
   return (
@@ -74,9 +88,16 @@ export default function BackupScreen() {
         <DataGrid
           loading={isLoadingBackups}
           disableColumnMenu
-          hideFooter
           rows={rows}
           columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 7,
+              },
+            },
+          }}
+          pageSizeOptions={[7]}
         />
       </div>
     </BaseScreen>

@@ -121,7 +121,7 @@ export function ShellSellerLayout() {
           </div>
           <Divider className="ml-1 w-[99%]" />
           <div className="flex-1 overflow-auto">
-            <Suspense fallback={<LoadingScreen message="Cargando Modulo" />}>
+            <Suspense fallback={<LoadingScreen message="Cargando Sección" />}>
               <Outlet />
             </Suspense>
           </div>

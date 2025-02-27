@@ -24,7 +24,7 @@ import { saveAs } from "file-saver";
 import img from "../Customer/receta medica.jpg";
 
 const columns: GridColDef[] = [
-  { field: "colId", headerName: "N.", width: 90 },
+  { field: "colId", headerName: "Codigo", width: 90 },
   {
     field: "col1",
     headerName: "Motivo",
@@ -94,8 +94,8 @@ export function ConsultScreen() {
         .filter((consult) =>
           consult.motive.toLowerCase().includes(searchByWord.toLowerCase())
         )
-        .map((consult, index) => ({
-          colId: index + 1,
+        .map((consult) => ({
+          colId: consult.id.replace(/[^0-9]/g, "").substring(0, 6),
           id: consult.id,
           col1: consult.motive,
           col2: {
@@ -106,8 +106,8 @@ export function ConsultScreen() {
         }));
     }
 
-    return consultData.map((consult, index) => ({
-      colId: index + 1,
+    return consultData.map((consult) => ({
+      colId: consult.id.replace(/[^0-9]/g, "").substring(0, 6),
       id: consult.id,
       col1: consult.motive,
       col2: {
