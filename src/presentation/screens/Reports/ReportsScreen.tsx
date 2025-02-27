@@ -1,11 +1,16 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { BaseScreen } from "../BaseScreen";
-import { Button } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { BaseModal } from "../../components/Base/BaseModal";
 import { ReportForm } from "./components/ReportForm";
 import { useReportFormStore } from "../../storage/form.storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiFileExcel2Line } from "react-icons/ri";
+import { FiUserPlus } from "react-icons/fi";
+import { FaFileImage } from "react-icons/fa6";
+import toast from "react-hot-toast";
+import { FaSave } from "react-icons/fa";
+import { CiCamera } from "react-icons/ci";
 
 export function ReportsScreen() {
   const [reportName, setReportName] = useState<string>("");

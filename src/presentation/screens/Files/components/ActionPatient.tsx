@@ -21,6 +21,7 @@ import { VscFileSymlinkDirectory } from "react-icons/vsc";
 import { IConsult } from "../../../../interfaces/consult.interface";
 import { useGetConsultByPatientId } from "../query/consult.query";
 import { SiFiles } from "react-icons/si";
+import { useState } from "react";
 
 interface IProps {
   id: string;
@@ -62,24 +63,62 @@ export function ActionPatient({ id }: IProps) {
       return;
     }
 
-    console.log("patient Data:", patient);
+    // console.log("patient Data:", patient);
 
     const doc = new jsPDF("landscape");
 
-    // doc.addImage(
-    //   "https://dl.dropboxusercontent.com/scl/fi/1dkv94n2vwvnjmpd03yj8/e2ed39fa-ed26-44c4-955d-11ce1231afc8.jpeg?rlkey=syzmyq0gi6fbc90oy5ttrx2qt&dl=0",
-    //   "JPEG", // Formato de la imagen
-    //   10, // Posición X
-    //   10, // Posición Y
-    //   10, // Ancho
-    //   10 // Alto
-    // );
+    const clinicaData = localStorage.getItem("clinicaData");
 
-    // // Agregar los textos
-    // doc.setFontSize(6); // Establecer tamaño de fuente pequeño
-    // doc.text("Hola", 20, 15); // Texto "Hola" al lado de la imagen
-    // doc.text("Adios", 20, 20); // Texto "Adios" debajo de "Hola"
-    // doc.text("xdxdxdxd", 20, 25); // Texto "xdxdxdxd" debajo de "Adios"
+    if (clinicaData) {
+      // Convierte el string a un objeto si la data fue almacenada como JSON
+      const parsedData = JSON.parse(clinicaData);
+      console.log(parsedData);
+      doc.addImage(
+        parsedData.imagen, // Ruta de la imagen o URL de la imagen en lise,
+        "JPEG", // Formato de la imagen
+        10, // Posición X
+        0, // Posición Y
+        50, // Ancho
+        50 // Alto
+      );
+      // // Agregar los textos
+
+      doc.setFont("helvetica", "bold");
+      doc.text(`Clinica ${parsedData.nombre}`, 52, 20);
+      doc.setFont("helvetica", "normal");
+      doc.setFont("helvetica", "bold");
+      doc.text("Direccion:", 52, 26);
+      doc.setFont("helvetica", "normal");
+      doc.text(parsedData.direccion, 80, 26);
+      const texto =
+        "Atención personalizada para el diagnóstico, tratamiento y seguimiento de enfermedades comunes, infecciones, dolencias y problemas de salud generales.";
+
+      const maxCaracteresPorLinea = 80; // Máximo de caracteres antes del salto
+      const lineas = []; // Array para almacenar las líneas
+
+      // Dividir el texto en partes de máximo 52 caracteres
+      for (let i = 0; i < texto.length; i += maxCaracteresPorLinea) {
+        lineas.push(texto.substring(i, i + maxCaracteresPorLinea).trim());
+      }
+
+      // Imprimir cada línea en una posición diferente en Y
+      let y = 32; // Posición inicial en el eje Y
+      lineas.forEach((linea) => {
+        doc.text(linea, 52, y);
+        y += 6; // Incrementar Y para la siguiente línea
+      });
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text("Teléfono:", 20, 200);
+      doc.setFont("helvetica", "normal"); // Volver a fuente normal
+      doc.text(parsedData.telefono, 47, 200); // Ajustar la posición para que quede al lado
+
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text("Horario Atención:", 196, 200);
+      doc.setFont("helvetica", "normal"); // Volver a fuente normal
+      doc.text(parsedData.horario, 245, 200); // Ajustar la posición para que quede alineado
+    } else {
+      console.log("No se encontró información en localStorage");
+    }
 
     // Eliminar letras y símbolos, quedándonos solo con los números
     let numbersOnly = patient?.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
@@ -88,7 +127,9 @@ export function ActionPatient({ id }: IProps) {
     let firstSixNumbers = numbersOnly.substring(0, 6);
 
     // Concatenar con el texto
-    doc.text(`Código Expediente: ${firstSixNumbers}`, 20, 15);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Código Expediente: ${firstSixNumbers}`, 20, 52);
+    doc.setFont("helvetica", "normal");
 
     autoTable(doc, {
       body: [
@@ -361,7 +402,7 @@ export function ActionPatient({ id }: IProps) {
 
         cellPadding: 4, // Espaciado dentro de las celdas
       },
-      margin: { top: 30, left: 20, right: 20 }, // Márgenes para centrar la tabla en la página
+      margin: { top: 55, left: 20, right: 20 }, // Márgenes para centrar la tabla en la página
       tableWidth: "auto", // Esto asegura que la tabla se ajuste bien al tamaño de la página
     });
 

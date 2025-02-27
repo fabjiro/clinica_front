@@ -20,6 +20,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { PDFDocument, rgb, PDFPage } from "pdf-lib";
 import { saveAs } from "file-saver";
+import img from "../../Customer/receta medica.jpg";
 
 interface IProps {
   id: string;
@@ -98,6 +99,57 @@ export function ActionConsult({ id }: IProps) {
     // doc.text("Hola", 20, 15); // Texto "Hola" al lado de la imagen
     // doc.text("Adios", 20, 20); // Texto "Adios" debajo de "Hola"
     // doc.text("xdxdxdxd", 20, 25); // Texto "xdxdxdxd" debajo de "Adios"
+    const clinicaData = localStorage.getItem("clinicaData");
+    if (clinicaData) {
+      // Convierte el string a un objeto si la data fue almacenada como JSON
+      const parsedData = JSON.parse(clinicaData);
+      console.log(parsedData);
+      doc.addImage(
+        parsedData.imagen, // Ruta de la imagen o URL de la imagen en lise,
+        "JPEG", // Formato de la imagen
+        0, // Posición X
+        0, // Posición Y
+        50, // Ancho
+        50 // Alto
+      );
+      // // Agregar los textos
+
+      doc.setFont("helvetica", "bold");
+      doc.text(`Clinica ${parsedData.nombre}`, 42, 15);
+      doc.setFont("helvetica", "normal");
+      doc.setFont("helvetica", "bold");
+      doc.text("Direccion:", 42, 21);
+      doc.setFont("helvetica", "normal");
+      doc.text(parsedData.direccion, 70, 21);
+      const texto =
+        "Atención personalizada para el diagnóstico, tratamiento y seguimiento de enfermedades comunes, infecciones, dolencias y problemas de salud generales.";
+
+      const maxCaracteresPorLinea = 60; // Máximo de caracteres antes del salto
+      const lineas = []; // Array para almacenar las líneas
+
+      // Dividir el texto en partes de máximo 52 caracteres
+      for (let i = 0; i < texto.length; i += maxCaracteresPorLinea) {
+        lineas.push(texto.substring(i, i + maxCaracteresPorLinea).trim());
+      }
+
+      // Imprimir cada línea en una posición diferente en Y
+      let y = 27; // Posición inicial en el eje Y
+      lineas.forEach((linea) => {
+        doc.text(linea, 42, y);
+        y += 6; // Incrementar Y para la siguiente línea
+      });
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text("Teléfono:", 15, 290);
+      doc.setFont("helvetica", "normal"); // Volver a fuente normal
+      doc.text(parsedData.telefono, 40, 290); // Ajustar la posición para que quede al lado
+
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text("Horario Atención:", 110, 290);
+      doc.setFont("helvetica", "normal"); // Volver a fuente normal
+      doc.text(parsedData.horario, 160, 290); // Ajustar la posición para que quede alineado
+    } else {
+      console.log("No se encontró información en localStorage");
+    }
 
     // Eliminar letras y símbolos, quedándonos solo con los números
     let numbersOnly = consult.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
@@ -105,10 +157,11 @@ export function ActionConsult({ id }: IProps) {
     // Obtener solo los primeros 6 números
     let firstSixNumbers = numbersOnly.substring(0, 6);
 
-    // Concatenar con el texto
-    doc.text(`Código Consulta: ${firstSixNumbers}`, 20, 15);
+    doc.setFont("helvetica", "bold"); // Poner en negrita
+    doc.text(`Código Consulta: ${firstSixNumbers}`, 15, 63);
+    doc.setFont("helvetica", "normal"); // Poner en negrita
     // Saltos de línea
-    let currentY = 30; // Comienza en y = 30 después del encabezado
+    let currentY = 65; // Comienza en y = 30 después del encabezado
 
     autoTable(doc, {
       startY: currentY, // Comienza la tabla después de los saltos de línea
@@ -646,153 +699,98 @@ export function ActionConsult({ id }: IProps) {
     }
 
     console.log("Consult Data:", consult);
-    try {
-      // URL del PDF existente o carga un archivo local esta en la carpeta public de proyecto
-      const existingPdfUrl = "../../../../../public/receta medica.pdf";
-      const existingPdfBytes = await fetch(existingPdfUrl).then((res) =>
-        res.arrayBuffer()
-      );
 
-      // Cargar el PDF existente
-      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    const doc = new jsPDF();
 
-      // Obtener la primera página
-      const firstPage = pdfDoc.getPages()[0];
+    // Cargar la imagen (en este caso, la imagen se carga desde una URL)
+    const imgPath = img; // Cambia esto por la ruta de tu imagen
 
-      // Escribir en coordenadas específicas (ajusta los valores según el diseño del PDF)
-      firstPage.drawText(consult.patient?.name || "N/A", {
-        x: 122,
-        y: 458,
-        size: 10,
-        color: rgb(0, 0, 0),
-      });
+    // Agregar la imagen al PDF como fondo (ajustar al tamaño de la página)
+    doc.addImage(
+      imgPath,
+      "JPEG",
+      0,
+      0,
+      doc.internal.pageSize.width,
+      doc.internal.pageSize.height
+    );
 
-      firstPage.drawText(consult.createdAt.split("T")[0] || "N/A", {
-        x: 322,
-        y: 458,
-        size: 10,
-        color: rgb(0, 0, 0),
-      });
+    // Ahora puedes agregar más contenido encima de la imagen, por ejemplo, texto:
+    doc.setFontSize(12);
+    doc.text(consult.patient?.name || "N/A", 60, 60);
+    doc.text(consult.createdAt.split("T")[0] || "N/A", 155, 60);
+    doc.text(
+      calculateAge(consult.patient?.birthday || "N/A").toString(),
+      40,
+      72
+    );
+    doc.text(
+      consult.patient?.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
+        ? "Masculino"
+        : "Femeninio",
+      94,
+      72
+    );
+    doc.text(consult.weight ? `${consult.weight} kg` : "N/A", 160, 72);
+    doc.text(consult.diagnosis || "N/A", 50, 84);
+    const texto = consult.recipe || "N/A";
+    const maxCaracteresPorLinea = 70; // Máximo de caracteres antes del salto
+    const lineas = []; // Array para almacenar las líneas
 
-      // firstPage.drawText(
-      //   new Date(consult.createdAt).toLocaleDateString() || "N/A",
-      //   {
-      //     x: 322,
-      //     y: 458,
-      //     size: 12,
-      //     color: rgb(0, 0, 0),
-      //   }
-      // );
-
-      firstPage.drawText(
-        calculateAge(consult.patient?.birthday || "N/A").toString(),
-        {
-          x: 90,
-          y: 435,
-          size: 12,
-          color: rgb(0, 0, 0),
-        }
-      );
-
-      firstPage.drawText(
-        consult.patient?.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
-          ? "Masculino"
-          : "Femeninio",
-        {
-          x: 195,
-          y: 435,
-          size: 10,
-          color: rgb(0, 0, 0),
-        }
-      );
-
-      firstPage.drawText(consult.weight ? `${consult.weight} kg` : "N/A", {
-        x: 330,
-        y: 435,
-        size: 12,
-        color: rgb(0, 0, 0),
-      });
-
-      firstPage.drawText(consult.diagnosis || "N/A", {
-        x: 110,
-        y: 412,
-        size: 12,
-        color: rgb(0, 0, 0),
-      });
-
-      let dateString = consult.nextappointment || "N/A"; // Si no existe el valor, se usará "N/A"
-
-      if (dateString !== "N/A") {
-        // Reemplazar "T" por espacio y eliminar la "Z"
-        dateString = dateString.replace("T", " ").replace("Z", "");
-
-        // Dividir la fecha en parte de fecha y hora
-        let [datePart, timePart] = dateString.split(" ");
-
-        // Extraer la hora, los minutos y los segundos
-        let [hours, minutes, seconds] = timePart.split(":").map(Number);
-
-        // Restar 6 horas
-        hours -= 6;
-
-        // Si las horas quedan por debajo de 0 (es decir, resta de un día anterior), ajustamos
-        if (hours < 0) {
-          hours += 24; // Sumar 24 horas si queda negativo
-          // Ajustar el día, para eso usamos el objeto Date
-          let date = new Date(datePart); // Crear un objeto Date solo con la parte de la fecha
-          date.setDate(date.getDate() - 1); // Restamos un día
-          datePart = date.toISOString().split("T")[0]; // Formateamos solo la fecha (YYYY-MM-DD)
-        }
-
-        // Formatear la nueva hora con los minutos y segundos
-        let newTimePart = `${hours.toString().padStart(2, "0")}:${minutes
-          .toString()
-          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-
-        // Crear la nueva fecha con la hora ajustada
-        let formattedDate = `${datePart} ${newTimePart}`;
-
-        // Mostrar el resultado en el documento
-        firstPage.drawText(formattedDate, {
-          x: 50,
-          y: 77,
-          size: 10,
-          color: rgb(0, 0, 0),
-        });
-      } else {
-        firstPage.drawText("N/A", {
-          // Opciones de estilo
-        });
-      }
-
-      // firstPage.drawText(consult.nextappointment || "N/A", {
-      //   x: 50,
-      //   y: 77,
-      //   size: 10,
-      //   color: rgb(0, 0, 0),
-      // });
-
-      firstPage.drawText(consult.userCreatedBy?.name || "N/A", {
-        x: 290,
-        y: 50,
-        size: 10,
-        color: rgb(0, 0, 0),
-      });
-
-      drawWrappedText(firstPage, consult.recipe || "N/A", 50, 360, 12, 15);
-
-      // Guardar el nuevo PDF
-      const modifiedPdfBytes = await pdfDoc.save();
-
-      // Descargar el archivo
-      const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
-      const fileName = `Receta_Medica_${consult.patient?.name}_${
-        consult.createdAt.split("T")[0]
-      }.pdf`;
-      saveAs(blob, fileName);
-    } catch (error) {
-      console.error("Error generando la receta:", error);
+    // Dividir el texto en partes de máximo 80 caracteres
+    for (let i = 0; i < texto.length; i += maxCaracteresPorLinea) {
+      lineas.push(texto.substring(i, i + maxCaracteresPorLinea).trim());
     }
+
+    // Imprimir cada línea en una posición diferente en Y
+    let y = 110; // Posición inicial en el eje Y
+    lineas.forEach((linea) => {
+      doc.text(linea, 20, y);
+      y += 8; // Incrementar Y para la siguiente línea
+    });
+    doc.text(consult.userCreatedBy?.name || "N/A", 145, 270);
+    doc.text(formateDate(consult.nextappointment) || "N/A", 27, 257);
+
+    const clinicaData = localStorage.getItem("clinicaData");
+    if (clinicaData) {
+      // Convierte el string a un objeto si la data fue almacenada como JSON
+      const parsedData = JSON.parse(clinicaData);
+      console.log(parsedData);
+      doc.addImage(
+        parsedData.imagen, // Ruta de la imagen o URL de la imagen en lise,
+        "JPEG", // Formato de la imagen
+        0, // Posición X
+        3, // Posición Y
+        13, // Ancho
+        13 // Altos
+      );
+      // // Agregar los textos
+
+      doc.setFont("helvetica", "bold");
+      doc.text(`Clinica ${parsedData.nombre}`, 80, 15);
+      doc.setFont("helvetica", "normal");
+
+      doc.setFont("helvetica", "bold");
+      doc.text(parsedData.direccion, 67, 21);
+      doc.setFont("helvetica", "normal");
+
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text(parsedData.telefono, 90, 295); // Ajustar la posición para que quede al lado
+      doc.setFont("helvetica", "normal");
+
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text("Horario Atención:", 70, 27);
+      doc.setFont("helvetica", "normal"); // Volver a fuente normal
+      doc.text(parsedData.horario, 106, 27); // Ajustar la posición para que quede alineado
+    } else {
+      console.log("No se encontró información en localStorage");
+    }
+    const filesName = consult.patient?.name
+      ? `Consulta_Medica_${consult.patient?.name}.pdf`
+      : "Consulta_Medica.pdf";
+
+    // Guardar el archivo
+    doc.save(filesName);
   };
 
   /**

@@ -3,6 +3,7 @@ import { MdBackup, MdDashboard } from "react-icons/md";
 import { FaUserGear, FaUsersGear } from "react-icons/fa6";
 import { IoDocumentText } from "react-icons/io5";
 import { VscFileSubmodule } from "react-icons/vsc";
+import { GrConfigure } from "react-icons/gr";
 
 export const listItemSidebar: ISidebarItem[] = [
   {
@@ -41,5 +42,11 @@ export const listItemSidebar: ISidebarItem[] = [
     key: "backups",
     path: "/backups",
     icon: <MdBackup />,
+  },
+  {
+    name: "Configuraciones",
+    key: "configconfiguraciones",
+    path: "/configuraciones",
+    icon: <GrConfigure />,
   },
 ];

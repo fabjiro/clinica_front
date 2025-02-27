@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { listItemSidebar } from "../../../const/sidebar.const";
 import { LogOutButton } from "../../components/Buttons/LogOutButton";
 import { Me } from "../../components/Me";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { LoadingScreen } from "../LoadingScreen";
 import { AccordionInput } from "./components/AccordionInput";
 import { IoMenu, IoSettings } from "react-icons/io5";
@@ -15,6 +15,20 @@ export function ShellAdminLayout() {
   const location = useLocation();
   const toggleNavbar = useNavBarStorage((state) => state.toggleNavBar);
 
+  // Estado para la clínica
+  const [clinica, setClinica] = useState({
+    nombre: "",
+    imagen: null as string | ArrayBuffer | null,
+  });
+
+  // Cargar los datos de la clínica desde localStorage
+  useEffect(() => {
+    const storedClinicaData = localStorage.getItem("clinicaData");
+    if (storedClinicaData) {
+      setClinica(JSON.parse(storedClinicaData));
+    }
+  }, []);
+
   return (
     <>
       <div className="w-full h-screen flex flex-row">
@@ -22,8 +36,25 @@ export function ShellAdminLayout() {
         <div className="w-1/5 min-w-[230px] hidden md:flex md:flex-col md:justify-between h-full bg-gray-100 px-4">
           {/* header */}
           <div className="h-14 flex flex-row items-center">
-            {/* <ShopDetail /> */}
+            {/* Mostrar la imagen y el nombre de la clínica */}
+            {clinica.imagen ? (
+              <img
+                src={clinica.imagen as string}
+                alt="Imagen de la clínica"
+                className="w-10 h-10 rounded-full object-cover mr-4" // Imagen redondeada
+              />
+            ) : (
+              <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div> // Imagen predeterminada si no hay imagen
+            )}
+
+            <div className="flex flex-col">
+              <b>
+                <h1 className="">{clinica.nombre || "Nombre de la clínica"}</h1>
+              </b>
+              <p className="text-sm text-gray-600 mt-0">Clínica</p>
+            </div>
           </div>
+
           <Divider className="mb-3" />
 
           <div className="flex flex-col gap-3">
@@ -73,15 +104,6 @@ export function ShellAdminLayout() {
           <div className="flex-grow"></div>
 
           <div className="mb-5 flex flex-col gap-2">
-            {/* <Button
-              onClick={() => navigate("/settings")}
-              variant="light"
-              color="primary"
-              className="justify-start"
-              startContent={<IoSettings />}
-            >
-              Configuraciónes
-            </Button> */}
             <LogOutButton />
           </div>
         </div>
