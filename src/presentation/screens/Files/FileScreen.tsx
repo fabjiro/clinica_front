@@ -18,7 +18,7 @@ import { useConsutlFormStore } from "../../storage/form.storage";
 import { FormConsult } from "./components/FormConsult";
 
 const columns: GridColDef[] = [
-  { field: "colId", headerName: "Codigo", width: 90 },
+  { field: "colId", headerName: "Código", width: 90 },
   {
     field: "col1",
     headerName: "Nombre",
@@ -26,12 +26,12 @@ const columns: GridColDef[] = [
   },
   {
     field: "col3",
-    headerName: "Dirreccion",
+    headerName: "Dirrección",
     flex: 1,
   },
   {
     field: "col4",
-    headerName: "Telefono",
+    headerName: "Teléfono",
     flex: 1,
   },
   {

@@ -92,7 +92,7 @@ export const ConfigurationsScreen = () => {
   return (
     <>
       <BaseScreen
-        titlePage="Datos Clinica"
+        titlePage="Datos Clínica"
         actions={
           <Button
             onClick={handleSave}

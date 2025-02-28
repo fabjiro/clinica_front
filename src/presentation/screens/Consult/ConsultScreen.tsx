@@ -24,7 +24,7 @@ import { saveAs } from "file-saver";
 import img from "../Customer/receta medica.jpg";
 
 const columns: GridColDef[] = [
-  { field: "colId", headerName: "Codigo", width: 90 },
+  { field: "colId", headerName: "Código", width: 90 },
   {
     field: "col1",
     headerName: "Motivo",
