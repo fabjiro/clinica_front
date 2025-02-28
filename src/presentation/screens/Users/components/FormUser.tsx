@@ -45,6 +45,7 @@ export function FormUser() {
           "Avatar",
           await FileUtils.convertFileToBase64(plainFiles[0])
         );
+        setFileName(plainFiles[0]?.name || "");
       })();
     }
   }, [plainFiles]);
@@ -83,6 +84,8 @@ export function FormUser() {
       handleSubmit();
     }
   };
+
+  const [fileName, setFileName] = useState("");
 
   return (
     <div className="flex flex-col gap-4">
@@ -205,8 +208,7 @@ export function FormUser() {
         fullWidth
         // disabled={isLoadingAddProduct || isLoadingUpdateProduct}
       >
-        {" "}
-        Avatar
+        {fileName ? fileName : "Avatar"}
       </Button>
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button
