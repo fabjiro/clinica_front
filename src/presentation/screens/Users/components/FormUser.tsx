@@ -10,6 +10,7 @@ import { useFilePicker } from "use-file-picker";
 import { FileUtils } from "../../../../utils/file.utils";
 import { useGetSubRol } from "../../Roles/querys/subrol.query";
 import { useToggle } from "../../../hooks/useToggle";
+import toast from "react-hot-toast";
 
 export function FormUser() {
   const { openFilePicker, plainFiles, loading, clear } = useFilePicker({
@@ -61,10 +62,10 @@ export function FormUser() {
     if (!password) return 0;
 
     let score = 1; // Empieza en 1 si hay al menos un carácter
-    if (password.length >= 8) score += 1;
+    if (password.length >= 10) score += 1;
     if (password.match(/\d/)) score += 1;
     if (password.match(/[!@#$%^&*(),.?":{}|<>]/)) score += 1;
-    if (password.length >= 10) score += 1;
+    if (password.length >= 14) score += 1;
 
     return score;
   };
@@ -73,6 +74,14 @@ export function FormUser() {
     const password = e.target.value;
     setFieldValue("Password", password);
     setPasswordStrength(evaluatePasswordStrength(password));
+  };
+
+  const handleSubmitNotDebile = () => {
+    if (passwordStrength === 1 || passwordStrength === 2) {
+      toast.error("La contraseña es poco segura.");
+    } else {
+      handleSubmit();
+    }
   };
 
   return (
@@ -154,6 +163,8 @@ export function FormUser() {
                   ? "w-1/4 bg-red-500 opacity-100"
                   : passwordStrength === 2
                   ? "w-1/2 bg-orange-400 opacity-100"
+                  : passwordStrength === 3
+                  ? "w-9/12 bg-blue-500 opacity-100"
                   : "w-full bg-green-500 opacity-100"
               }`}
             />
@@ -199,7 +210,7 @@ export function FormUser() {
       </Button>
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button
-          onClick={() => handleSubmit()}
+          onClick={() => handleSubmitNotDebile()}
           isLoading={isLoadingAddUser || isLoadingUpdateUser}
           disabled={isLoadingRoles}
           color="primary"

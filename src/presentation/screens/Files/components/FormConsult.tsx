@@ -98,7 +98,7 @@ export function FormConsult() {
   return (
     <div className="flex flex-col items-center w-full">
       <div className="flex flex-col gap-4 w-10/12">
-        <h1 className="text-2xl font-semibold">Consulta Medica</h1>
+        <h1 className="text-2xl font-semibold">Consulta Médica</h1>
         <Divider />
         <Autocomplete
           isLoading={isLoading}
@@ -126,7 +126,7 @@ export function FormConsult() {
           />
           <Textarea
             onChange={(e) => setFieldValue("clinicalhistory", e.target.value)}
-            label="Historial clinico"
+            label="Historial clínico"
             value={values.clinicalhistory}
           />
         </div>
@@ -137,14 +137,14 @@ export function FormConsult() {
             onChange={(e) =>
               setFieldValue("bilogicalEvaluation", e.target.value)
             }
-            label="Biologico"
+            label="Biológico"
             value={values.bilogicalEvaluation}
           />
           <Textarea
             onChange={(e) =>
               setFieldValue("psychologicalEvaluation", e.target.value)
             }
-            label="Psicologico"
+            label="Psicológico"
             value={values.psychologicalEvaluation}
           />
           <Textarea
@@ -176,7 +176,7 @@ export function FormConsult() {
             errorMessage={errors.size}
             isRequired
             size="sm"
-            label="Talla"
+            label="Estatura"
             endContent="Cm"
             value={values.size?.toString()}
             onChange={(e) => setFieldValue("size", e.target.value)}
@@ -191,20 +191,20 @@ export function FormConsult() {
           <Input
             onChange={(e) => setFieldValue("oxygenSaturation", e.target.value)}
             size="sm"
-            label="Saturacion de oxigeno"
+            label="Saturación de oxigeno"
             endContent="%"
             value={values.oxygenSaturation?.toString()}
           />
         </div>
         <div className="flex flex-col">
-          <h1>Presion arterial</h1>
+          <h1>Presión arterial</h1>
           <div className="flex flex-row w-1/4 gap-4">
             <Input
               onChange={(e) =>
                 setFieldValue("systolicPressure", e.target.value)
               }
               size="sm"
-              label="Sistolica"
+              label="Sistólica"
               value={values.systolicPressure?.toString()}
             />
             {/* <Button variant="light">/</Button> */}
@@ -213,7 +213,7 @@ export function FormConsult() {
                 setFieldValue("diastolicPressure", e.target.value)
               }
               size="sm"
-              label="Diastolica"
+              label="Diastólica"
               value={values.diastolicPressure?.toString()}
             />
           </div>
@@ -254,7 +254,7 @@ export function FormConsult() {
           </Autocomplete>
           <Textarea
             isRequired
-            label="Diagnostico"
+            label="Diagnóstico"
             isInvalid={!!errors.diagnostic}
             errorMessage={errors.diagnostic}
             value={values.diagnostic}

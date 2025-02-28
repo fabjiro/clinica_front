@@ -156,7 +156,7 @@ export function FileScreen() {
               startContent={<ImFilesEmpty />}
               color="success"
             >
-              Examenes
+              Exámenes
             </Button>
           </>
         }

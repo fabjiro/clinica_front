@@ -699,6 +699,16 @@ export function ConsultScreen() {
           ],
           [
             {
+              content: "Historial clínico:",
+              styles: {
+                fontStyle: "bold",
+                fillColor: [200, 200, 200],
+                lineColor: [0, 0, 0],
+                textColor: [0, 0, 0],
+              },
+              colSpan: 1,
+            },
+            {
               content: "Saturacion de Oxígeno:",
               styles: {
                 fontStyle: "bold",
@@ -716,20 +726,19 @@ export function ConsultScreen() {
                 lineColor: [0, 0, 0],
                 textColor: [0, 0, 0],
               },
-              colSpan: 1,
-            },
-            {
-              content: "Historial clínico:",
-              styles: {
-                fontStyle: "bold",
-                fillColor: [200, 200, 200],
-                lineColor: [0, 0, 0],
-                textColor: [0, 0, 0],
-              },
               colSpan: 2,
             },
           ],
           [
+            {
+              content: consult.clinicalhistory || "N/A",
+              colSpan: 1,
+              styles: {
+                lineColor: [0, 0, 0],
+                halign: "center",
+                textColor: [0, 0, 0],
+              },
+            },
             {
               content: consult.oxygenSaturation
                 ? `${consult.oxygenSaturation}%`
@@ -746,15 +755,6 @@ export function ConsultScreen() {
                 consult.systolicPressure && consult.diastolicPressure
                   ? `${consult.systolicPressure}/${consult.diastolicPressure} mmHg`
                   : "N/A",
-              colSpan: 1,
-              styles: {
-                lineColor: [0, 0, 0],
-                halign: "center",
-                textColor: [0, 0, 0],
-              },
-            },
-            {
-              content: consult.clinicalhistory || "N/A",
               colSpan: 2,
               styles: {
                 lineColor: [0, 0, 0],
@@ -796,7 +796,7 @@ export function ConsultScreen() {
               colSpan: 2,
             },
             {
-              content: "Evalucaion Psicologica:",
+              content: "Evalución Psicologica:",
               styles: {
                 fontStyle: "bold",
                 fillColor: [200, 200, 200],
@@ -828,7 +828,7 @@ export function ConsultScreen() {
           ],
           [
             {
-              content: "Evaluacion Social",
+              content: "Evaluación Social",
               styles: {
                 fontStyle: "bold",
                 fillColor: [200, 200, 200],
@@ -838,7 +838,7 @@ export function ConsultScreen() {
               colSpan: 2,
             },
             {
-              content: "Evaluacion Funcional:",
+              content: "Evaluación Funcional:",
               styles: {
                 fontStyle: "bold",
                 fillColor: [200, 200, 200],
@@ -877,7 +877,7 @@ export function ConsultScreen() {
         body: [
           [
             {
-              content: "Resultados y Diagnósticoss",
+              content: "Resultados y Diagnósticos",
               styles: {
                 fontStyle: "bold",
                 fontSize: 14,
@@ -912,7 +912,7 @@ export function ConsultScreen() {
           ],
           [
             {
-              content: "Diagnostico:",
+              content: "Diagnóstico:",
               styles: {
                 fontStyle: "bold",
                 fillColor: [200, 200, 200],

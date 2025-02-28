@@ -18,6 +18,8 @@ export function DashboardScreen() {
   const { data: dataPatientByDate, isLoading: isLoadingPatient } =
     useGetPatientByDate();
 
+  console.log(dataConsultByDate);
+
   const { dataXaxis, dataCountConsult, dataCountPatatient } = useMemo(() => {
     if (!dataConsultByDate || !dataPatientByDate)
       return {
@@ -65,7 +67,7 @@ export function DashboardScreen() {
     <div>
       <div className=" flex flex-col gap-2">
         <div className="bg-white flex flex-col  rounded-md shadow-lg items-center justify-center mt-3">
-          <h1 className="text-md font-semibold">Pacientes mas recurrentes</h1>
+          <h1 className="text-md font-semibold">Pacientes más recurrentes</h1>
 
           {/* Gráfico de barras */}
           <div className="w-full flex">
@@ -97,7 +99,7 @@ export function DashboardScreen() {
         {/* Gráfico de líneas */}
         <div className="bg-white rounded-md shadow-lg flex flex-col items-center justify-center">
           <h1 className="text-md font-semibold">
-            Pacientes y consultas creadas los ultimos 7 dias
+            Pacientes y Consultas creadas los ultimos 7 días
           </h1>
           <LineChart
             series={[
