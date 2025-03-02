@@ -40,7 +40,7 @@ export function RolesScreen() {
 
   const row = useMemo(() => {
     if (!dataSubRol) return [];
-
+    console.log(dataSubRol);
     let filteredData = dataSubRol;
 
     if (searchByWord) {

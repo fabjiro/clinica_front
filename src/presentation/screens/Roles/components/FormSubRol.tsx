@@ -18,9 +18,12 @@ import { HiSelector } from "react-icons/hi";
 import { useGetPages } from "../querys/pages.query";
 import { useAddPages } from "../querys/pages.query"; // Importamos el hook de la mutación
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
+import { useGetSubRol } from "../querys/subrol.query";
 
 export function FormSubRol() {
   const { modeForm, toggleForm: toggleFormSubRol } = useSubRolStore();
+
+  const { data: dataSubRoles, status: statusGetSubRoles } = useGetSubRol();
 
   const { data: dataRoles, status: statusGetRoles } = useGetAllRoles();
   const isLoadingRoles = statusGetRoles === "pending";
@@ -74,6 +77,38 @@ export function FormSubRol() {
 
   const isUpdateMode = modeForm === MODEFORMENUM.UPDATE;
 
+  interface Rolee {
+    id: string;
+    name: string;
+    rol: {
+      id: string;
+      name: string;
+    };
+    pages: {
+      id: string;
+      url: string;
+    }[];
+  }
+
+  let actualName: Rolee | null = null;
+
+  // Buscamos el sub-rol actual para actualizar el estado de los checkboxes
+  if (dataSubRoles) {
+    dataSubRoles.forEach((role) => {
+      if (role.name === values.name) {
+        actualName = role;
+      }
+    });
+  }
+
+  // Actualiza el estado de selectedPages al cargar la página
+  useEffect(() => {
+    if (isUpdateMode && actualName) {
+      const selectedPagesIds = actualName.pages.map((page) => page.id);
+      setSelectedPages(selectedPagesIds); // Actualizamos los checkboxes seleccionados
+    }
+  }, [isUpdateMode, actualName]);
+
   return (
     <div className="flex flex-col gap-4 ">
       <div className="flex flex-row gap-2">
@@ -115,12 +150,21 @@ export function FormSubRol() {
             orientation="horizontal"
           >
             {dataPage &&
-              dataPage.map((page) => (
-                <Checkbox key={page.id} value={page.id}>
-                  {page.url.charAt(0).toUpperCase() + page.url.slice(1)}{" "}
-                  {/* Capitaliza el nombre */}
-                </Checkbox>
-              ))}
+              dataPage.map((page) => {
+                // Verificar si la URL está presente en actualName.pages
+                const isChecked = selectedPages.includes(page.id); // Verificamos si el checkbox debe estar marcado
+
+                return (
+                  <Checkbox
+                    key={page.id}
+                    value={page.id}
+                    checked={isChecked} // Marcar el checkbox si está presente en selectedPages
+                  >
+                    {page.url.charAt(0).toUpperCase() + page.url.slice(1)}{" "}
+                    {/* Capitaliza el nombre */}
+                  </Checkbox>
+                );
+              })}
           </CheckboxGroup>
         </>
       )}

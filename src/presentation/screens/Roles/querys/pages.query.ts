@@ -31,7 +31,7 @@ export function useAddPages() {
       mutationFn: AddPages,
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["getAllPages"] });
-        toast.success("Page creada", {
+        toast.success("Pemisos de pagina concedidos", {
           position: "top-right",
         });
       },
