@@ -82,8 +82,14 @@ export function FileScreen() {
 
     if (searchByWord) {
       return dataPatient
-        .filter((patient) =>
-          patient.name.toLowerCase().includes(searchByWord.toLowerCase())
+        .filter(
+          (patient) =>
+            patient.name.toLowerCase().includes(searchByWord.toLowerCase()) ||
+            patient.id
+              .replace(/[^0-9]/g, "")
+              .substring(0, 6)
+              .toLowerCase()
+              .includes(searchByWord.toLowerCase())
         )
         .map((patient) => ({
           colId: patient?.id.replace(/[^0-9]/g, "").substring(0, 6),
@@ -164,7 +170,7 @@ export function FileScreen() {
         <div className="flex flex-col gap-2 flex-1">
           <Input
             label=""
-            placeholder="Buscar paciente..."
+            placeholder="Buscar Paciente..."
             variant="bordered"
             startContent={<CiSearch />}
             onChange={(e) => setSearchByWord(e.target.value)}

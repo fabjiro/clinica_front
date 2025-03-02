@@ -47,8 +47,10 @@ export function ExamScreen() {
 
     if (searchByWord) {
       return dataExam
-        .filter((Exam) =>
-          Exam.name.toLowerCase().includes(searchByWord.toLowerCase())
+        .filter(
+          (Exam) =>
+            Exam.name.toLowerCase().includes(searchByWord.toLowerCase()) ||
+            Exam.group.name.toLowerCase().includes(searchByWord.toLowerCase())
         )
         .map((Exam, index) => ({
           colId: index + 1,

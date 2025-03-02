@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   AutocompleteItem,
+  AutocompleteSection,
   Button,
   DatePicker,
   Divider,
@@ -71,6 +72,7 @@ export function FormConsult() {
         setFileName(plainFiles[0]?.name || "");
       })();
     }
+    // console.log(allExamns);
   }, [addConsultStatus, updateConsultStatus, plainFiles, modeForm]);
 
   const handleSubmitForm = () => {
@@ -94,6 +96,53 @@ export function FormConsult() {
       handleSubmit();
     }
   };
+
+  interface Group {
+    id: string;
+    name: string;
+  }
+
+  interface Exam {
+    id: string;
+    name: string;
+    group: Group;
+  }
+
+  interface GroupedExam {
+    idGroup: string;
+    nameGroup: string;
+    exams: {
+      idExam: string;
+      nameExam: string;
+    }[];
+  }
+
+  const groupedExams: GroupedExam[] = [];
+
+  if (allExamns && allExamns.length > 0) {
+    allExamns.forEach((exam: Exam) => {
+      const { id: examId, name: examName, group } = exam;
+      const { id: groupId, name: groupName } = group;
+
+      let groupFound = groupedExams.find((g) => g.idGroup === groupId);
+
+      if (!groupFound) {
+        groupFound = {
+          idGroup: groupId,
+          nameGroup: groupName,
+          exams: [],
+        };
+        groupedExams.push(groupFound);
+      }
+
+      groupFound.exams.push({
+        idExam: examId,
+        nameExam: examName,
+      });
+    });
+  }
+
+  console.log(groupedExams);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -235,7 +284,7 @@ export function FormConsult() {
           />
         </div>
         <div className="flex flex-row gap-4">
-          <Autocomplete
+          {/* <Autocomplete
             isLoading={isLoading}
             defaultItems={allExamns ?? []}
             label="Examen complementario"
@@ -251,7 +300,35 @@ export function FormConsult() {
             {(item) => (
               <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
             )}
+          </Autocomplete> */}
+          <Autocomplete
+            isLoading={isLoading}
+            defaultItems={groupedExams ?? []}
+            label="Examen complementario"
+            size="sm"
+            onSelectionChange={(e) => {
+              setFieldValue("examComplementary", e);
+              console.log(e);
+              setNoExam(e ? false : true);
+            }}
+            defaultSelectedKey={values.examComplementary}
+            disabledKeys={groupedExams.map((group) => group.idGroup)}
+          >
+            {groupedExams.map((group) => (
+              <>
+                <AutocompleteItem key={group.idGroup} isDisabled>
+                  {group.nameGroup}
+                </AutocompleteItem>
+                {group.exams &&
+                  group.exams.map((exam) => (
+                    <AutocompleteItem key={exam.idExam}>
+                      {exam.nameExam}
+                    </AutocompleteItem>
+                  ))}
+              </>
+            ))}
           </Autocomplete>
+
           <Textarea
             isRequired
             label="Diagnóstico"

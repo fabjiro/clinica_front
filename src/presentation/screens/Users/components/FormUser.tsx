@@ -180,7 +180,7 @@ export function FormUser() {
                 : passwordStrength === 2
                 ? "text-orange-400"
                 : passwordStrength === 3
-                ? "text-green-500"
+                ? "text-blue-500"
                 : passwordStrength === 4
                 ? "text-green-500"
                 : "hidden"

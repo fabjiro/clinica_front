@@ -91,8 +91,14 @@ export function ConsultScreen() {
 
     if (searchByWord) {
       return consultData
-        .filter((consult) =>
-          consult.motive.toLowerCase().includes(searchByWord.toLowerCase())
+        .filter(
+          (consult) =>
+            consult.motive.toLowerCase().includes(searchByWord.toLowerCase()) ||
+            consult.id
+              .replace(/[^0-9]/g, "")
+              .substring(0, 6)
+              .toLowerCase()
+              .includes(searchByWord.toLowerCase())
         )
         .map((consult) => ({
           colId: consult.id.replace(/[^0-9]/g, "").substring(0, 6),
@@ -1073,6 +1079,15 @@ export function ConsultScreen() {
       doc.text(consult.userCreatedBy?.name || "N/A", 145, 270);
       doc.text(formateDate(consult.nextappointment) || "N/A", 27, 257);
 
+      let numbersOnlyy = consult.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
+
+      // Obtener solo los primeros 6 números
+      let firstSixNumberss = numbersOnlyy.substring(6, 12);
+
+      doc.setFont("helvetica", "bold"); // Poner en negrita
+      doc.text(`Código Receta: ${firstSixNumberss}`, 1, 296);
+      doc.setFont("helvetica", "normal"); // Poner en negrita
+
       if (clinicaData) {
         // Convierte el string a un objeto si la data fue almacenada como JSON
         const parsedData = JSON.parse(clinicaData);
@@ -1201,7 +1216,7 @@ export function ConsultScreen() {
         <div className="flex flex-col gap-2 flex-1">
           <Input
             label=""
-            placeholder="Buscar consulta..."
+            placeholder="Buscar Consulta..."
             variant="bordered"
             startContent={<CiSearch />}
             className="max-w-sm"

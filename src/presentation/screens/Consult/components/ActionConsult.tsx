@@ -751,6 +751,15 @@ export function ActionConsult({ id }: IProps) {
     doc.text(consult.userCreatedBy?.name || "N/A", 145, 270);
     doc.text(formateDate(consult.nextappointment) || "N/A", 27, 257);
 
+    let numbersOnly = consult.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número
+
+    // Obtener solo los primeros 6 números
+    let firstSixNumbers = numbersOnly.substring(6, 12);
+
+    doc.setFont("helvetica", "bold"); // Poner en negrita
+    doc.text(`Código Receta: ${firstSixNumbers}`, 1, 296);
+    doc.setFont("helvetica", "normal"); // Poner en negrita
+
     const clinicaData = localStorage.getItem("clinicaData");
     if (clinicaData) {
       // Convierte el string a un objeto si la data fue almacenada como JSON
@@ -783,11 +792,13 @@ export function ActionConsult({ id }: IProps) {
       doc.setFont("helvetica", "normal"); // Volver a fuente normal
       doc.text(parsedData.horario, 106, 27); // Ajustar la posición para que quede alineado
     } else {
-      console.log("No se encontró información en localStorage");
+      console.log(
+        "Primero ingrese inofrmacion de la clinica en seccion Configuraciones"
+      );
     }
     const filesName = consult.patient?.name
-      ? `Consulta_Medica_${consult.patient?.name}.pdf`
-      : "Consulta_Medica.pdf";
+      ? `Receta_Medica_${consult.patient?.name}.pdf`
+      : "Receta_Medica.pdf";
 
     // Guardar el archivo
     doc.save(filesName);
