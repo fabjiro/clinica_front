@@ -316,7 +316,11 @@ export function FormConsult() {
           >
             {groupedExams.map((group) => (
               <>
-                <AutocompleteItem key={group.idGroup} isDisabled>
+                <AutocompleteItem
+                  key={group.idGroup}
+                  isDisabled
+                  style={{ color: "white", backgroundColor: "#0460ca" }}
+                >
                   {group.nameGroup}
                 </AutocompleteItem>
                 {group.exams &&
