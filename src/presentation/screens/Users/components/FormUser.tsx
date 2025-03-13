@@ -155,49 +155,48 @@ export function FormUser() {
         type={isVisible ? "text" : "password"}
       />
       {/* Barra de progreso de seguridad de contraseña */}
-      {passwordStrength > 0 && (
-        <div className="mt-2">
-          <div className="h-2 w-full bg-gray-200 rounded-md overflow-hidden">
-            <div
-              className={`h-full transition-all duration-500 transform ${
-                passwordStrength === 0
-                  ? "w-0 opacity-0"
-                  : passwordStrength === 1
-                  ? "w-1/4 bg-red-500 opacity-100"
-                  : passwordStrength === 2
-                  ? "w-1/2 bg-orange-400 opacity-100"
-                  : passwordStrength === 3
-                  ? "w-9/12 bg-blue-500 opacity-100"
-                  : "w-full bg-green-500 opacity-100"
-              }`}
-            />
-          </div>
-          {/* Texto de fortaleza de contraseña */}
-          <p
-            className={`text-sm font-medium mt-1 ${
-              passwordStrength === 1
-                ? "text-red-500"
+
+      <div className="mt-2">
+        <div className="h-2 w-full bg-gray-200 rounded-md overflow-hidden">
+          <div
+            className={`h-full transition-all duration-500 transform ${
+              passwordStrength === 0
+                ? "w-0 opacity-0"
+                : passwordStrength === 1
+                ? "w-1/4 bg-red-500 opacity-100"
                 : passwordStrength === 2
-                ? "text-orange-400"
+                ? "w-1/2 bg-orange-400 opacity-100"
                 : passwordStrength === 3
-                ? "text-blue-500"
-                : passwordStrength === 4
-                ? "text-green-500"
-                : "hidden"
+                ? "w-9/12 bg-blue-500 opacity-100"
+                : "w-full bg-green-500 opacity-100"
             }`}
-          >
-            {passwordStrength === 1
-              ? "Débil"
-              : passwordStrength === 2
-              ? "Regular"
-              : passwordStrength === 3
-              ? "Buena"
-              : passwordStrength === 4
-              ? "Segura"
-              : ""}
-          </p>
+          />
         </div>
-      )}
+        {/* Texto de fortaleza de contraseña */}
+        <p
+          className={`text-sm font-medium mt-1 ${
+            passwordStrength === 1
+              ? "text-red-500"
+              : passwordStrength === 2
+              ? "text-orange-400"
+              : passwordStrength === 3
+              ? "text-blue-500"
+              : passwordStrength === 4
+              ? "text-green-500"
+              : "hidden"
+          }`}
+        >
+          {passwordStrength === 1
+            ? "Débil"
+            : passwordStrength === 2
+            ? "Regular"
+            : passwordStrength === 3
+            ? "Buena"
+            : passwordStrength === 4
+            ? "Segura"
+            : ""}
+        </p>
+      </div>
 
       <Button
         variant="flat"

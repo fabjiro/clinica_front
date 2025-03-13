@@ -170,7 +170,7 @@ export function FileScreen() {
         <div className="flex flex-col gap-2 flex-1">
           <Input
             label=""
-            placeholder="Buscar Paciente..."
+            placeholder="Buscar Expediente..."
             variant="bordered"
             startContent={<CiSearch />}
             onChange={(e) => setSearchByWord(e.target.value)}

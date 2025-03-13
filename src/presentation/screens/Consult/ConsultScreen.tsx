@@ -1054,8 +1054,8 @@ export function ConsultScreen() {
       );
       doc.text(
         consult.patient?.typeSex === "c2594acf-bb7c-49d0-9506-f556179670ab"
-          ? "Masculino"
-          : "Femeninio",
+          ? "Femeninio"
+          : "Masculino",
         94,
         72
       );
@@ -1132,8 +1132,8 @@ export function ConsultScreen() {
 
     // Guardar el PDF con el nombre del paciente o un nombre genérico si es null
     const fileName = patient?.name
-      ? `Consulta_Medica_${patient?.name}.pdf`
-      : "Consulta_Medica.pdf";
+      ? `Expediente_Clinico_${patient?.name}.pdf`
+      : "Expediente_Clinico.pdf";
 
     // Guardar el archivo
     doc.save(fileName);

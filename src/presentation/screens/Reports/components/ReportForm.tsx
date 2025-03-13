@@ -309,7 +309,26 @@ export const ReportForm = () => {
       ),
     }));
 
-    XLSX.writeFile(workbook, "Reporte.xlsx");
+    // XLSX.writeFile(workbook, "Reporte_Diagnósticos_Realizados.xlsx");
+    if (item === 6) {
+      XLSX.writeFile(workbook, "Reporte_Diagnósticos_Realizados.xlsx");
+    } else if (item === 4) {
+      XLSX.writeFile(workbook, "Reporte_Consultas_Recientes.xlsx");
+    } else if (item === 2) {
+      XLSX.writeFile(workbook, "Reporte_Citas_Pendientes.xlsx");
+    } else if (item === 5) {
+      XLSX.writeFile(
+        workbook,
+        "Reporte_Registros_Realizados_por_Usuarios.xlsx"
+      );
+    } else if (item === 1) {
+      XLSX.writeFile(workbook, "Reporte_Maestro-Detalle.xlsx");
+    } else if (item === 3) {
+      XLSX.writeFile(
+        workbook,
+        "Reporte_Pacientes_Registrados_Recientemente.xlsx"
+      );
+    }
     setIsReady(false);
     toggleForm();
   };

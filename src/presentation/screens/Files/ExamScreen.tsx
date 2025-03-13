@@ -68,6 +68,7 @@ export function ExamScreen() {
     }));
   }, [dataExam, searchByWord]);
 
+  console.log(dataExam);
   return (
     <>
       <BaseScreen
