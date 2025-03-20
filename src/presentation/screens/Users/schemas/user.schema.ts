@@ -8,7 +8,7 @@ export const userSchemaValidation = () => {
   const isCreateMode = useUserState.modeForm === MODEFORMENUM.CREATE;
 
   return Yup.object().shape({
-    Name: Yup.string().required("El nombre es requerido"),
+    Name: Yup.string().required("El nombre es requerido").matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s.]+$/, "El nombre solo puede contener letras y espacios"),
     Rol: Yup.string().required("El Rol es requerido"),
     ...(isCreateMode && {
       Email: Yup.string()

@@ -11,13 +11,21 @@ import { useGetAllCivilStatus } from "../query/civilstatus.query";
 import { usePatientStore } from "../store/patient.store";
 import { useFormikPatient } from "../hooks/useFormikPatient";
 import { useEffect } from "react";
-import { parseDate} from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
 import moment from "moment";
+import toast from "react-hot-toast";
 export function FormPatient() {
   const { data: DataCivilStatus, status: statusGetRoles } =
     useGetAllCivilStatus();
   const toggleForm = usePatientStore((state) => state.toggleForm);
-  const { errors, values, handleSubmit, setFieldValue, statusAddPatient, statusUpdatePatient } = useFormikPatient();
+  const {
+    errors,
+    values,
+    handleSubmit,
+    setFieldValue,
+    statusAddPatient,
+    statusUpdatePatient,
+  } = useFormikPatient();
 
   const {
     name: nameError,
@@ -37,10 +45,10 @@ export function FormPatient() {
   const isLoadingAddPatient = statusAddPatient === "pending";
 
   useEffect(() => {
-    if(statusAddPatient == "success" || statusUpdatePatient == "success"){ 
+    if (statusAddPatient == "success" || statusUpdatePatient == "success") {
       toggleForm();
     }
-  },[statusAddPatient, statusUpdatePatient])
+  }, [statusAddPatient, statusUpdatePatient]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -53,6 +61,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("name", e.target.value)}
           size="sm"
           label="Nombre"
+          maxLength={50}
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Input
@@ -89,6 +98,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("identification", e.target.value)}
           size="sm"
           label="Identificacion"
+          maxLength={16}
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
       </div>
@@ -100,7 +110,8 @@ export function FormPatient() {
           value={values.phone}
           onChange={(e) => setFieldValue("phone", e.target.value)}
           size="sm"
-          label="Numero"
+          label="Numero Telefono"
+          maxLength={15}
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Textarea
@@ -110,6 +121,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("address", e.target.value)}
           size="sm"
           label="Direccion"
+          maxLength={110}
           isRequired
         />
       </div>
@@ -122,7 +134,11 @@ export function FormPatient() {
           size="sm"
           label="Fecha de nacimiento"
           showMonthAndYearPickers
-          value={values.birthday && parseDate(moment.utc(values.birthday).format('YYYY-MM-DD')) || undefined}
+          value={
+            (values.birthday &&
+              parseDate(moment.utc(values.birthday).format("YYYY-MM-DD"))) ||
+            undefined
+          }
           hideTimeZone={true}
           granularity="day"
         />
@@ -148,7 +164,7 @@ export function FormPatient() {
           errorMessage={civilStatusError}
           selectedKey={values.civilStatus}
           onSelectionChange={(e) => setFieldValue("civilStatus", e)}
-          >
+        >
           {(item) => (
             <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
           )}
@@ -163,6 +179,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("contactPerson", e.target.value)}
           size="sm"
           label="Nombre de contacto"
+          maxLength={50}
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Input
@@ -173,14 +190,15 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("contactPhone", e.target.value)}
           size="sm"
           label="Numero de contacto"
+          maxLength={15}
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
       </div>
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button onClick={() => toggleForm()}>Cancelar</Button>
         <Button
-            onClick={() => handleSubmit()}
-            isLoading={isLoadingAddPatient || isLoadingUpdatePatient}
+          onClick={() => handleSubmit()}
+          isLoading={isLoadingAddPatient || isLoadingUpdatePatient}
           //   disabled={isLoadingRoles}
           color="primary"
         >

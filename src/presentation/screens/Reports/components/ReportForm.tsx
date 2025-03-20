@@ -180,8 +180,8 @@ export const ReportForm = () => {
             ...rest,
             nextcite:
               typeof nextAppointment === "string"
-                ? nextAppointment.replace("T", " ").replace("Z", "") // Cambia 'T' por espacio y elimina 'Z'
-                : "", // Devuelve "" si nextAppointment es undefined o no es una cadena
+                ? formateDate(nextAppointment)
+                : "", // Aplica la función formateDate
           }))
         : [];
 
@@ -265,7 +265,7 @@ export const ReportForm = () => {
     } else if (item === 4) {
       return filterDataConsult(dataConsult) || [];
     } else if (item === 2) {
-      return filterDataNextConsults(dataNextConsults) || [];
+      return (filterDataNextConsults(dataNextConsults) as ReportData[]) || [];
     } else if (item === 5) {
       return filterDataByUser(dataRegisteredPatientsByUser) || [];
     } else if (item === 1) {
@@ -331,6 +331,44 @@ export const ReportForm = () => {
     }
     setIsReady(false);
     toggleForm();
+  };
+
+  const formateDate = (date: string) => {
+    let dateString = date || "N/A"; // Si no existe el valor, se usará "N/A"
+
+    if (dateString !== "N/A") {
+      // Reemplazar "T" por espacio y eliminar la "Z"
+      dateString = dateString.replace("T", " ").replace("Z", "");
+
+      // Dividir la fecha en parte de fecha y hora
+      let [datePart, timePart] = dateString.split(" ");
+
+      // Extraer la hora, los minutos y los segundos
+      let [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+      // Restar 6 horas
+      hours -= 6;
+
+      // Si las horas quedan por debajo de 0 (es decir, resta de un día anterior), ajustamos
+      if (hours < 0) {
+        hours += 24; // Sumar 24 horas si queda negativo
+        // Ajustar el día, para eso usamos el objeto Date
+        let date = new Date(datePart); // Crear un objeto Date solo con la parte de la fecha
+        date.setDate(date.getDate() - 1); // Restamos un día
+        datePart = date.toISOString().split("T")[0]; // Formateamos solo la fecha (YYYY-MM-DD)
+      }
+
+      // Formatear la nueva hora con los minutos y segundos
+      let newTimePart = `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+      // Crear la nueva fecha con la hora ajustada
+      var formattedDate = `${datePart} ${newTimePart}`;
+      return formattedDate;
+
+      // Mostrar el resultado en el documento
+    }
   };
 
   return (

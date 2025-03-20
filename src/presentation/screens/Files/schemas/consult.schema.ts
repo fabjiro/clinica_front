@@ -5,8 +5,8 @@ export function consultSchemaValidation(): Yup.Schema<Partial<IConsultReqDto>> {
   return Yup.object().shape({
     patient: Yup.string().required("El paciente es requerido"),
     nextappointment: Yup.string().required("La proxima cita es requerida"),
-    weight: Yup.number().required("El peso es requerido"),
-    size: Yup.number().required("El tamaño es requerido"),
+    weight: Yup.number().required("El peso es requerido").positive("Debe ser un número positivo"),
+    size: Yup.number().required("El tamaño es requerido").positive("Debe ser un número positivo").integer("Debe ser un número entero"),
     diagnostic: Yup.string().required("El diagnostico es requerido"),
     examComplementary: Yup.string().optional(),
     motive: Yup.string().required("El motivo es requerido"),
