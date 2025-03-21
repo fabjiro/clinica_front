@@ -17,7 +17,6 @@ export function ExamScreen() {
   const { toggleForm: toggleFormGroup, setModeForm } = useGroupsStore();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
   const { data: dataExam } = useGetExam();
-  console.log(dataExam);
 
   const columns: GridColDef[] = [
     { field: "colId", headerName: "N", width: 90 },
@@ -68,7 +67,6 @@ export function ExamScreen() {
     }));
   }, [dataExam, searchByWord]);
 
-  console.log(dataExam);
   return (
     <>
       <BaseScreen

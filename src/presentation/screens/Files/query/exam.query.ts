@@ -44,11 +44,13 @@ export function useAddExam() {
         queryClient.invalidateQueries({ queryKey: ["getAllExam"] });
         toast.success("Examen creado", {
           position: "top-right",
+          duration: 3000,
         });
       },
       onError: () => {
         toast.error("Error al crear Examen", {
           position: "top-right",
+          duration: 3000,
         });
       },
     });
@@ -64,11 +66,13 @@ export function useAddExam() {
         queryClient.invalidateQueries({ queryKey: ["getAllExam"] });
         toast.success("Examen eliminado", {
           position: "top-right",
+          duration: 3000,
         });
       },
       onError: () => {
         toast.error("Error al eliminar Examen", {
           position: "top-right",
+          duration: 3000,
         });
       },
     });
@@ -84,11 +88,13 @@ export function useAddExam() {
         queryClient.invalidateQueries({ queryKey: ["getAllExam"] });
         toast.success("Examen actualizado", {
           position: "top-right",
+          duration: 3000,
         });
       },
       onError: () => {
         toast.error("Error al actualizar Examen", {
           position: "top-right",
+          duration: 3000,
         });
       },
     });

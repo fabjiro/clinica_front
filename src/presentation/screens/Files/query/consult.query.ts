@@ -46,11 +46,13 @@ export function useUpdateConsult() {
 
       toast.success("Consulta actualizada", {
         position: "top-right",
+        duration: 3000,
       });
     },
     onError: () => {
       toast.error("Error al actualizar consulta", {
         position: "top-right",
+        duration: 3000,
       });
     }
   });
@@ -66,11 +68,13 @@ export function useCreateConsult() {
       
       toast.success("Consulta creada", {
         position: "top-right",
+        duration: 3000,
       });
     },
     onError: () => {
       toast.error("Error al crear consulta", {
         position: "top-right",
+        duration: 3000,
       });
     }
   });
@@ -92,11 +96,13 @@ export function useDeleteConsult() {
 
       toast.success("Consulta eliminada", {
         position: "top-right",
+        duration: 3000,
       });
     },
     onError: () => {
       toast.error("Error al eliminar consulta", {
         position: "top-right",
+        duration: 3000,
       });
     }
   });

@@ -43,11 +43,13 @@ export function useAddSubRol() {
         queryClient.invalidateQueries({ queryKey: ["getAllSubRol"] });
         toast.success("SubRol creado", {
           position: "top-right",
+          duration: 3000,
         });
       },
       onError: () => {
         toast.error("Error al crear SubRol", {
           position: "top-right",
+          duration: 3000,
         });
       },
     });
@@ -63,11 +65,13 @@ export function useAddSubRol() {
         queryClient.invalidateQueries({ queryKey: ["getAllSubRol"] });
         toast.success("SubRol actualizado", {
           position: "top-right",
+          duration: 3000,
         });
       },
       onError: () => {
         toast.error("Error al actualizar SubRol", {
           position: "top-right",
+          duration: 3000,
         });
       },
     });
@@ -83,11 +87,13 @@ export function useAddSubRol() {
         queryClient.invalidateQueries({ queryKey: ["getAllSubRol"] });
         toast.success("SubRol eliminado", {
           position: "top-right",
+          duration: 3000,
         });
       },
       onError: () => {
         toast.error("Error al eliminar subRol", {
           position: "top-right",
+          duration: 3000,
         });
       },
     });

@@ -25,12 +25,23 @@ export function useAddUser() {
       queryClient.invalidateQueries({ queryKey: ["getAllUsers"] });
       toast.success("Usuario creado", {
         position: "top-right",
+        duration: 3000,
       });
     },
-    onError: () => {
-      toast.error("Error al crear usuario", {
-        position: "top-right",
-      });
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.detail;
+      if (errorMessage == "Email already exists") {
+        toast.error("El usuario ya existe", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }else{
+        toast.error("Error al crear usuario", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }
+      
     },
   });
 }
@@ -50,6 +61,7 @@ export function useUpdateUser() {
     onError: () => {
       toast.error("Error al actualizar usuario", {
         position: "top-right",
+        duration: 3000,
       });
     },
   });
@@ -65,11 +77,13 @@ export function useDeleteUser() {
       queryClient.invalidateQueries({ queryKey: ["getAllUsers"] });
       toast.success("Usuario eliminado", {
         position: "top-right",
+        duration: 3000,
       });
     },
     onError: () => {
       toast.error("Error al eliminar usuario", {
         position: "top-right",
+        duration: 3000,
       });
     },
   });

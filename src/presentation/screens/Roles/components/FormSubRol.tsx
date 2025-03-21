@@ -19,6 +19,7 @@ import { useGetPages } from "../querys/pages.query";
 import { useAddPages } from "../querys/pages.query"; // Importamos el hook de la mutación
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import { useGetSubRol } from "../querys/subrol.query";
+import toast from "react-hot-toast";
 
 export function FormSubRol() {
   const { modeForm, toggleForm: toggleFormSubRol } = useSubRolStore();
@@ -57,6 +58,21 @@ export function FormSubRol() {
 
   // Esta función manejará el envío de las páginas seleccionadas
   const handleSubmitForm = () => {
+    if (
+      Array.isArray(dataSubRoles) &&
+      dataSubRoles.some(
+        (subrol) =>
+          subrol.name === values.name &&
+          (modeForm === MODEFORMENUM.CREATE || subrol.id !== values.id) // Excluye el subrol actual en edición
+      )
+    ) {
+      toast.error("El subrol ya existe", {
+        position: "top-right",
+        duration: 3000,
+      });
+      return;
+    }
+
     const rolId = values.id ?? ""; // Si rolId es undefined, asignamos un valor vacío o cualquier valor predeterminado
 
     selectedPages.forEach((pageId) => {

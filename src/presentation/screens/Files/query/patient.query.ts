@@ -41,12 +41,23 @@ export function useAddPatient() {
       queryClient.invalidateQueries({ queryKey: ["getAllPatient"] });
       toast.success("Paciente creado", {
         position: "top-right",
+        duration: 3000,
       });
     },
-    onError: () => {
-      toast.error("Error al crear paciente", {
-        position: "top-right",
-      });
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.detail;
+      if(errorMessage == "User already exists"){
+        toast.error("El paciente ya existe, cambie la Identificación", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }else{
+        toast.error("Error al crear paciente", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }
+      
     },
   });
 }
@@ -61,12 +72,23 @@ export function useUpdatePatient() {
       queryClient.invalidateQueries({ queryKey: ["getAllPatient"] });
       toast.success("Paciente actualizado", {
         position: "top-right",
+        duration: 3000,
       });
     },
-    onError: () => {
-      toast.error("Error al actualizar paciente", {
-        position: "top-right",
-      });
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.detail;
+      if(errorMessage == "User already exists"){
+        toast.error("El paciente ya existe, cambie la Identificación", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }else{
+        toast.error("Error al actualizar paciente", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }
+      
     },
   });
 }
