@@ -116,9 +116,23 @@ export const ReportForm = () => {
     console.log(dataConsult);
 
     if (isReady) {
-      toast.success("Datos listos para descargar el reporte creada", {
-        position: "top-right",
-      });
+      if (item === 5) {
+        if (selectedUserId === null) {
+          toast.error("debe seleccionar un usuario", {});
+          setIsReady(false);
+        } else if (rangeDate === undefined) {
+          toast.error("debe seleccionar un rango de fechas", {});
+          setIsReady(false);
+        } else {
+          toast.success("Datos listos para descargar el reporte Generado", {
+            position: "top-right",
+          });
+        }
+      } else {
+        toast.success("Datos listos para descargar el reporte Generado", {
+          position: "top-right",
+        });
+      }
     }
   }, [
     dataRecentDiagnostics,
@@ -374,7 +388,7 @@ export const ReportForm = () => {
   return (
     <div>
       <div className="flex flex-col gap-4 items-center justify-center">
-        {item !== undefined && item >= 2 && item <= 6 && (
+        {item !== undefined && item >= 2 && item <= 6 && item !== 4 && (
           <>
             <p>Por Rango de fechas</p>
             <div className="flex gap-2 items-center">

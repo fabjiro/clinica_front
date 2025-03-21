@@ -74,9 +74,9 @@ export function ReportsScreen() {
     },
     {
       id: 4,
-      col1: "Consultas Recientes",
+      col1: "Historial Consultas",
       col2: "#4",
-      col3: "Rango de Fechas",
+      col3: "Sin Parámetros",
     },
     {
       id: 5,
