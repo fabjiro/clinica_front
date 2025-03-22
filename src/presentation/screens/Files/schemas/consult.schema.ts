@@ -18,10 +18,10 @@ export function consultSchemaValidation(): Yup.Schema<Partial<IConsultReqDto>> {
     psychologicalEvaluation: Yup.string().optional(),
     socialEvaluation: Yup.string().optional(),
     functionalEvaluation: Yup.string().optional(),
-    pulse: Yup.number().optional().positive("Debe ser un número positivo"),
-    oxygenSaturation: Yup.number().optional().positive("Debe ser un número positivo"),
-    systolicPressure: Yup.number().optional(),
-    diastolicPressure: Yup.number().optional(),
+    pulse: Yup.number().optional().positive("Debe ser un número positivo").integer("Debe ser un número entero").max(250, "El pulso no puede ser mayor a 250 Lpm"),
+    oxygenSaturation: Yup.number().optional().positive("Debe ser un número positivo").max(100, "La saturación de oxigeno no puede ser mayor a 100 %"),
+    systolicPressure: Yup.number().optional().positive("Debe ser un número positivo").max(200, "La presión sistólica no puede ser mayor a 200 mmHg"),
+    diastolicPressure: Yup.number().optional().positive("Debe ser un número positivo").max(140, "La presión diastólica no puede ser mayor a 140 mmHg"),
     imageExam: Yup.string().optional(),
 });
 }

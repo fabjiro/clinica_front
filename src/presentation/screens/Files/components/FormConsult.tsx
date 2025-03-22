@@ -308,6 +308,8 @@ export function FormConsult() {
             onChange={(e) => setFieldValue("size", e.target.value)}
           />
           <Input
+            isInvalid={!!errors.pulse}
+            errorMessage={errors.pulse}
             onChange={(e) => setFieldValue("pulse", e.target.value)}
             size="sm"
             label="Pulso"
@@ -315,6 +317,8 @@ export function FormConsult() {
             value={values.pulse?.toString()}
           />
           <Input
+            isInvalid={!!errors.oxygenSaturation}
+            errorMessage={errors.oxygenSaturation}
             onChange={(e) => setFieldValue("oxygenSaturation", e.target.value)}
             size="sm"
             label="Saturación de oxigeno"
@@ -324,22 +328,28 @@ export function FormConsult() {
         </div>
         <div className="flex flex-col">
           <h1>Presión arterial</h1>
-          <div className="flex flex-row w-1/4 gap-4">
+          <div className="flex flex-row w-1/3 gap-4">
             <Input
+              isInvalid={!!errors.systolicPressure}
+              errorMessage={errors.systolicPressure}
               onChange={(e) =>
                 setFieldValue("systolicPressure", e.target.value)
               }
               size="sm"
               label="Sistólica"
+              endContent="mmHG"
               value={values.systolicPressure?.toString()}
             />
             {/* <Button variant="light">/</Button> */}
             <Input
+              isInvalid={!!errors.diastolicPressure}
+              errorMessage={errors.diastolicPressure}
               onChange={(e) =>
                 setFieldValue("diastolicPressure", e.target.value)
               }
               size="sm"
               label="Diastólica"
+              endContent="mmHG"
               value={values.diastolicPressure?.toString()}
             />
           </div>
