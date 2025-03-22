@@ -6,6 +6,8 @@ import {
   DatePicker,
   Divider,
   Input,
+  RangeValue,
+  DateValue,
   Textarea,
 } from "@nextui-org/react";
 import { useGetAllPatient } from "../query/patient.query";
@@ -20,10 +22,20 @@ import { useConsutlFormStore } from "../../../storage/form.storage";
 import { FileUtils } from "../../../../utils/file.utils";
 import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import toast from "react-hot-toast";
+import { useGetRecentConsults } from "../../Reports/query/consult.query";
 
 export function FormConsult() {
+  const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
   const { data: allExamns, status: statusGetAllExam } = useGetExam();
+  const { data: dataConsult, refetch: handleGetConsult } = useGetRecentConsults(
+    rangeDate
+      ? {
+          startDate: moment(rangeDate.start.toString()).format("l"),
+          endDate: moment(rangeDate.end.toString()).format("l"),
+        }
+      : undefined
+  );
 
   const toggleForm = useConsutlFormStore((state) => state.toggleForm);
   const modeForm = useConsutlFormStore((state) => state.modeForm);
@@ -60,8 +72,11 @@ export function FormConsult() {
     ) {
       setNoExam(false);
     }
-    console.log(values.examComplementary);
-    console.log(values.image);
+    getDataconsult();
+    console.log(dataConsult);
+    console.log(values.nextappointment);
+    // console.log(values.examComplementary);
+    // console.log(values.image);
 
     if (plainFiles.length > 0) {
       (async () => {
@@ -72,10 +87,24 @@ export function FormConsult() {
         setFileName(plainFiles[0]?.name || "");
       })();
     }
-    // console.log(allExamns);
   }, [addConsultStatus, updateConsultStatus, plainFiles, modeForm]);
 
+  const getDataconsult = async () => {
+    await handleGetConsult();
+  };
+
   const handleSubmitForm = () => {
+    if (values.nextappointment) {
+      const isFalse = validateNextAppointment(dataConsult, {
+        nextappointment: values.nextappointment,
+      });
+
+      if (isFalse === false) {
+        return;
+      }
+    } else {
+      console.error("El valor de nextappointment es undefined.");
+    }
     // Verifica si hay un examen complementario seleccionado pero no hay imagen
     if (values.examComplementary && !plainFiles[0]?.name) {
       if (modeForm === MODEFORMENUM.CREATE) {
@@ -96,6 +125,54 @@ export function FormConsult() {
       handleSubmit();
     }
   };
+
+  function validateNextAppointment(
+    dataConsult: { nextappointment: string }[],
+    values: { nextappointment: string }
+  ): boolean {
+    const newDate = new Date(values.nextappointment); // Convierte la fecha a tipo Date
+
+    for (const consult of dataConsult) {
+      const existingDate = new Date(consult.nextappointment); // Convierte la fecha a tipo Date
+
+      // Comparar si la fecha y la hora exacta coinciden
+      if (newDate.getTime() === existingDate.getTime()) {
+        toast.error("Esta fecha y hora están ocupadas.", {
+          position: "top-right",
+          duration: 3000,
+        });
+        return false;
+      }
+
+      // Comparar si la fecha coincide y la hora está dentro de los 29 minutos
+      if (newDate.toDateString() === existingDate.toDateString()) {
+        const diffMilliseconds: number =
+          newDate.getTime() - existingDate.getTime();
+        const diffMinutes: number = Math.abs(diffMilliseconds / (1000 * 60)); // Diferencia en minutos
+
+        if (diffMinutes < 30) {
+          toast.error(
+            "La Agenda está ocupada, debe elegir una hora con al menos 30 minutos de diferencia.",
+            { position: "top-right", duration: 4000 }
+          );
+          return false;
+        }
+      }
+    }
+
+    return true; // Si pasa todas las validaciones
+  }
+
+  // Ejemplo de uso
+  // const dataConsult = [
+  //   { nextappointment: "2025-03-22T09:00:00.000Z" }, // Cita existente
+  //   { nextappointment: "2025-03-22T10:00:00.000Z" }, // Otra cita existente
+  // ];
+
+  // const values = { nextappointment: "2025-03-22T09:15:00.000Z" }; // Nueva cita (debe fallar)
+
+  // const isValid = validateNextAppointment(dataConsult, values);
+  // console.log(isValid); // false, mostrará alerta
 
   interface Group {
     id: string;
@@ -142,7 +219,7 @@ export function FormConsult() {
     });
   }
 
-  console.log(groupedExams);
+  // console.log(groupedExams);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -308,7 +385,7 @@ export function FormConsult() {
             size="sm"
             onSelectionChange={(e) => {
               setFieldValue("examComplementary", e);
-              console.log(e);
+              // console.log(e);
               setNoExam(e ? false : true);
             }}
             defaultSelectedKey={values.examComplementary}
