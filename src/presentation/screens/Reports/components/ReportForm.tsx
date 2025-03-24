@@ -23,6 +23,7 @@ import { useGetAllUsers } from "../../Users/query/user.query";
 import { useFormikUser } from "../../Users/hooks/useFormikUser";
 import { RiAiGenerate } from "react-icons/ri";
 import { HiOutlineDownload } from "react-icons/hi";
+import { create } from "@mui/material/styles/createTransitions";
 
 interface ReportData {
   [key: string]: string | number | boolean | null;
@@ -162,15 +163,29 @@ export const ReportForm = () => {
   const getDataForExport = (): ReportData[] => {
     const filterDataMaster = (data: ReportData[] | undefined) =>
       data
-        ? data.map(({ registerBy, ...rest }) => ({
+        ? data.map(({ registerBy, createdAt, ...rest }) => ({
             ...rest,
+            createDate:
+              typeof createdAt === "string"
+                ? createdAt.split("T")[0] +
+                  " " +
+                  createdAt.split("T")[1].split(".")[0] // Separar la fecha y hora, eliminando los milisegundos
+                : createdAt ?? "",
           }))
         : [];
 
     const filterDataRegisteredPatients = (data: ReportData[] | undefined) =>
       data
         ? data.map(
-            ({ rol, avatar, civilStatus, typeSex, birthday, ...rest }) => ({
+            ({
+              rol,
+              avatar,
+              civilStatus,
+              typeSex,
+              birthday,
+              createdAt,
+              ...rest
+            }) => ({
               ...rest,
               civilStatusName:
                 typeof civilStatus === "object" && civilStatus !== null
@@ -184,6 +199,12 @@ export const ReportForm = () => {
                 typeof birthday === "string"
                   ? birthday.split("T")[0]
                   : birthday ?? "", // Devuelve "" si es undefined o null
+              createDate:
+                typeof createdAt === "string"
+                  ? createdAt.split("T")[0] +
+                    " " +
+                    createdAt.split("T")[1].split(".")[0] // Separar la fecha y hora, eliminando los milisegundos
+                  : createdAt ?? "",
             })
           )
         : [];
@@ -234,6 +255,7 @@ export const ReportForm = () => {
               patient,
               complementaryTest,
               userCreatedBy,
+              nextappointment,
               count,
               createdAt,
               image,
@@ -259,7 +281,10 @@ export const ReportForm = () => {
                 typeof createdAt === "string"
                   ? createdAt.replace("T", " ").split(".")[0] // Cambia 'T' por espacio y elimina 'Z'
                   : ""; // Devuelve "" si createdAt es undefined o no es una cadena
-
+              const nextAppointmentDate =
+                typeof nextappointment === "string"
+                  ? nextappointment.replace("T", " ").replace("Z", "") // Cambia "T" por espacio y "Z" por vacío
+                  : ""; // Devuelve "" si nextAppointment es undefined o no es una cadena
               // Reorganizamos el objeto para que `patientName` esté en la segunda posición
               return {
                 id,
@@ -267,6 +292,7 @@ export const ReportForm = () => {
                 patientName, // Se coloca al principio
                 CreatedAtt,
                 ...rest, // El resto de las propiedades se mantienen
+                nextAppointmentDate,
                 userCreatedByName,
                 complementaryTestName,
               };

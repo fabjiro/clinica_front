@@ -415,7 +415,7 @@ export function ConsultScreen() {
           },
 
           {
-            content: consultations[0].patient?.civilStatus?.name || "N/A",
+            content: consultations[0].patient?.civilStatus?.name || "Soltero",
             styles: {
               lineColor: [0, 0, 0],
               fontSize: 15,

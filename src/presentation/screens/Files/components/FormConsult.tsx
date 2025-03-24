@@ -317,6 +317,8 @@ export function FormConsult({ id }: IProps) {
             label="Motivo"
           />
           <Textarea
+            isInvalid={!!errors.clinicalhistory}
+            errorMessage={errors.clinicalhistory}
             onChange={(e) => setFieldValue("clinicalhistory", e.target.value)}
             label="Historial clínico"
             value={values.clinicalhistory}
@@ -326,6 +328,8 @@ export function FormConsult({ id }: IProps) {
         <h1 className="text-2xl font-semibold">Evaluacion Geriatrica</h1>
         <div className="flex flex-row gap-4">
           <Textarea
+            isInvalid={!!errors.bilogicalEvaluation}
+            errorMessage={errors.bilogicalEvaluation}
             onChange={(e) =>
               setFieldValue("bilogicalEvaluation", e.target.value)
             }
@@ -333,6 +337,8 @@ export function FormConsult({ id }: IProps) {
             value={values.bilogicalEvaluation}
           />
           <Textarea
+            isInvalid={!!errors.psychologicalEvaluation}
+            errorMessage={errors.psychologicalEvaluation}
             onChange={(e) =>
               setFieldValue("psychologicalEvaluation", e.target.value)
             }
@@ -340,11 +346,15 @@ export function FormConsult({ id }: IProps) {
             value={values.psychologicalEvaluation}
           />
           <Textarea
+            isInvalid={!!errors.socialEvaluation}
+            errorMessage={errors.socialEvaluation}
             onChange={(e) => setFieldValue("socialEvaluation", e.target.value)}
             label="Social"
             value={values.socialEvaluation}
           />
           <Textarea
+            isInvalid={!!errors.functionalEvaluation}
+            errorMessage={errors.functionalEvaluation}
             onChange={(e) =>
               setFieldValue("functionalEvaluation", e.target.value)
             }
@@ -359,9 +369,11 @@ export function FormConsult({ id }: IProps) {
             isRequired
             size="sm"
             label="Peso"
-            endContent="Kg"
+            endContent="Lb"
             value={values.weight?.toString()}
-            onChange={(e) => setFieldValue("weight", e.target.value)}
+            onChange={(e) =>
+              setFieldValue("weight", e.target.value.replace(",", "."))
+            }
           />
           <Input
             isInvalid={!!errors.size}
@@ -371,7 +383,9 @@ export function FormConsult({ id }: IProps) {
             label="Estatura"
             endContent="Cm"
             value={values.size?.toString()}
-            onChange={(e) => setFieldValue("size", e.target.value)}
+            onChange={(e) =>
+              setFieldValue("size", e.target.value.replace(",", "."))
+            }
           />
           <Input
             isInvalid={!!errors.pulse}
@@ -385,7 +399,12 @@ export function FormConsult({ id }: IProps) {
           <Input
             isInvalid={!!errors.oxygenSaturation}
             errorMessage={errors.oxygenSaturation}
-            onChange={(e) => setFieldValue("oxygenSaturation", e.target.value)}
+            onChange={(e) =>
+              setFieldValue(
+                "oxygenSaturation",
+                e.target.value.replace(",", ".")
+              )
+            }
             size="sm"
             label="Saturación de oxigeno"
             endContent="%"
@@ -399,7 +418,10 @@ export function FormConsult({ id }: IProps) {
               isInvalid={!!errors.systolicPressure}
               errorMessage={errors.systolicPressure}
               onChange={(e) =>
-                setFieldValue("systolicPressure", e.target.value)
+                setFieldValue(
+                  "systolicPressure",
+                  e.target.value.replace(",", ".")
+                )
               }
               size="sm"
               label="Sistólica"
@@ -411,7 +433,10 @@ export function FormConsult({ id }: IProps) {
               isInvalid={!!errors.diastolicPressure}
               errorMessage={errors.diastolicPressure}
               onChange={(e) =>
-                setFieldValue("diastolicPressure", e.target.value)
+                setFieldValue(
+                  "diastolicPressure",
+                  e.target.value.replace(",", ".")
+                )
               }
               size="sm"
               label="Diastólica"
@@ -431,6 +456,8 @@ export function FormConsult({ id }: IProps) {
             label="Antecendentes Personales"
           />
           <Textarea
+            isInvalid={!!errors.antecedentFamily}
+            errorMessage={errors.antecedentFamily}
             onChange={(e) => setFieldValue("antecedentFamily", e.target.value)}
             label="Antecendentes Familiares"
             value={values.antecedentFamily}

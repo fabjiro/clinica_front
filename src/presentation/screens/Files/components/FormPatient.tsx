@@ -10,14 +10,19 @@ import { SexType } from "../../../../const/sexType.const";
 import { useGetAllCivilStatus } from "../query/civilstatus.query";
 import { usePatientStore } from "../store/patient.store";
 import { useFormikPatient } from "../hooks/useFormikPatient";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { parseDate } from "@internationalized/date";
 import moment from "moment";
 import toast from "react-hot-toast";
+import { useGetAllPatient } from "../query/patient.query";
+import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 export function FormPatient() {
   const { data: DataCivilStatus, status: statusGetRoles } =
     useGetAllCivilStatus();
   const toggleForm = usePatientStore((state) => state.toggleForm);
+  const modeForm = usePatientStore((state) => state.modeForm);
+  const { data: dataPatient, status: statusGetPatient } = useGetAllPatient();
+
   const {
     errors,
     values,
@@ -48,7 +53,47 @@ export function FormPatient() {
     if (statusAddPatient == "success" || statusUpdatePatient == "success") {
       toggleForm();
     }
+    console.log(values.birthday);
   }, [statusAddPatient, statusUpdatePatient]);
+
+  const handleSubmitForm = () => {
+    if (
+      Array.isArray(dataPatient) &&
+      dataPatient.some(
+        (patient) =>
+          patient.identification === values.identification &&
+          modeForm === MODEFORMENUM.CREATE // Excluye el subrol actual en edición
+      )
+    ) {
+      toast.error("El Paciente ya existe", {
+        position: "top-right",
+        duration: 3000,
+      });
+      return;
+    }
+    handleSubmit();
+  };
+
+  const calcularEdad = (fechaNacimiento: string): number => {
+    const fechaNac = new Date(fechaNacimiento);
+    const hoy = new Date();
+
+    let edad = hoy.getFullYear() - fechaNac.getFullYear();
+    const mesActual = hoy.getMonth();
+    const diaActual = hoy.getDate();
+    const mesNacimiento = fechaNac.getMonth();
+    const diaNacimiento = fechaNac.getDate();
+
+    // Restar un año si aún no ha pasado el cumpleaños este año
+    if (
+      mesActual < mesNacimiento ||
+      (mesActual === mesNacimiento && diaActual < diaNacimiento)
+    ) {
+      edad--;
+    }
+
+    return edad;
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -61,12 +106,13 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("name", e.target.value)}
           size="sm"
           label="Nombre"
-          maxLength={50}
+
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Input
           className="w-1/5"
           isRequired
+          isDisabled={true}
           size="sm"
           label="Edad"
           type="number"
@@ -98,7 +144,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("identification", e.target.value)}
           size="sm"
           label="Identificacion"
-          maxLength={16}
+
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
       </div>
@@ -111,7 +157,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("phone", e.target.value)}
           size="sm"
           label="Numero Telefono"
-          maxLength={15}
+
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Textarea
@@ -121,7 +167,6 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("address", e.target.value)}
           size="sm"
           label="Direccion"
-          maxLength={110}
           isRequired
         />
       </div>
@@ -129,7 +174,12 @@ export function FormPatient() {
         <DatePicker
           isInvalid={!!birthdayError}
           errorMessage={birthdayError}
-          onChange={(e) => setFieldValue("birthday", e?.toString())}
+          onChange={(e) => {
+            console.log("Valor de birthday:", e?.toString()); // Imprime el valor en la consola
+
+            values.age = calcularEdad(e?.toString() || "0");
+            setFieldValue("birthday", e?.toString());
+          }}
           isRequired
           size="sm"
           label="Fecha de nacimiento"
@@ -179,7 +229,7 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("contactPerson", e.target.value)}
           size="sm"
           label="Nombre de contacto"
-          maxLength={50}
+
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
         <Input
@@ -190,14 +240,14 @@ export function FormPatient() {
           onChange={(e) => setFieldValue("contactPhone", e.target.value)}
           size="sm"
           label="Numero de contacto"
-          maxLength={15}
+
           // disabled={isLoadingAddUser || isLoadingUpdateUser}
         />
       </div>
       <div className="flex flex-row gap-4 justify-end items-center">
         <Button onClick={() => toggleForm()}>Cancelar</Button>
         <Button
-          onClick={() => handleSubmit()}
+          onClick={() => handleSubmitForm()}
           isLoading={isLoadingAddPatient || isLoadingUpdatePatient}
           //   disabled={isLoadingRoles}
           color="primary"
