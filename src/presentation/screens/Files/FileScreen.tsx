@@ -89,6 +89,9 @@ export function FileScreen() {
               .replace(/[^0-9]/g, "")
               .substring(0, 6)
               .toLowerCase()
+              .includes(searchByWord.toLowerCase()) ||
+            patient.identification
+              .toLowerCase()
               .includes(searchByWord.toLowerCase())
         )
         .map((patient) => ({
@@ -206,7 +209,7 @@ export function FileScreen() {
             : "Editar Consulta"
         }
       >
-        <FormConsult />
+        <FormConsult id={""} />
       </BaseModal>
     </>
   );

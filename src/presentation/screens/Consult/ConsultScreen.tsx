@@ -23,49 +23,61 @@ import { saveAs } from "file-saver";
 
 import img from "../Customer/receta medica.jpg";
 
-const columns: GridColDef[] = [
-  { field: "colId", headerName: "Código", width: 90 },
-  {
-    field: "col1",
-    headerName: "Motivo",
-    flex: 1,
-  },
-  {
-    field: "col2",
-    headerName: "Registrado por",
-    flex: 1,
-    renderCell: (params) => (
-      <div className="flex items-center justify-start w-full h-full">
-        <User
-          name={params.row.col2.name}
-          avatarProps={{
-            src: params.row.col2.url,
-          }}
-        />
-      </div>
-    ),
-  },
-  {
-    field: "col8",
-    headerName: "Fecha de creación",
-    flex: 1,
-  },
-  {
-    field: "col7",
-    headerName: "Acciones",
-    width: 100,
-    sortable: false,
-    filterable: false,
-    pinnable: false,
-    renderCell: (params) => <ActionConsult id={params.id.toString()} />,
-  },
-];
 export function ConsultScreen() {
   const { patientId } = useParams();
   const navigate = useNavigate();
   const clientQuery = useQueryClient();
   const [searchByWord, setSearchByWord] = useState<string | undefined>();
+  const [idConsulta, setIdConsulta] = useState<string | undefined>();
 
+  // Función que maneja el cambio de ID
+  const handleRowClick = (params: any) => {
+    const id = params.id.toString();
+    setIdConsulta(id); // Actualiza el estado del id
+  };
+
+  const columns: GridColDef[] = [
+    { field: "colId", headerName: "Código", width: 90 },
+    {
+      field: "col1",
+      headerName: "Motivo",
+      flex: 1,
+    },
+    {
+      field: "col2",
+      headerName: "Registrado por",
+      flex: 1,
+      renderCell: (params) => (
+        <div className="flex items-center justify-start w-full h-full">
+          <User
+            name={params.row.col2.name}
+            avatarProps={{
+              src: params.row.col2.url,
+            }}
+          />
+        </div>
+      ),
+    },
+    {
+      field: "col8",
+      headerName: "Fecha de creación",
+      flex: 1,
+    },
+    {
+      field: "col7",
+      headerName: "Acciones",
+      width: 100,
+      sortable: false,
+      filterable: false,
+      pinnable: false,
+      renderCell: (params) => {
+        // Aquí guardamos el id de cada fila en el estado
+        const id = params.id.toString();
+
+        return <ActionConsult id={id} />;
+      },
+    },
+  ];
   if (!patientId) {
     navigate("/");
     return null;
@@ -122,9 +134,14 @@ export function ConsultScreen() {
       },
       col8: moment(consult.createdAt).locale("es").format("L"),
     }));
-  }, [consultData, searchByWord]);
+  }, [consultData, searchByWord, idConsulta]);
 
-  console.log(consultData);
+  // console.log(consultData);
+  useEffect(() => {
+    if (idConsulta) {
+      console.log("ID CONSULTA actualizado: " + idConsulta);
+    }
+  }, [idConsulta]); // Dependencia para que se actualice solo cuando cambie el id
 
   function generateConsultationPDF(consultations: any[]) {
     const doc = new jsPDF();
@@ -1224,6 +1241,7 @@ export function ConsultScreen() {
           />
           <div className="flex-1 overflow-auto">
             <DataGrid
+              onRowClick={handleRowClick}
               columns={columns}
               rows={rows}
               disableColumnMenu
@@ -1250,7 +1268,7 @@ export function ConsultScreen() {
             : "Editar Consulta"
         }
       >
-        <FormConsult />
+        <FormConsult id={idConsulta ?? ""} />
       </BaseModal>
     </>
   );

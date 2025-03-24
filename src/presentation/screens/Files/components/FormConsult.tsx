@@ -24,7 +24,10 @@ import { MODEFORMENUM } from "../../../../enum/mode/mode.enum";
 import toast from "react-hot-toast";
 import { useGetRecentConsults } from "../../Reports/query/consult.query";
 
-export function FormConsult() {
+interface IProps {
+  id: string;
+}
+export function FormConsult({ id }: IProps) {
   const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
   const { data: allPatient, status: statusGetAllPatient } = useGetAllPatient();
   const { data: allExamns, status: statusGetAllExam } = useGetExam();
@@ -73,8 +76,8 @@ export function FormConsult() {
       setNoExam(false);
     }
     getDataconsult();
-    console.log(dataConsult);
-    console.log(values.nextappointment);
+    // console.log(dataConsult);
+    // console.log(values.nextappointment);
     // console.log(values.examComplementary);
     // console.log(values.image);
 
@@ -87,7 +90,21 @@ export function FormConsult() {
         setFileName(plainFiles[0]?.name || "");
       })();
     }
-  }, [addConsultStatus, updateConsultStatus, plainFiles, modeForm]);
+    // if (modeForm === MODEFORMENUM.UPDATE && values.patient) {
+    //   const selectedPatient = allPatient?.find((p) => p.id === values.patient);
+    //   if (selectedPatient && inputValue !== selectedPatient.name) {
+    //     setInputValue(selectedPatient.name); // Solo actualiza si es diferente
+    //   }
+    // }
+    console.log("id desde consult: " + id);
+  }, [
+    addConsultStatus,
+    updateConsultStatus,
+    plainFiles,
+    modeForm,
+    // values.patient,
+    // allPatient,
+  ]);
 
   const getDataconsult = async () => {
     await handleGetConsult();
@@ -95,9 +112,14 @@ export function FormConsult() {
 
   const handleSubmitForm = () => {
     if (values.nextappointment) {
-      const isFalse = validateNextAppointment(dataConsult, {
-        nextappointment: values.nextappointment,
-      });
+      const isFalse = validateNextAppointment(
+        dataConsult,
+        {
+          nextappointment: values.nextappointment,
+          id: id || "",
+        },
+        modeForm
+      );
 
       if (isFalse === false) {
         return;
@@ -127,8 +149,9 @@ export function FormConsult() {
   };
 
   function validateNextAppointment(
-    dataConsult: { nextappointment: string }[],
-    values: { nextappointment: string }
+    dataConsult: { nextappointment: string; id: string }[],
+    values: { nextappointment: string; id: string },
+    formMode: MODEFORMENUM
   ): boolean {
     const newDate = new Date(values.nextappointment); // Convierte la fecha a tipo Date
 
@@ -137,11 +160,18 @@ export function FormConsult() {
 
       // Comparar si la fecha y la hora exacta coinciden
       if (newDate.getTime() === existingDate.getTime()) {
-        toast.error("Esta fecha y hora están ocupadas.", {
-          position: "top-right",
-          duration: 3000,
-        });
-        return false;
+        if (formMode === MODEFORMENUM.UPDATE && consult.id === values.id) {
+          continue;
+        } else {
+          toast.error("Esta fecha y hora están ocupadas.", {
+            position: "top-right",
+            duration: 3000,
+          });
+          console.log(formMode);
+          console.log(existingDate + " --- " + newDate);
+          console.log(consult.id + " --- " + values.id);
+          return false;
+        }
       }
 
       // Comparar si la fecha coincide y la hora está dentro de los 29 minutos
@@ -219,6 +249,8 @@ export function FormConsult() {
     });
   }
 
+  const [inputValue, setInputValue] = useState("");
+
   // console.log(groupedExams);
 
   return (
@@ -227,6 +259,35 @@ export function FormConsult() {
         <h1 className="text-2xl font-semibold">Consulta Médica</h1>
         <Divider />
         <Autocomplete
+          isDisabled={modeForm === MODEFORMENUM.UPDATE}
+          isLoading={isLoading}
+          isRequired
+          defaultItems={allPatient ?? []}
+          label="Paciente"
+          size="sm"
+          isInvalid={!!errors.patient}
+          errorMessage={errors.patient}
+          selectedKey={values.patient}
+          inputValue={inputValue}
+          onInputChange={(value) => setInputValue(value)} // Permite escribir manualmente
+          onSelectionChange={(e) => {
+            const selectedPatient = allPatient?.find((p) => p.id === e);
+            if (selectedPatient) {
+              setFieldValue("patient", e); // Guarda el ID del paciente
+              setInputValue(selectedPatient.name); // Muestra solo el nombre en el input
+            }
+          }}
+        >
+          {(item) => (
+            <AutocompleteItem key={item.id}>
+              {item.id.replace(/[^0-9]/g, "").substring(0, 6) +
+                " - " +
+                item.name}
+            </AutocompleteItem>
+          )}
+        </Autocomplete>
+
+        {/* <Autocomplete
           isLoading={isLoading}
           isRequired
           defaultItems={allPatient ?? []}
@@ -238,9 +299,14 @@ export function FormConsult() {
           onSelectionChange={(e) => setFieldValue("patient", e)}
         >
           {(item) => (
-            <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
+            <AutocompleteItem key={item.id}>
+              {" "}
+              {item.id.replace(/[^0-9]/g, "").substring(0, 6) +
+                " - " +
+                item.name}
+            </AutocompleteItem>
           )}
-        </Autocomplete>
+        </Autocomplete> */}
         <div className="flex flex-row gap-4">
           <Textarea
             value={values.motive}

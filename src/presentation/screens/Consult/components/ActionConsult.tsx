@@ -42,7 +42,7 @@ export function ActionConsult({ id }: IProps) {
       ]) ?? []
     ).find((param) => param.id === id);
 
-    console.log(consult);
+    console.log("el id es: " + id);
 
     if (!consult) return;
 
