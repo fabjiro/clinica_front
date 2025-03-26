@@ -16,7 +16,7 @@ export function patientSchemaValidation(): Yup.Schema<Partial<IPatientReqDto>> {
     age: Yup.number().required("Seleccione una fecha de nacimiento").positive("La edad debe ser un número positivo") // Solo permite números positivos
       .integer("La edad debe ser un número entero").max(120, "La edad no puede ser mayor a 120"),
     contactPerson: Yup.string().required("La persona de contacto es requerida")
-      .matches(/^[A-Za-z\s]+$/, "El nombre de la persona de contacto solo puede contener letras y espacios").max(50, "El nombre de la persona de contacto no puede ser mayor a 50 caracteres").min(16, "El nombre de la persona de contacto debe tener al menos 16 caracteres"), // No permite números ni caracteres especiales
+      .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "El nombre de la persona de contacto solo puede contener letras y espacios").max(50, "El nombre de la persona de contacto no puede ser mayor a 50 caracteres").min(16, "El nombre de la persona de contacto debe tener al menos 16 caracteres"), // No permite números ni caracteres especiales
     contactPhone: Yup.string()
       .required("El numero de contacto es requerido")
       .matches(/^[\d()+-\s]*$/, "El numero de contacto de contacto solo puede contener números, el símbolo '+' y paréntesis '()'").max(15, "El numero de contacto no puede ser mayor a 15 caracteres").min(13, "El numero de contacto debe tener al menos 14 caracteres"), // Solo permite números, + y ()

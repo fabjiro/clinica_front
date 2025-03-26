@@ -62,7 +62,7 @@ export function FormPatient() {
       dataPatient.some(
         (patient) =>
           patient.identification === values.identification &&
-          modeForm === MODEFORMENUM.CREATE // Excluye el subrol actual en edición
+          modeForm === MODEFORMENUM.CREATE
       )
     ) {
       toast.error("El Paciente ya existe", {
