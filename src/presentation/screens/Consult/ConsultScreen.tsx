@@ -163,7 +163,10 @@ export function ConsultScreen() {
       // // Agregar los textos
 
       doc.setFont("helvetica", "bold");
-      doc.text(`Clinica ${parsedData.nombre}`, 42, 15);
+      doc.text(`Clínica ${parsedData.nombre}`, 42, 15);
+      doc.setFontSize(9);
+      doc.text(`COD Clínica: ${parsedData.codigo}`, 150, 15);
+      doc.setFontSize(14);
       doc.setFont("helvetica", "normal");
       doc.setFont("helvetica", "bold");
       doc.text("Direccion:", 42, 21);
@@ -530,6 +533,9 @@ export function ConsultScreen() {
 
         doc.setFont("helvetica", "bold");
         doc.text(`Clinica ${parsedData.nombre}`, 42, 15);
+        doc.setFontSize(9);
+        doc.text(`COD Clínica: ${parsedData.codigo}`, 150, 15);
+        doc.setFontSize(14);
         doc.setFont("helvetica", "normal");
         doc.setFont("helvetica", "bold");
         doc.text("Direccion:", 42, 21);
@@ -552,15 +558,15 @@ export function ConsultScreen() {
           doc.text(linea, 42, y);
           y += 6; // Incrementar Y para la siguiente línea
         });
-        doc.setFont("helvetica", "bold"); // Poner en negrita
-        doc.text("Teléfono:", 15, 290);
-        doc.setFont("helvetica", "normal"); // Volver a fuente normal
-        doc.text(parsedData.telefono, 40, 290); // Ajustar la posición para que quede al lado
+        // doc.setFont("helvetica", "bold"); // Poner en negrita
+        // doc.text("Teléfono:", 15, 290);
+        // doc.setFont("helvetica", "normal"); // Volver a fuente normal
+        // doc.text(parsedData.telefono, 40, 290); // Ajustar la posición para que quede al lado
 
-        doc.setFont("helvetica", "bold"); // Poner en negrita
-        doc.text("Horario Atención:", 110, 290);
-        doc.setFont("helvetica", "normal"); // Volver a fuente normal
-        doc.text(parsedData.horario, 160, 290); // Ajustar la posición para que quede alineado
+        // doc.setFont("helvetica", "bold"); // Poner en negrita
+        // doc.text("Horario Atención:", 110, 290);
+        // doc.setFont("helvetica", "normal"); // Volver a fuente normal
+        // doc.text(parsedData.horario, 160, 290); // Ajustar la posición para que quede alineado
       } else {
         console.log("No se encontró información en localStorage");
       }
@@ -1020,6 +1026,21 @@ export function ConsultScreen() {
         ],
         theme: "grid",
       });
+      const finalY = (doc as any).lastAutoTable?.finalY || 10;
+      const textt = "___________________";
+      const textWidthh = doc.getTextWidth(textt); // Corrige la variable usada
+      const pageWidthh = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
+
+      doc.setFont("helvetica", "bold");
+      doc.text(textt, (pageWidthh - textWidthh) / 2, finalY + 10); // Coloca el texto debajo de la primera tabla
+      const texttt = "Firma Médico";
+      const textWidthhh = doc.getTextWidth(textt); // Corrige la variable usada
+      const pageWidthhh = doc.internal.pageSize.getWidth(); // Obtiene el ancho de la página
+
+      doc.setFont("helvetica", "bold");
+      // Nueva posición más a la derecha
+      const offsetX = 10; // Ajusta este valor según lo que necesites
+      doc.text(texttt, (pageWidthhh - textWidthhh) / 2 + offsetX, finalY + 18);
 
       //encabezado de pagina
       // doc.addImage(
@@ -1078,22 +1099,47 @@ export function ConsultScreen() {
       );
       doc.text(consult.weight ? `${consult.weight} kg` : "N/A", 160, 72);
       doc.text(consult.diagnosis || "N/A", 50, 84);
-      const texto = consult.recipe || "N/A";
-      const maxCaracteresPorLinea = 70; // Máximo de caracteres antes del salto
-      const lineas = []; // Array para almacenar las líneas
+      // const texto = consult.recipe || "N/A";
+      // const maxCaracteresPorLinea = 70; // Máximo de caracteres antes del salto
+      // const lineas = []; // Array para almacenar las líneas
 
-      // Dividir el texto en partes de máximo 80 caracteres
-      for (let i = 0; i < texto.length; i += maxCaracteresPorLinea) {
-        lineas.push(texto.substring(i, i + maxCaracteresPorLinea).trim());
-      }
+      // // Dividir el texto en partes de máximo 80 caracteres
+      // for (let i = 0; i < texto.length; i += maxCaracteresPorLinea) {
+      //   lineas.push(texto.substring(i, i + maxCaracteresPorLinea).trim());
+      // }
+
+      // // Imprimir cada línea en una posición diferente en Y
+      // let y = 110; // Posición inicial en el eje Y
+      // lineas.forEach((linea) => {
+      //   doc.text(linea, 20, y);
+      //   y += 8; // Incrementar Y para la siguiente línea
+      // });
+
+      const texto: string = consult.recipe || "N/A";
+      const maxCaracteresPorLinea: number = 70; // Máximo de caracteres antes del salto de línea
+      const lineas: string[] = []; // Especificamos que es un array de strings
+      const yInicial: number = 110; // Posición inicial en Y
+      let y: number = yInicial;
+
+      // Primero, dividir por saltos de línea existentes (\n)
+      const partes: string[] = texto.split("\n");
+
+      partes.forEach((parte: string) => {
+        // Dividir cada parte en fragmentos de máximo 'maxCaracteresPorLinea' caracteres
+        for (let i = 0; i < parte.length; i += maxCaracteresPorLinea) {
+          lineas.push(parte.substring(i, i + maxCaracteresPorLinea).trim());
+        }
+        // Agregar un espacio extra en Y para respetar los saltos de línea originales
+        lineas.push("");
+      });
 
       // Imprimir cada línea en una posición diferente en Y
-      let y = 110; // Posición inicial en el eje Y
-      lineas.forEach((linea) => {
+      lineas.forEach((linea: string) => {
         doc.text(linea, 20, y);
-        y += 8; // Incrementar Y para la siguiente línea
+        y += 4; // Espacio normal entre líneas
       });
-      doc.text(consult.userCreatedBy?.name || "N/A", 145, 270);
+
+      doc.text(consult.userCreatedBy?.name || "N/A", 140, 270);
       doc.text(formateDate(consult.nextappointment) || "N/A", 27, 257);
 
       let numbersOnlyy = consult.id.replace(/[^0-9]/g, ""); // Elimina todo lo que no sea un número

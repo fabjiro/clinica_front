@@ -9,7 +9,7 @@ export function consultSchemaValidation(): Yup.Schema<Partial<IConsultReqDto>> {
     size: Yup.number().required("El tamaño es requerido").positive("Debe ser un número positivo").integer("Debe ser un número entero").max(200, "La estatura no puede ser mayor a 220 Cm").min(15, "La estatura debe ser mayor a 15 Cm"),
     diagnostic: Yup.string().required("El diagnostico es requerido").max(110, "El diagnostico no puede tener mas de 110 caracteres"),
     examComplementary: Yup.string().optional(),
-    motive: Yup.string().required("El motivo es requerido").max(50, "El Motivo no puede tener mas de 50 caracteres"),
+    motive: Yup.string().required("El motivo es requerido").max(100, "El Motivo no puede tener mas de 100 caracteres"),
     antecedentPerson: Yup.string().required("El antecedente personal es requerido").max(300, "El antecedente personal no puede tener mas de 300 caracteres"),
     recipe: Yup.string().required("La receta es requerida").max(300, "La receta no puede tener mas de 300 caracteres"),
     antecedentFamily: Yup.string().optional().max(300, "El antecedente familiar no puede tener mas de 300 caracteres"),

@@ -85,6 +85,9 @@ export function ActionPatient({ id }: IProps) {
 
       doc.setFont("helvetica", "bold");
       doc.text(`Clinica ${parsedData.nombre}`, 52, 20);
+      doc.setFontSize(12);
+      doc.text(`COD Clínica: ${parsedData.codigo}`, 220, 20);
+      doc.setFontSize(16);
       doc.setFont("helvetica", "normal");
       doc.setFont("helvetica", "bold");
       doc.text("Direccion:", 52, 26);
