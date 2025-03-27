@@ -119,19 +119,25 @@ export const ReportForm = () => {
     if (isReady) {
       if (item === 5) {
         if (selectedUserId === null) {
-          toast.error("debe seleccionar un usuario", {});
+          toast.error("debe seleccionar un usuario", {
+            duration: 3000,
+          });
           setIsReady(false);
         } else if (rangeDate === undefined) {
-          toast.error("debe seleccionar un rango de fechas", {});
+          toast.error("debe seleccionar un rango de fechas", {
+            duration: 3000,
+          });
           setIsReady(false);
         } else {
           toast.success("Datos listos para descargar el reporte Generado", {
             position: "top-right",
+            duration: 3000,
           });
         }
       } else {
         toast.success("Datos listos para descargar el reporte Generado", {
           position: "top-right",
+          duration: 3000,
         });
       }
     }

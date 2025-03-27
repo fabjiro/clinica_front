@@ -133,6 +133,7 @@ export function FormConsult({ id }: IProps) {
         // Muestra la advertencia para que el usuario suba una imagen
         toast.error("Debe subir una imagen del examen", {
           position: "top-right",
+          duration: 3000,
         });
       } else {
         handleSubmit();
